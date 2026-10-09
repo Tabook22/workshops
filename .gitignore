@@ -1,0 +1,19 @@
+# Dependencies and caches (reinstall with npm install)
+node_modules/
+.npm-cache/
+
+# Temporary build workspaces used to produce the presenter guide and handbook
+.guide-build/
+.script-build/
+
+# Local tool settings
+.claude/
+
+# Local backup of the app's original nested git folder
+.git-history-backup/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
