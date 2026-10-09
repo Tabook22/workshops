@@ -1,0 +1,51 @@
+"use client";
+import {useState,type ReactNode} from 'react';
+import {Check,ChevronLeft,ChevronRight,Pause,Play,QrCode,Monitor,Wrench,Users,Lightbulb,Layers3,Sparkles} from 'lucide-react';
+import type {Snapshot,Config,Idea,Language} from './workshop';
+import PresenterIdeaWall from './presenter-idea-wall';
+import {lessonSteps,lessonIndex} from './lesson';
+import {LanguageSwitch,ThemeSwitch,SignOutButton,Timer} from './client';
+import {FacilitatorNotes,ActivityFeed,ThemeCloud} from './learning-ui';
+
+const instructions:[string,string][]=[['Ask: who needs help, and what is difficult? Collect clear problems before thinking about solutions.','اسأل: من يحتاج المساعدة وما الصعوبة؟ اجمع المشكلات قبل التفكير في الحلول.'],['Ask everyone for a possible solution. Discuss the ideas together; simple ideas are welcome.','اطلب حلاً ممكناً من كل مشارك وناقش الأفكار معاً.'],['Choose an idea to develop. Ask: what would make it useful, practical, and better? Group similar ideas if helpful.','اختر فكرة للتطوير واسأل كيف نجعلها مفيدة وعملية وأفضل.'],['Choose the ideas to include, then write a clear project brief: users, problem, core features, and how AI helps.','اختر أفكار المشروع ثم حدد المستخدمين والمشكلة والميزات ودور الذكاء الاصطناعي.'],['Copy your build prompt into your chosen AI coding tool. Build and test a prototype, show it to the room, and gather feedback.','انسخ تعليمات البناء إلى أداة البرمجة بالذكاء الاصطناعي وابنِ نموذجاً واختبره واعرضه واجمع الملاحظات.']];
+
+export default function GuidedWorkshop({data,busy,control,choose,openProduct,invite,more,present,renderIdea,onOpen}:{data:Snapshot;busy:boolean;control:(p:Partial<Config>)=>Promise<boolean>;choose:(i:Idea)=>Promise<void>;openProduct:()=>void;invite:()=>void;more:()=>void;present:()=>void;renderIdea:(i:Idea)=>ReactNode;onOpen:(i:Idea)=>void}){
+ const [organize,setOrganize]=useState(false);
+ const c=data.config,step=lessonIndex(c.stage),lang:Language=c.language,ar=lang==='ar',t=(en:string,arabic:string)=>ar?arabic:en;
+ const ideas=data.ideas.filter(i=>i.status==='approved'&&i.type!=='comment'),chosen=ideas.find(i=>i.id===c.spotlight),selected=ideas.filter(i=>c.selected.includes(i.id));
+ const pending=data.ideas.filter(i=>i.status==='pending').length;
+ const shown=step===0?ideas.filter(i=>i.type==='problem'):ideas.filter(i=>i.type!=='problem'||step===2);
+ const canNext=!(busy||c.ended||(step===1&&!ideas.some(i=>i.type==='idea'||i.type==='solution'))||(step===3&&!selected.length));
+ const nextHint=step===1&&!ideas.some(i=>i.type==='idea'||i.type==='solution')?t('Waiting for the first idea…','بانتظار أول فكرة…'):step===3&&!selected.length?t('Include at least one idea first','أضف فكرة واحدة على الأقل أولاً'):'';
+ async function go(n:number){const stage=lessonSteps[n][2];const patch:Partial<Config>={stage,screen:'stage',votingOpen:false};if(n===2&&!c.spotlight){const idea=ideas.find(i=>i.type==='idea'||i.type==='solution');if(!idea)return;patch.spotlight=idea.id}await control(patch)}
+ const developButton=(i:Idea)=>step===2&&<button className={'btn small '+(c.spotlight===i.id?'primary':'secondary')} disabled={busy} onClick={()=>void control({spotlight:i.id,screen:'stage'})}>{c.spotlight===i.id?t('Developing this idea ✓','نطور هذه الفكرة ✓'):t('Develop this idea','طور هذه الفكرة')}</button>;
+
+ return <main className="guided-main" dir={ar?'rtl':'ltr'} lang={ar?'ar':'en'}>
+  <header className="guided-header">
+   <div className="guided-brand"><span className="brand-icon small-icon"><Sparkles size={16}/></span><strong>AI COLLAB <b>LAB</b></strong><span className={'status '+(c.paused||c.ended?'off':'')}><span className="pulse"/>{c.ended?t('ENDED','انتهت'):c.paused?t('PAUSED','متوقفة'):t('LIVE','مباشر')}</span><span className="pill code-pill" dir="ltr">{data.code}</span></div>
+   <div className="actions"><Timer end={c.timerEnd}/><LanguageSwitch lang={lang} onChange={v=>void control({language:v})}/><ThemeSwitch/><button className="btn secondary small" onClick={invite}><QrCode size={16}/>{t('Invite','دعوة')} · {data.stats.participants}</button><button className="btn secondary small" onClick={present}><Monitor size={16}/>{t('Present','اعرض')}</button><button className="btn secondary small" onClick={more}><Wrench size={16}/>{t('More tools','المزيد من الأدوات')}{pending>0&&<span className="badge-dot">{pending}</span>}</button><SignOutButton/></div>
+  </header>
+  <section className="guided-hero"><span className="eyebrow">{t('TODAY’S CHALLENGE','تحدي اليوم')}</span><h1>{c.challenge}</h1><p className="muted">{c.question}</p></section>
+  <nav className="lesson-steps" aria-label="Workshop journey" style={{'--progress':`${step/(lessonSteps.length-1)*100}%`} as React.CSSProperties}>{lessonSteps.map(([en,arabic],i)=><button key={en} className={step===i?'active':i<step?'done':''} aria-current={step===i?'step':undefined} disabled={busy||c.ended} onClick={()=>void go(i)}><span className="step-index">{i<step?<Check size={14}/>:i+1}</span><span className="step-name">{t(en,arabic)}</span></button>)}</nav>
+  <div className="guided-grid">
+   <section className="guided-task"><div className="guided-task-top"><span className="eyebrow">{t('STEP','الخطوة')} {step+1}/5</span></div><h2>{t(lessonSteps[step][0],lessonSteps[step][1])}</h2><p>{t(...instructions[step])}</p>
+    {step===0&&<p className="guided-question">{c.question}</p>}
+    {step===2&&<p className="guided-focus">{chosen?<><Lightbulb size={16}/>{t('Developing: ','نطور: ')}<strong>{chosen.title}</strong></>:t('Select an idea below to develop.','اختر فكرة أدناه للتطوير.')}</p>}
+    {step===3&&<div className="actions"><button className="btn primary" disabled={!selected.length} onClick={openProduct}><Sparkles size={17}/>{t('Create project brief','إنشاء ملخص المشروع')}</button><span className="muted">{selected.length} {t('ideas included','أفكار مضمّنة')}</span></div>}
+    {step===4&&<><button className="btn primary" onClick={openProduct}><Sparkles size={17}/>{t('Open brief & build prompt','فتح الملخص وتعليمات البناء')}</button><p className="inline-help">{t('The workshop prepares your brief and prompt. Build the working prototype in your AI coding tool, then return to discuss it.','تجهز الورشة الملخص والتعليمات. ابنِ النموذج في أداة البرمجة ثم عُد لمناقشته.')}</p></>}
+    {c.paused&&<p className="success">{t('Paused — audience contributions are saved.','متوقفة مؤقتاً — المشاركات محفوظة.')}</p>}{c.ended&&<p className="success">{t('Workshop ended. Your project brief is saved.','انتهت الورشة وتم حفظ ملخص المشروع.')}</p>}
+    <div className="guided-stats"><span><Users size={16}/><strong>{data.stats.participants}</strong>{t('joined','انضموا')}</span><span><Lightbulb size={16}/><strong>{data.stats.ideas}</strong>{t('contributions','مشاركات')}</span><span><Layers3 size={16}/><strong>{data.stats.improvements}</strong>{t('improvements','تحسينات')}</span></div>
+   </section>
+   <div className="guided-side"><FacilitatorNotes step={step} lang={lang}/><ActivityFeed ideas={data.ideas} lang={lang} limit={4}/></div>
+  </div>
+  {step<3&&<ThemeCloud ideas={shown} lang={lang} compact/>}
+  {step===3?<section><div className="section-heading"><div><h2>{t('Choose your project ideas','اختر أفكار مشروعك')}</h2><p className="muted">{t('Aim for three core features. You can edit the brief afterwards.','اختر ثلاث ميزات أساسية ويمكنك تعديل الملخص لاحقاً.')}</p></div></div><div className="idea-grid">{ideas.filter(i=>i.type!=='problem').map(i=><div key={i.id} className="idea-with-action">{renderIdea(i)}<button className={'btn small '+(c.selected.includes(i.id)?'primary':'secondary')} disabled={busy} onClick={()=>void choose(i)}>{c.selected.includes(i.id)?t('Included in project ✓','ضمن المشروع ✓'):t('Include in project','أضف إلى المشروع')}</button></div>)}</div></section>
+  :step===4?<section className="panel project-summary"><span className="eyebrow">{t('YOUR PROJECT','مشروعك')}</span><h3>{c.canvas.Solution||c.challenge}</h3><p style={{whiteSpace:'pre-wrap'}}>{c.canvas.Features||t('Return to Plan the project to choose core features.','عُد إلى التخطيط لاختيار الميزات الأساسية.')}</p><h3>{t('Ask the audience','اسأل الجمهور')}</h3><p>{t('Does it solve our problem? What works? What should we improve next?','هل يحل المشكلة؟ ما الذي يعمل وما الذي نحسنه لاحقاً؟')}</p></section>
+  :<section><div className="section-heading"><h2>{t('Our contributions','مشاركاتنا')} <span className="count-badge">{shown.length}</span></h2><button className="btn small secondary" onClick={()=>setOrganize(!organize)}>{organize?t('Show simple cards','عرض البطاقات البسيطة'):t('Organize ideas (optional)','تنظيم الأفكار (اختياري)')}</button></div>
+   {organize?<PresenterIdeaWall code={data.code} lang={lang} challenge={c.challenge} ideas={shown} comments={data.ideas.filter(i=>i.type==='comment')} renderIdea={i=><>{renderIdea(i)}{developButton(i)}</>} onOpen={onOpen}/>
+   :shown.length?<div className="idea-grid">{shown.map(i=><div key={i.id} className="idea-with-action">{renderIdea(i)}{developButton(i)}</div>)}</div>
+   :<div className="empty"><span className="empty-icon"><QrCode size={26}/></span><h3>{t('Waiting for the room','بانتظار القاعة')}</h3>{t('Invite the audience with the QR code. Contributions appear here instantly.','ادعُ الجمهور برمز QR. تظهر المشاركات هنا فوراً.')}<div className="actions" style={{justifyContent:'center',marginTop:14}}><button className="btn small primary" onClick={invite}><QrCode size={15}/>{t('Show QR code','اعرض رمز QR')}</button></div></div>}
+  </section>}
+  <footer className="guided-footer">{nextHint&&<span className="muted next-hint">{nextHint}</span>}<button className="btn secondary" disabled={busy||step===0||c.ended} onClick={()=>void go(step-1)}><ChevronLeft size={17}/>{t('Back','السابق')}</button><button className="btn secondary" disabled={busy||c.ended} onClick={()=>void control({paused:!c.paused})}>{c.paused?<Play size={16}/>:<Pause size={16}/>}{c.paused?t('Resume','متابعة'):t('Pause','إيقاف مؤقت')}</button>{step<4&&<button className="btn primary" disabled={!canNext} onClick={()=>void (c.stage===0?control({stage:1,screen:'stage'}):go(step+1))}>{c.stage===0?t('Start: gather problems','ابدأ: اجمع المشكلات'):t('Next: ','التالي: ')+t(lessonSteps[step+1][0],lessonSteps[step+1][1])}<ChevronRight size={17}/></button>}</footer>
+ </main>;
+}

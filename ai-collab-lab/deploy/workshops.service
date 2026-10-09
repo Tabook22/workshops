@@ -1,0 +1,22 @@
+[Unit]
+Description=AI Collab Lab workshop platform
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/nasser/apps/workshops/current
+Environment=NODE_ENV=production
+Environment=HOST=127.0.0.1
+Environment=PORT=3800
+Environment=BASE_PATH=/workshops
+Environment=PUBLIC_ORIGIN=https://nasserdiary.com
+Environment=WORKSHOP_DB=/home/nasser/apps/workshops/shared/workshops.sqlite
+Environment=PRESENTER_AUTH_FILE=/home/nasser/apps/workshops/shared/presenter-auth.json
+ExecStart=/usr/bin/node /home/nasser/apps/workshops/current/server.mjs
+Restart=on-failure
+RestartSec=3
+UMask=0077
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target

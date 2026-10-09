@@ -1,0 +1,34 @@
+import { database, hash, cookie, presenterAuthenticated } from '../db/server';
+import type { Config, Idea } from './workshop';
+export const reply=(data:unknown,status=200,headers:Record<string,string>={})=>Response.json(data,{status,headers:{'Cache-Control':'no-store',...headers}});
+export const failure=(message:string,status=400)=>reply({error:message},status);
+export const clean=(value:unknown,max:number)=>String(value??'').trim().slice(0,max);
+export type Session={code:string;adminHash:string;config:string;created:number};
+/* Workshop-wide data is identical for every viewer, so live streams share one read per workshop
+   (and concurrent readers share one in-flight query). Writes invalidate it; explicit GETs bypass it. */
+type Shared={session:Session;config:Config;ideas:Idea[];participants:number;totals:{type:string;count:number}[];votes:number;reflection:Record<string,number>};
+const sharedCache=new Map<string,{at:number;value:Promise<Shared|null>}>();
+const SHARED_TTL=1000;
+export function invalidate(code:string){sharedCache.delete(code);}
+function loadShared(db:D1Database,code:string,cached:boolean):Promise<Shared|null>{
+ const hit=sharedCache.get(code);
+ if(cached&&hit&&Date.now()-hit.at<SHARED_TTL)return hit.value;
+ const value=(async()=>{const data=await db.batch([db.prepare('SELECT * FROM sessions WHERE code=?').bind(code),db.prepare('SELECT i.*, (SELECT COUNT(*) FROM votes v WHERE v.code=i.code AND v.idea=i.id) AS votes FROM ideas i WHERE i.code=? ORDER BY i.sortOrder,i.created DESC').bind(code),db.prepare('SELECT COUNT(*) AS count FROM participants WHERE code=?').bind(code),db.prepare('SELECT type, COUNT(*) AS count FROM ideas WHERE code=? AND status != ? GROUP BY type').bind(code,'deleted'),db.prepare('SELECT COUNT(*) AS count FROM votes WHERE code=?').bind(code),db.prepare('SELECT skill,COUNT(*) AS count FROM reflections WHERE code=? GROUP BY skill').bind(code)]);
+  const session=data[0].results[0] as Session|undefined;if(!session)return null;
+  return {session,config:JSON.parse(session.config) as Config,ideas:data[1].results as unknown as Idea[],participants:(data[2].results[0] as {count:number})?.count||0,totals:data[3].results as unknown as {type:string;count:number}[],votes:(data[4].results[0] as {count:number})?.count||0,reflection:Object.fromEntries((data[5].results as {skill:string;count:number}[]).map(x=>[x.skill,x.count]))};})();
+ sharedCache.set(code,{at:Date.now(),value});
+ value.then(v=>{if(!v&&sharedCache.get(code)?.value===value)sharedCache.delete(code)},()=>{if(sharedCache.get(code)?.value===value)sharedCache.delete(code)});
+ if(sharedCache.size>200){const oldest=sharedCache.keys().next().value;if(oldest!==undefined)sharedCache.delete(oldest);}
+ return value;
+}
+export async function snapshot(req:Request,code:string,cached=false){const db=database();const s=await loadShared(db,code,cached);if(!s)return failure('Workshop not found. Check the session code.',404);const {config}=s;
+ const admin=cookie(req,'admin_'+code);const isPresenter=presenterAuthenticated(req)||(!!admin&&await hash(admin)===s.session.adminHash);const participant=cookie(req,'student_'+code);
+ let me:{id:string;nickname:string}|null=null,myVotes:string[]=[],myReflection:string|null=null;
+ if(participant){const own=await db.batch([db.prepare('SELECT id,nickname FROM participants WHERE id = ? AND code = ?').bind(participant,code),db.prepare('SELECT idea FROM votes WHERE code=? AND participant=?').bind(code,participant),db.prepare('SELECT skill FROM reflections WHERE code=? AND participant=?').bind(code,participant)]);me=(own[0].results[0] as {id:string;nickname:string}|undefined)||null;if(me){myVotes=(own[1].results as {idea:string}[]).map(x=>x.idea);myReflection=(own[2].results[0] as {skill:string}|undefined)?.skill||null;}}
+ const showVotes=isPresenter||config.liveResults||!config.votingOpen;
+ const ideaList=(isPresenter?s.ideas:s.ideas.filter(i=>i.status==='approved'||(!!me&&i.participant===me.id))).map(i=>({...i,participant:me&&i.participant===me.id?i.participant:'',votes:showVotes?i.votes:null}));const totals=s.totals;
+ return reply({code,config,ideas:ideaList,stats:{participants:s.participants,ideas:totals.filter(x=>x.type!=='improvement'&&x.type!=='reflection'&&x.type!=='comment').reduce((n,x)=>n+x.count,0),improvements:totals.find(x=>x.type==='improvement')?.count||0,votes:s.votes},reflection:s.reflection,isPresenter,me:me?{...me,votes:myVotes,reflection:myReflection,submitted:ideaList.filter(i=>i.participant===me!.id&&i.status!=='deleted').map(i=>i.type)}:null});}
+export const readCode=(req:Request)=>clean(new URL(req.url).searchParams.get('code'),20).toUpperCase();
+export const unavailable=(e:unknown)=>{console.error('Workshop read failed',e);return failure('The workshop connection is unavailable. Your work is safe. Please retry.',503);};
+/** Live-stream reads: may reuse the workshop-wide data for up to a second. */
+export async function streamSnapshot(req:Request){try{return await snapshot(req,readCode(req),true);}catch(e){return unavailable(e);}}
