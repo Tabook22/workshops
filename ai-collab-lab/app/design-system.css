@@ -538,3 +538,18 @@ body:has(.control-bar) .workshop-help-button { left: auto; right: 18px; bottom: 
 .theme-fade, .theme-fade *, .theme-fade *::before, .theme-fade *::after { transition: background-color .35s ease, color .35s ease, border-color .35s ease, box-shadow .35s ease !important; }
 @media (prefers-reduced-motion: reduce) { .theme-fade, .theme-fade * { transition: none !important; } }
 @media (max-width: 420px) { .theme-switch button { min-width: 27px; height: 28px; padding: 0 5px; } .student header .actions { gap: 2px; } .student header .language button { padding: 6px 3px; } }
+
+/* ---------- Arabic typography & right-to-left ---------- */
+/* Letter-spacing breaks the joins between Arabic letters, so it is removed wherever Arabic is shown. */
+:lang(ar), :lang(ar) * { letter-spacing: 0 !important; }
+:lang(ar) { font-family: 'Noto Sans Arabic', 'DM Sans', sans-serif; }
+:lang(ar) :is(h1, h2, h3, h4, .brand-hub, .theme-words span, .code-input, .ended-stats strong) { font-family: 'Noto Sans Arabic', 'Manrope', sans-serif; }
+:lang(ar) :is(h1, h2, h3) { line-height: 1.4; font-weight: 700; }
+:lang(ar) .hero h1 { line-height: 1.25; }
+:lang(ar) :is(p, li, .inline-help, small, label) { line-height: 1.8; }
+:lang(ar) .eyebrow { font-size: 13px; }
+:lang(ar) .brand, :lang(ar) [dir=ltr], :lang(ar) code, :lang(ar) .code-pill, :lang(ar) .session-code { font-family: 'DM Sans', 'Manrope', sans-serif; }
+.arabic { font-family: 'Noto Sans Arabic', sans-serif; line-height: 1.7; }
+/* Mirror directional icons in right-to-left layouts */
+[dir=rtl] :is(.lucide-arrow-right, .lucide-arrow-up-right, .lucide-arrow-left, .lucide-send, .lucide-log-in) { transform: scaleX(-1); }
+[dir=rtl] .language { direction: ltr; }

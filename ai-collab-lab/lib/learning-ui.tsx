@@ -90,7 +90,7 @@ function ago(ms: number, lang: Language) {
   const min = Math.floor((Date.now() - ms) / 60000);
   if (min < 1) return lang === 'ar' ? 'الآن' : 'just now';
   if (min < 60) return lang === 'ar' ? `قبل ${min} د` : `${min} min ago`;
-  return new Date(ms).toLocaleTimeString(lang === 'ar' ? 'ar-OM' : 'en-GB', {hour: '2-digit', minute: '2-digit'});
+  return new Date(ms).toLocaleTimeString(lang === 'ar' ? 'ar-OM-u-nu-latn' : 'en-GB', {hour: '2-digit', minute: '2-digit'});
 }
 /** Latest contributions — makes participation visible and keeps the room's energy up. */
 export function ActivityFeed({ideas, lang, limit = 5}: {ideas: Idea[]; lang: Language; limit?: number}) {

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = { themeColor: "#101216", viewportFit: "cover" };
 
-const themeScript = "try{var p=localStorage.getItem('ai-collab-theme');if(p!=='dark'&&p!=='light')p=window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.dataset.theme=p}catch(e){}";
+const themeScript = "try{var p=localStorage.getItem('ai-collab-theme');if(p!=='dark'&&p!=='light')p=window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.dataset.theme=p}catch(e){}try{if(localStorage.getItem('ai-collab-lang')==='ar'){document.documentElement.lang='ar';document.documentElement.dir='rtl'}}catch(e){}";
 
 export default function RootLayout({
   children,
