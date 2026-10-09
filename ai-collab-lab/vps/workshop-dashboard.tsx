@@ -1,5 +1,5 @@
 import {useEffect, useMemo, useRef, useState} from 'react';
-import {Plus, Users, Lightbulb, ArrowUpRight, Search, LayoutGrid, List, GripVertical, Pencil, Trash2, Download, Power, RotateCcw, CheckSquare, Square, X, ArrowUpDown} from 'lucide-react';
+import {Plus, Users, Lightbulb, ArrowUpRight, Search, LayoutGrid, List, GripVertical, Pencil, Trash2, Download, Power, RotateCcw, CheckSquare, Square, X, ArrowUpDown, Settings2} from 'lucide-react';
 import {Modal, action, download, useToast} from '../lib/client';
 import {stages, stageArabic, type Language} from '../lib/workshop';
 import {tx, type UiLang} from '../lib/i18n';
@@ -36,7 +36,7 @@ const sorters: Record<Exclude<Sort, 'custom'>, (a: Session, b: Session) => numbe
   status: (a, b) => Number(a.ended) - Number(b.ended) || (b.created || 0) - (a.created || 0),
 };
 
-export default function WorkshopDashboard({sessions, lang, onCreate, reload}: {sessions: Session[]; lang: UiLang; onCreate: () => void; reload: () => Promise<void>}) {
+export default function WorkshopDashboard({sessions, lang, onCreate, onSettings, reload}: {sessions: Session[]; lang: UiLang; onCreate: () => void; onSettings?: () => void; reload: () => Promise<void>}) {
   const t = (en: string, ar: string) => tx(lang, en, ar);
   const [prefs, setPrefs] = useState<Prefs>(readPrefs);
   const [query, setQuery] = useState('');
@@ -143,7 +143,7 @@ export default function WorkshopDashboard({sessions, lang, onCreate, reload}: {s
   const href = (s: Session) => appUrl('/presenter?code=') + s.code;
 
   return <section className={'workshop-dashboard' + (dragging ? ' is-dragging' : '')}>
-    <section className="dashboard-head"><div><span className="eyebrow">{t('PRESENTER CONTROL CENTER', 'مركز تحكم مقدم الورشة')}</span><h1>{t('Your workshops', 'ورشك')}</h1><p className="muted">{t(`${counts.all} workshops · ${counts.active} active`, `${counts.all} ورشة · ${counts.active} نشطة`)}</p></div><button className="btn primary btn-lg" onClick={onCreate}><Plus size={18} />{t('Create workshop', 'إنشاء ورشة')}</button></section>
+    <section className="dashboard-head"><div><span className="eyebrow">{t('PRESENTER CONTROL CENTER', 'مركز تحكم مقدم الورشة')}</span><h1>{t('Your workshops', 'ورشك')}</h1><p className="muted">{t(`${counts.all} workshops · ${counts.active} active`, `${counts.all} ورشة · ${counts.active} نشطة`)}</p></div><div className="actions">{onSettings && <button className="btn secondary btn-lg" onClick={onSettings}><Settings2 size={18} />{t('Settings', 'الإعدادات')}</button>}<button className="btn primary btn-lg" onClick={onCreate}><Plus size={18} />{t('Create workshop', 'إنشاء ورشة')}</button></div></section>
 
     <div className="dashboard-toolbar">
       <label className="wall-search dashboard-search"><Search size={18} /><input aria-label={t('Search workshops', 'ابحث في الورش')} placeholder={t('Search by name, challenge or code…', 'ابحث بالاسم أو التحدي أو الرمز…')} value={query} onChange={e => setQuery(e.target.value)} /></label>

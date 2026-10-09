@@ -5,9 +5,10 @@ import { fileURLToPath } from 'node:url';
 import { Readable } from 'node:stream';
 import { GET as workshopGet, POST as workshopPost } from '../app/api/workshop/route';
 import { GET as eventsGet } from '../app/api/events/route';
+import { GET as appGet, POST as appPost } from '../app/api/app/route';
 import { closeDatabase } from './database';
 import { database } from './database';
-import { authEnabled, presenterAuthenticated, accountLogin } from './auth';
+import { authEnabled, presenterAuthenticated, accountLogin, updateCredentials, currentUsername } from './auth';
 
 const base = (process.env.BASE_PATH || '/workshops').replace(/\/$/, '');
 if (!/^\/[a-zA-Z0-9_-]+$/.test(base)) throw new Error('BASE_PATH must be a single URL path, such as /workshops.');
@@ -62,15 +63,16 @@ async function relay(request: IncomingMessage, response: ServerResponse, url: UR
     if(request.method==='GET') {
       const authenticated=presenterAuthenticated(fetched);
       const sessions=authenticated ? (await database().batch([database().prepare("SELECT s.code,s.config,s.created,(SELECT COUNT(*) FROM participants p WHERE p.code=s.code) AS participants,(SELECT COUNT(*) FROM ideas i WHERE i.code=s.code AND i.status!='deleted' AND i.type!='comment') AS ideas FROM sessions s ORDER BY s.created DESC LIMIT 500")]))[0].results.map((row)=>{const r=row as {code:string;config:string;created:number;participants:number;ideas:number};const c=JSON.parse(r.config);return {code:r.code,name:c.name,challenge:c.challenge,question:c.question,description:c.description,language:c.language,stage:c.stage,ended:c.ended,created:r.created,participants:r.participants,ideas:r.ideas};}) : [];
-      result=Response.json({enabled:authEnabled,authenticated,sessions},{headers:{'Cache-Control':'no-store'}});
+      result=Response.json({enabled:authEnabled,authenticated,username:authenticated?currentUsername():'',sessions},{headers:{'Cache-Control':'no-store'}});
     } else {
-      result=parsed.action==='logout'?Response.json({ok:true},{headers:{'Set-Cookie':`presenter_session=; Path=${base}; HttpOnly; Secure; SameSite=Lax; Max-Age=0`}}):accountLogin(fetched,parsed.username,parsed.password,base);
+      result=parsed.action==='logout'?Response.json({ok:true},{headers:{'Set-Cookie':`presenter_session=; Path=${base}; HttpOnly; Secure; SameSite=Lax; Max-Age=0`}}):parsed.action==='updateCredentials'?updateCredentials(fetched,parsed,base):accountLogin(fetched,parsed.username,parsed.password,base);
     }
   } else if(authEnabled&&request.method==='POST'&&['create','unlock'].includes(String(parsed.action))) {
     if(!presenterAuthenticated(fetched))result=Response.json({error:'Presenter login required.'},{status:401});
     else if(parsed.action==='unlock')result=Response.json({ok:true});
     else result=await workshopPost(fetched);
-  } else result = url.pathname === base + '/api/events' ? await eventsGet(fetched) : request.method === 'POST' ? await workshopPost(fetched) : await workshopGet(fetched);
+  } else if(url.pathname===base+'/api/app') result = request.method === 'POST' ? await appPost(fetched) : await appGet();
+  else result = url.pathname === base + '/api/events' ? await eventsGet(fetched) : request.method === 'POST' ? await workshopPost(fetched) : await workshopGet(fetched);
   for (const [name, value] of result.headers) if (name !== 'set-cookie') response.setHeader(name, value);
   const cookies = result.headers.getSetCookie(); if (cookies.length) response.setHeader('Set-Cookie', cookies);
   response.writeHead(result.status); response.flushHeaders();
@@ -86,10 +88,10 @@ const server = createServer(async (request, response) => {
     const path = url.pathname;
     if (path === base) { response.writeHead(308, { Location: base + '/' + url.search }); response.end(); return; }
     if (path === base + '/healthz' && request.method === 'GET') { response.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }); response.end('{"status":"ok"}'); return; }
-    if ((path === base + '/api/workshop'||path===base+'/api/account') && (request.method === 'GET' || request.method === 'POST') || path === base + '/api/events' && request.method === 'GET') { await relay(request, response, url); return; }
+    if ((path === base + '/api/workshop'||path===base+'/api/account'||path===base+'/api/app') && (request.method === 'GET' || request.method === 'POST') || path === base + '/api/events' && request.method === 'GET') { await relay(request, response, url); return; }
     if (request.method !== 'GET' && request.method !== 'HEAD') { response.writeHead(405); response.end('Method not allowed'); return; }
     const local = path.slice(base.length);
-    if (path.startsWith(base + '/') && ['/', '/join', '/join/', '/presenter', '/presenter/', '/project', '/project/'].includes(local)) { sendFile(response, resolve(root, 'index.html'), request.method === 'HEAD'); return; }
+    if (path.startsWith(base + '/') && ['/', '/join', '/join/', '/presenter', '/presenter/', '/project', '/project/', '/about', '/about/'].includes(local)) { sendFile(response, resolve(root, 'index.html'), request.method === 'HEAD'); return; }
     if (path.startsWith(base + '/assets/') || path === base + '/favicon.svg') {
       const filename = resolve(root, '.' + decodeURIComponent(local));
       if (filename.startsWith(root.replace(/[\\/]$/, '') + sep) && existsSync(filename) && statSync(filename).isFile()) { sendFile(response, filename, request.method === 'HEAD'); return; }
