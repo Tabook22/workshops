@@ -2,6 +2,13 @@ import { database, presenterAuthenticated } from '../../../db/server';
 import { reply, failure } from '../../../lib/snapshot';
 import { defaultAppInfo, sanitizeAppInfo, type AppInfo } from '../../../lib/app-info';
 import { readTranslationConfig, mergeTranslationConfig, testProvider } from '../../../lib/translate-server';
+import { defaultLanding, sanitizeLanding, type LandingContent } from '../../../lib/landing-content';
+
+async function readLanding(): Promise<LandingContent> {
+  const row = await database().prepare('SELECT value FROM app_settings WHERE key=?').bind('landing').first<{ value: string }>();
+  if (!row) return defaultLanding;
+  try { return sanitizeLanding(JSON.parse(row.value)); } catch { return defaultLanding; }
+}
 export const dynamic = 'force-dynamic';
 
 async function readInfo(): Promise<AppInfo> {
@@ -15,9 +22,9 @@ export async function GET(req?: Request) {
   try {
     const t = await readTranslationConfig();
     const admin = req ? presenterAuthenticated(req) : false;
-    return reply({ info: await readInfo(), translationEnabled: t.provider !== 'off', ...(admin ? { translation: { provider: t.provider, endpoint: t.endpoint, model: t.model, dailyLimit: t.dailyLimit, hasKey: !!t.apiKey, keyHint: t.apiKey ? '…' + t.apiKey.slice(-4) : '' } } : {}) });
+    return reply({ info: await readInfo(), landing: await readLanding(), translationEnabled: t.provider !== 'off', ...(admin ? { translation: { provider: t.provider, endpoint: t.endpoint, model: t.model, dailyLimit: t.dailyLimit, hasKey: !!t.apiKey, keyHint: t.apiKey ? '…' + t.apiKey.slice(-4) : '' } } : {}) });
   }
-  catch (e) { console.error('App settings read failed', e); return reply({ info: defaultAppInfo }); }
+  catch (e) { console.error('App settings read failed', e); return reply({ info: defaultAppInfo, landing: defaultLanding }); }
 }
 
 /** Presenter admin only: update the application identity. */
@@ -25,13 +32,22 @@ export async function POST(req: Request) {
   try {
     const origin = req.headers.get('origin');
     if (origin && origin !== new URL(req.url).origin) return failure('Invalid request origin.', 403);
-    if (Number(req.headers.get('content-length') || 0) > 20000) return failure('Request too large.', 413);
+    if (Number(req.headers.get('content-length') || 0) > 60000) return failure('Request too large.', 413);
     if (!presenterAuthenticated(req)) return failure('Presenter login required.', 401);
     let body: Record<string, unknown>;
     try { body = await req.json() as Record<string, unknown>; } catch { return failure('Invalid request.'); }
     if (body.action === 'reset') {
       await database().prepare('DELETE FROM app_settings WHERE key=?').bind('app').run();
       return reply({ ok: true, info: defaultAppInfo });
+    }
+    if (body.action === 'landing') {
+      const landing = sanitizeLanding(body.landing);
+      await database().prepare('INSERT INTO app_settings(key,value,updated) VALUES(?,?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value, updated=excluded.updated').bind('landing', JSON.stringify(landing), Date.now()).run();
+      return reply({ ok: true, landing });
+    }
+    if (body.action === 'resetLanding') {
+      await database().prepare('DELETE FROM app_settings WHERE key=?').bind('landing').run();
+      return reply({ ok: true, landing: defaultLanding });
     }
     if (body.action === 'translation' || body.action === 'testTranslation') {
       const { config, error } = mergeTranslationConfig(await readTranslationConfig(), (body.translation || {}) as Record<string, unknown>);

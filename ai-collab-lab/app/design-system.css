@@ -768,3 +768,24 @@ body:has(.bulk-bar) .workshop-help-button { bottom: 92px; }
 .new-here .icon-action { margin-inline-start: auto; width: 28px; height: 28px; }
 @media (max-width: 1000px) { .about-steps { grid-template-columns: 1fr 1fr; } .about-guide { grid-template-columns: 1fr; } }
 @media (max-width: 640px) { .about-steps { grid-template-columns: 1fr; } .about-oneline { flex-direction: column; padding: 22px; } .about-oneline p { font-size: 18px; } .intro-cta .btn-lg { width: 100%; } }
+
+/* ---------- Home page wording editor ---------- */
+.settings-subtitle { font-size: 17px; margin: 0 0 4px; }
+.preset-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.preset-option { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; text-align: start; padding: 16px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel2); transition: border-color .15s, transform .15s var(--ease); }
+.preset-option:hover { border-color: var(--accent); transform: translateY(-2px); }
+.preset-option svg { color: var(--accent); }
+.preset-option small { color: var(--muted); font-size: 12px; line-height: 1.5; }
+.landing-search { margin: 0; }
+.landing-group { display: flex; flex-direction: column; gap: 10px; }
+.landing-head, .landing-row { display: grid; grid-template-columns: 210px minmax(0, 1fr) minmax(0, 1fr); gap: 10px; align-items: start; }
+.landing-head { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.landing-row { padding: 8px 0; border-top: 1px solid var(--line); }
+.landing-row input, .landing-row textarea { margin: 0; font-size: 14px; padding: 10px 12px; }
+.landing-row textarea { min-height: 76px; }
+.landing-row.changed input, .landing-row.changed textarea { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.landing-label { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding-top: 10px; font-size: 13px; font-weight: 600; color: var(--label); }
+.edited-dot { padding: 1px 7px; border-radius: 999px; font-size: 10px; font-weight: 800; color: var(--accent); background: color-mix(in srgb, var(--accent-fill) 14%, transparent); }
+.small-link { margin: 0; font-size: 11px; display: inline-flex; align-items: center; gap: 3px; }
+@media (max-width: 1000px) { .landing-head { display: none; } .landing-row { grid-template-columns: 1fr; } .landing-label { padding-top: 4px; } .preset-options { grid-template-columns: 1fr; } }
+.settings-tabs { flex-wrap: wrap; }

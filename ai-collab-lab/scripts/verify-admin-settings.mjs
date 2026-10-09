@@ -37,6 +37,18 @@ assert.equal(now.logoText, 'TEST'); assert.equal(now.version, '9.9.9'); assert.e
 await admin.post('/api/app', {action: 'update', info: before});
 assert.equal((await anon.get('/api/app')).info.version, before.version, 'settings restored');
 
+// Home page wording
+const landingBefore = (await anon.get('/api/app')).landing;
+assert.ok(landingBefore.heroTitle1.en && landingBefore.heroTitle1.ar, 'home page wording is public and bilingual');
+await anon.post('/api/app', {action: 'landing', landing: {heroTitle1: {en: 'Hijack', ar: 'x'}}}, 401);
+const saved = await admin.post('/api/app', {action: 'landing', landing: {...landingBefore, heroTitle1: {en: 'Many colleagues.', ar: 'زملاء كثيرون.'}, unknownField: {en: 'x', ar: 'y'}, footerText: {en: 'x'.repeat(5000), ar: 'ok'}}});
+assert.equal(saved.landing.heroTitle1.ar, 'زملاء كثيرون.');
+assert.equal('unknownField' in saved.landing, false, 'unknown fields ignored');
+assert.equal(saved.landing.footerText.en.length, 400, 'long text trimmed');
+assert.equal((await anon.get('/api/app')).landing.heroTitle1.en, 'Many colleagues.', 'visible to everyone');
+await admin.post('/api/app', {action: 'landing', landing: landingBefore});
+assert.equal((await anon.get('/api/app')).landing.heroTitle1.en, landingBefore.heroTitle1.en, 'wording restored');
+
 // Credentials
 await other.post('/api/account', {username, password});
 assert.equal((await other.get('/api/account')).authenticated, true);
@@ -55,4 +67,4 @@ await client().post('/api/account', {username: temp.username, password: temp.pas
 // Restore the original credentials
 await admin.post('/api/account', {action: 'updateCredentials', currentPassword: temp.password, username, newPassword: password});
 await client().post('/api/account', {username, password});
-console.log('PASS: public app settings, admin-only updates, validation, restore; credential change requires session + current password, rejects weak passwords and bad usernames, signs out other devices, keeps this session, old password stops working, original credentials restored.');
+console.log('PASS: public app settings and home page wording, admin-only updates, validation, restore; credential change requires session + current password, rejects weak passwords and bad usernames, signs out other devices, keeps this session, old password stops working, original credentials restored.');

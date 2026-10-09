@@ -1,5 +1,6 @@
-import {useMemo, useState} from 'react';
-import {ArrowLeft, Command, Save, RotateCcw, KeyRound, Eye, EyeOff, Palette, UserCog, Check, ExternalLink, Languages} from 'lucide-react';
+import {useEffect, useMemo, useState} from 'react';
+import LandingSettings from './landing-settings';
+import {ArrowLeft, Command, Save, RotateCcw, KeyRound, Eye, EyeOff, Palette, UserCog, Check, ExternalLink, Languages, Home} from 'lucide-react';
 import TranslationSettings from './translation-settings';
 import {Modal, useToast} from '../lib/client';
 import {useAppInfo, setAppInfo} from '../lib/app-info-client';
@@ -17,12 +18,12 @@ async function post(path: string, body: unknown, lang: UiLang) {
 
 export default function AdminSettings({lang, username, onBack, onUsername}: {lang: UiLang; username: string; onBack: () => void; onUsername: (u: string) => void}) {
   const t = (en: string, ar: string) => tx(lang, en, ar);
-  const [tab, setTab] = useState<'app' | 'translation' | 'account'>('app');
+  const [tab, setTab] = useState<'app' | 'landing' | 'translation' | 'account'>('app');
   return <section className="admin-settings">
     <button className="btn small ghost back-link" onClick={onBack}><ArrowLeft size={16} />{t('Back to your workshops', 'العودة إلى ورشك')}</button>
-    <div className="dashboard-head"><div><span className="eyebrow">{t('ADMINISTRATION', 'الإدارة')}</span><h1>{t('Settings', 'الإعدادات')}</h1><p className="muted">{t('Branding, About page, automatic translation and your administrator account.', 'الهوية وصفحة «عن التطبيق» والترجمة التلقائية وحساب المسؤول.')}</p></div></div>
-    <div className="seg settings-tabs" role="tablist"><button role="tab" aria-selected={tab === 'app'} className={tab === 'app' ? 'active' : ''} onClick={() => setTab('app')}><Palette size={16} />{t('Application & About', 'التطبيق وصفحة «عن التطبيق»')}</button><button role="tab" aria-selected={tab === 'translation'} className={tab === 'translation' ? 'active' : ''} onClick={() => setTab('translation')}><Languages size={16} />{t('Translation', 'الترجمة')}</button><button role="tab" aria-selected={tab === 'account'} className={tab === 'account' ? 'active' : ''} onClick={() => setTab('account')}><UserCog size={16} />{t('Admin account', 'حساب المسؤول')}</button></div>
-    {tab === 'app' ? <AppForm lang={lang} /> : tab === 'translation' ? <TranslationSettings lang={lang} /> : <AccountForm lang={lang} username={username} onUsername={onUsername} />}
+    <div className="dashboard-head"><div><span className="eyebrow">{t('ADMINISTRATION', 'الإدارة')}</span><h1>{t('Settings', 'الإعدادات')}</h1><p className="muted">{t('Branding, home page wording, About page, automatic translation and your administrator account.', 'الهوية ونصوص الصفحة الرئيسية وصفحة «عن التطبيق» والترجمة التلقائية وحساب المسؤول.')}</p></div></div>
+    <div className="seg settings-tabs" role="tablist"><button role="tab" aria-selected={tab === 'app'} className={tab === 'app' ? 'active' : ''} onClick={() => setTab('app')}><Palette size={16} />{t('Application & About', 'التطبيق وصفحة «عن التطبيق»')}</button><button role="tab" aria-selected={tab === 'landing'} className={tab === 'landing' ? 'active' : ''} onClick={() => setTab('landing')}><Home size={16} />{t('Home page', 'الصفحة الرئيسية')}</button><button role="tab" aria-selected={tab === 'translation'} className={tab === 'translation' ? 'active' : ''} onClick={() => setTab('translation')}><Languages size={16} />{t('Translation', 'الترجمة')}</button><button role="tab" aria-selected={tab === 'account'} className={tab === 'account' ? 'active' : ''} onClick={() => setTab('account')}><UserCog size={16} />{t('Admin account', 'حساب المسؤول')}</button></div>
+    {tab === 'app' ? <AppForm lang={lang} /> : tab === 'landing' ? <LandingSettings lang={lang} /> : tab === 'translation' ? <TranslationSettings lang={lang} /> : <AccountForm lang={lang} username={username} onUsername={onUsername} />}
   </section>;
 }
 
@@ -30,6 +31,9 @@ function AppForm({lang}: {lang: UiLang}) {
   const t = (en: string, ar: string) => tx(lang, en, ar);
   const saved = useAppInfo();
   const [form, setForm] = useState<AppInfo>(saved);
+  // Adopt the saved settings when they arrive, unless the admin has started editing.
+  const [base, setBase] = useState(saved);
+  useEffect(() => { setForm(f => JSON.stringify(f) === JSON.stringify(base) ? saved : f); setBase(saved); }, [saved]);
   const [busy, setBusy] = useState(false), [error, setError] = useState(''), [confirmReset, setConfirmReset] = useState(false);
   const {toast, notify} = useToast();
   const dirty = useMemo(() => JSON.stringify(form) !== JSON.stringify(saved), [form, saved]);
@@ -75,7 +79,7 @@ function AppForm({lang}: {lang: UiLang}) {
         <button type="button" className="btn ghost full-width" disabled={busy} onClick={() => setConfirmReset(true)}><RotateCcw size={16} />{t('Restore defaults', 'استعادة الافتراضي')}</button>
       </div>
     </aside>
-    {confirmReset && <Modal title={t('Restore the default branding?', 'استعادة الهوية الافتراضية؟')} onClose={() => setConfirmReset(false)}><p className="muted">{t('The logo, name, version and About text return to their original values. Workshops are not affected.', 'يعود الشعار والاسم والإصدار ونص «عن التطبيق» إلى القيم الأصلية. لا تتأثر الورش.')}</p><div className="actions"><button className="btn danger" disabled={busy} onClick={() => void reset()}>{t('Restore defaults', 'استعادة الافتراضي')}</button><button className="btn secondary" onClick={() => setConfirmReset(false)}>{t('Cancel', 'إلغاء')}</button></div></Modal>}
+    {confirmReset && <Modal title={t('Restore the default branding?', 'استعادة الهوية الافتراضية؟')} onClose={() => setConfirmReset(false)}><p className="muted">{t('The logo, name, version and About text return to their original values. Workshops are not affected.', 'يعود الشعار والاسم والإصدار ونص «عن التطبيق» إلى القيم الأصلية. لا تتأثر الورش.')}</p><div className="actions"><button type="button" className="btn danger" disabled={busy} onClick={() => void reset()}>{t('Restore defaults', 'استعادة الافتراضي')}</button><button type="button" className="btn secondary" onClick={() => setConfirmReset(false)}>{t('Cancel', 'إلغاء')}</button></div></Modal>}
     {toast && <div className="toast" role="status">{toast}</div>}
   </form>;
 }
