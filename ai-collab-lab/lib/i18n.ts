@@ -96,6 +96,7 @@ const errors: Record<string, string> = {
   'Voting is closed, this idea is unavailable, or you have used your votes.': 'التصويت مغلق، أو الفكرة غير متاحة، أو استخدمت جميع أصواتك.',
   'Reflection is not available.': 'التأمل غير متاح حالياً.',
   'Unknown action.': 'إجراء غير معروف.',
+  'Type the workshop code to confirm.': 'اكتب رمز الورشة للتأكيد.',
   'Unable to save right now. Keep your text and retry.': 'تعذّر الحفظ الآن. احتفظ بنصك وحاول مجدداً.',
   'The workshop service did not respond. Your text is still here — please retry.': 'لم تستجب خدمة الورشة. نصك ما زال هنا — يرجى المحاولة مجدداً.',
   'Unable to save. Please retry.': 'تعذّر الحفظ. يرجى المحاولة مجدداً.',
