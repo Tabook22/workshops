@@ -708,3 +708,24 @@ body:has(.bulk-bar) .workshop-help-button { bottom: 92px; }
   .dashboard-head .actions { width: 100%; }
   .dashboard-head .actions .btn-lg { flex: 1; }
 }
+
+/* ---------- Automatic translation ---------- */
+.translation-notice { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 12px 0; padding: 9px 12px; border-radius: 12px; font-size: 13px; color: var(--soft-text); background: color-mix(in srgb, var(--blue) 9%, var(--panel)); border: 1px solid color-mix(in srgb, var(--blue) 30%, var(--line)); }
+.translation-notice > svg { color: var(--blue); flex-shrink: 0; }
+.link-button { border: 0; background: none; padding: 0; color: var(--accent); font-weight: 700; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; margin-inline-start: auto; }
+.translated-mark { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; color: var(--blue); background: color-mix(in srgb, var(--blue) 12%, transparent); border: 1px solid color-mix(in srgb, var(--blue) 30%, transparent); cursor: help; }
+.provider-options { border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.provider-options legend { font-weight: 800; font-size: 14px; margin-bottom: 8px; }
+.provider-option { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; margin: 0; border-radius: 12px; border: 1px solid var(--line); background: var(--panel2); cursor: pointer; transition: border-color .15s, background .15s; }
+.provider-option.active { border-color: var(--accent); background: color-mix(in srgb, var(--accent-fill) 8%, var(--panel)); }
+.provider-option input { width: auto; margin-top: 3px; accent-color: var(--accent); }
+.provider-option span { display: flex; flex-direction: column; gap: 3px; }
+.provider-option strong { color: var(--text); font-size: 14px; }
+.provider-option small { color: var(--muted); font-size: 12px; line-height: 1.5; }
+.settings-actions h3 { display: flex; align-items: center; gap: 6px; }
+
+/* Mixed Arabic/English: each piece of user-written text takes the direction of its own first letters,
+   so English inside an Arabic page (and vice versa) keeps its punctuation in the right place. */
+:is(.idea-card, .challenge-card, .question-panel, .spotlight-card, .discovery-content, .idea-discussion, .wall-comment, .guided-hero, .guided-question, .indent, .activity-feed em, .vote-card, .result-title strong, .session-row-title, .session-card) :is(h1, h2, h3, p, strong, small, a, em),
+.guided-hero h1, .guided-hero p, .guided-question, .stage-card h2, .stage-card p, .page-heading h1, .page-heading p, .projector .subtitle, .projector h1, .idea-orb strong, .wall-body { unicode-bidi: plaintext; }
+.student-status .eyebrow, .code-pill, .session-code { white-space: nowrap; }

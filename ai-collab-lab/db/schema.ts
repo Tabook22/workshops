@@ -6,3 +6,5 @@ export const votes=sqliteTable('votes',{code:text('code').notNull(),participant:
 export const reflections=sqliteTable('reflections',{code:text('code').notNull(),participant:text('participant').notNull(),skill:text('skill').notNull()},t=>[primaryKey({columns:[t.code,t.participant]})]);
 /** Application-wide settings edited by the presenter admin (branding, About page). One JSON value per key. */
 export const appSettings=sqliteTable('app_settings',{key:text('key').primaryKey(),value:text('value').notNull(),updated:integer('updated').notNull()});
+/** Machine-translation cache shared by all viewers: key = sha256(target + newline + source text). */
+export const translations=sqliteTable('translations',{key:text('key').primaryKey(),target:text('target').notNull(),text:text('text').notNull(),provider:text('provider').notNull(),created:integer('created').notNull()});

@@ -13,6 +13,8 @@ await build({
 await build({
   configFile: false, publicDir: false,
   resolve: { alias: [{ find: /^.*\/db\/server(?:\.ts)?$/, replacement: resolve('vps/database.ts') }] },
+  // Bundle every dependency (e.g. the Anthropic SDK) so the server still needs no npm install.
+  ssr: { noExternal: true },
   build: {
     ssr: resolve('vps/server.ts'), outDir: target, emptyOutDir: false, target: 'node22', minify: false,
     rollupOptions: { output: { entryFileNames: 'server.mjs', format: 'es' } }

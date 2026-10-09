@@ -8,6 +8,7 @@ import {Journey,Coach,QualityMeter,Celebrate,HumanAiQuiz,ReflectionInsight} from
 import {prompts,promptsAr,skills,skillArabic,skillIcons,type Language} from '../../lib/workshop';
 import {uid} from '../../lib/id';
 import {setUiLang,storedLang} from '../../lib/i18n';
+import {useTranslatedSnapshot,TranslationNotice} from '../../lib/translate-client';
 
 /** A student's own language choice (EN / العربية / both) wins over the workshop default and is remembered. */
 const STUDENT_LANG='ai-collab-student-lang';
@@ -22,7 +23,8 @@ export default function Join(){
  const [code,setCode]=useState(''),[entry,setEntry]=useState(''),[nickname,setNickname]=useState(''),[error,setError]=useState(''),[busy,setBusy]=useState(false),[lang,setLang]=useState<Language>(()=>(typeof window!=='undefined'&&readStudentLang())||(typeof document!=='undefined'&&document.documentElement.lang==='ar'?'ar':'en')),[text,setText]=useState(''),[title,setTitle]=useState(''),[kind,setKind]=useState(kinds[0]),[confirmation,setConfirmation]=useState(''),[welcome,setWelcome]=useState(false),[tab,setTab]=useState('task'),[celebrate,setCelebrate]=useState(0);
  const submissionId=useRef('');if(!submissionId.current)submissionId.current=uid();
  const textArea=useRef<HTMLTextAreaElement>(null);
- const {data,connected,refresh,error:loadError}=useWorkshop(code);
+ const {data:rawData,connected,refresh,error:loadError}=useWorkshop(code);
+ const data=useTranslatedSnapshot(rawData,lang);
  const draftKey=data?`draft:${code}:${data.config.stage}:${data.config.spotlight||''}`:'';
  useEffect(()=>{const q=new URLSearchParams(location.search).get('code');if(q){setCode(q.toUpperCase());setEntry(q.toUpperCase())}},[]);
  useEffect(()=>{if(data)setLang(readStudentLang()||data.config.language)},[data?.config.language]);
@@ -53,6 +55,7 @@ export default function Join(){
   <header><Brand/><div className="actions"><LanguageSwitch lang={lang} onChange={chooseLang}/><ThemeSwitch/></div></header>
   <div className="student-status"><span className="eyebrow">{tr(`STEP ${step+1} OF 5`,`الخطوة ${step+1} من 5`)} · {ar?lessonSteps[step][1]:lessonSteps[step][0]}</span><span className={'connection '+(!connected?'bad':'')}>{connected?<Wifi size={13}/>:<WifiOff size={13}/>}{connected?tr('Live','مباشر'):tr('Reconnecting…','إعادة الاتصال…')}</span></div>
   <Journey step={step} lang={lang}/>
+  <TranslationNotice data={data} lang={lang}/>
   <nav className="student-tabs" aria-label={ar?'مساحة الورشة':'Workshop workspace'}><button className={tab==='task'?'active':''} aria-pressed={tab==='task'} onClick={()=>setTab('task')}>{tr('Your task','مهمتك')}</button><button className={tab==='wall'?'active':''} aria-pressed={tab==='wall'} onClick={()=>setTab('wall')}>{tr('Team ideas','أفكار الفريق')} <span className="pill">{teamCount}</span></button></nav>
   <Timer end={c.timerEnd}/>
   {tab==='wall'?<StudentWall data={data} lang={lang} refresh={refresh}/>:<>

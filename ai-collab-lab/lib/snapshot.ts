@@ -32,3 +32,5 @@ export const readCode=(req:Request)=>clean(new URL(req.url).searchParams.get('co
 export const unavailable=(e:unknown)=>{console.error('Workshop read failed',e);return failure('The workshop connection is unavailable. Your work is safe. Please retry.',503);};
 /** Live-stream reads: may reuse the workshop-wide data for up to a second. */
 export async function streamSnapshot(req:Request){try{return await snapshot(req,readCode(req),true);}catch(e){return unavailable(e);}}
+/** Text any attendee can already read in this workshop (config + approved contributions). Used to validate translation requests. */
+export async function workshopTexts(code:string):Promise<Set<string>|null>{const s=await loadShared(database(),code,true);if(!s)return null;const set=new Set<string>();const c=s.config;for(const v of [c.challenge,c.question,c.description,c.name])if(v)set.add(v);for(const i of s.ideas)if(i.status==='approved'){if(i.title)set.add(i.title);if(i.text)set.add(i.text)}return set;}

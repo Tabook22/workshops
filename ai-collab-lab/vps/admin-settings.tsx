@@ -1,5 +1,6 @@
 import {useMemo, useState} from 'react';
-import {ArrowLeft, Command, Save, RotateCcw, KeyRound, Eye, EyeOff, Palette, UserCog, Check, ExternalLink} from 'lucide-react';
+import {ArrowLeft, Command, Save, RotateCcw, KeyRound, Eye, EyeOff, Palette, UserCog, Check, ExternalLink, Languages} from 'lucide-react';
+import TranslationSettings from './translation-settings';
 import {Modal, useToast} from '../lib/client';
 import {useAppInfo, setAppInfo} from '../lib/app-info-client';
 import {defaultAppInfo, sanitizeAppInfo, type AppInfo} from '../lib/app-info';
@@ -16,12 +17,12 @@ async function post(path: string, body: unknown, lang: UiLang) {
 
 export default function AdminSettings({lang, username, onBack, onUsername}: {lang: UiLang; username: string; onBack: () => void; onUsername: (u: string) => void}) {
   const t = (en: string, ar: string) => tx(lang, en, ar);
-  const [tab, setTab] = useState<'app' | 'account'>('app');
+  const [tab, setTab] = useState<'app' | 'translation' | 'account'>('app');
   return <section className="admin-settings">
     <button className="btn small ghost back-link" onClick={onBack}><ArrowLeft size={16} />{t('Back to your workshops', 'العودة إلى ورشك')}</button>
-    <div className="dashboard-head"><div><span className="eyebrow">{t('ADMINISTRATION', 'الإدارة')}</span><h1>{t('Settings', 'الإعدادات')}</h1><p className="muted">{t('Branding, About page and your administrator account.', 'الهوية وصفحة «عن التطبيق» وحساب المسؤول.')}</p></div></div>
-    <div className="seg settings-tabs" role="tablist"><button role="tab" aria-selected={tab === 'app'} className={tab === 'app' ? 'active' : ''} onClick={() => setTab('app')}><Palette size={16} />{t('Application & About', 'التطبيق وصفحة «عن التطبيق»')}</button><button role="tab" aria-selected={tab === 'account'} className={tab === 'account' ? 'active' : ''} onClick={() => setTab('account')}><UserCog size={16} />{t('Admin account', 'حساب المسؤول')}</button></div>
-    {tab === 'app' ? <AppForm lang={lang} /> : <AccountForm lang={lang} username={username} onUsername={onUsername} />}
+    <div className="dashboard-head"><div><span className="eyebrow">{t('ADMINISTRATION', 'الإدارة')}</span><h1>{t('Settings', 'الإعدادات')}</h1><p className="muted">{t('Branding, About page, automatic translation and your administrator account.', 'الهوية وصفحة «عن التطبيق» والترجمة التلقائية وحساب المسؤول.')}</p></div></div>
+    <div className="seg settings-tabs" role="tablist"><button role="tab" aria-selected={tab === 'app'} className={tab === 'app' ? 'active' : ''} onClick={() => setTab('app')}><Palette size={16} />{t('Application & About', 'التطبيق وصفحة «عن التطبيق»')}</button><button role="tab" aria-selected={tab === 'translation'} className={tab === 'translation' ? 'active' : ''} onClick={() => setTab('translation')}><Languages size={16} />{t('Translation', 'الترجمة')}</button><button role="tab" aria-selected={tab === 'account'} className={tab === 'account' ? 'active' : ''} onClick={() => setTab('account')}><UserCog size={16} />{t('Admin account', 'حساب المسؤول')}</button></div>
+    {tab === 'app' ? <AppForm lang={lang} /> : tab === 'translation' ? <TranslationSettings lang={lang} /> : <AccountForm lang={lang} username={username} onUsername={onUsername} />}
   </section>;
 }
 

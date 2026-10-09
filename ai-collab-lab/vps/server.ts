@@ -6,6 +6,7 @@ import { Readable } from 'node:stream';
 import { GET as workshopGet, POST as workshopPost } from '../app/api/workshop/route';
 import { GET as eventsGet } from '../app/api/events/route';
 import { GET as appGet, POST as appPost } from '../app/api/app/route';
+import { POST as translatePost } from '../app/api/translate/route';
 import { closeDatabase } from './database';
 import { database } from './database';
 import { authEnabled, presenterAuthenticated, accountLogin, updateCredentials, currentUsername } from './auth';
@@ -71,7 +72,8 @@ async function relay(request: IncomingMessage, response: ServerResponse, url: UR
     if(!presenterAuthenticated(fetched))result=Response.json({error:'Presenter login required.'},{status:401});
     else if(parsed.action==='unlock')result=Response.json({ok:true});
     else result=await workshopPost(fetched);
-  } else if(url.pathname===base+'/api/app') result = request.method === 'POST' ? await appPost(fetched) : await appGet();
+  } else if(url.pathname===base+'/api/app') result = request.method === 'POST' ? await appPost(fetched) : await appGet(fetched);
+  else if(url.pathname===base+'/api/translate'&&request.method==='POST') result = await translatePost(fetched);
   else result = url.pathname === base + '/api/events' ? await eventsGet(fetched) : request.method === 'POST' ? await workshopPost(fetched) : await workshopGet(fetched);
   for (const [name, value] of result.headers) if (name !== 'set-cookie') response.setHeader(name, value);
   const cookies = result.headers.getSetCookie(); if (cookies.length) response.setHeader('Set-Cookie', cookies);
@@ -88,7 +90,7 @@ const server = createServer(async (request, response) => {
     const path = url.pathname;
     if (path === base) { response.writeHead(308, { Location: base + '/' + url.search }); response.end(); return; }
     if (path === base + '/healthz' && request.method === 'GET') { response.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }); response.end('{"status":"ok"}'); return; }
-    if ((path === base + '/api/workshop'||path===base+'/api/account'||path===base+'/api/app') && (request.method === 'GET' || request.method === 'POST') || path === base + '/api/events' && request.method === 'GET') { await relay(request, response, url); return; }
+    if ((path === base + '/api/workshop'||path===base+'/api/account'||path===base+'/api/app') && (request.method === 'GET' || request.method === 'POST') || path === base + '/api/translate' && request.method === 'POST' || path === base + '/api/events' && request.method === 'GET') { await relay(request, response, url); return; }
     if (request.method !== 'GET' && request.method !== 'HEAD') { response.writeHead(405); response.end('Method not allowed'); return; }
     const local = path.slice(base.length);
     if (path.startsWith(base + '/') && ['/', '/join', '/join/', '/presenter', '/presenter/', '/project', '/project/', '/about', '/about/'].includes(local)) { sendFile(response, resolve(root, 'index.html'), request.method === 'HEAD'); return; }
