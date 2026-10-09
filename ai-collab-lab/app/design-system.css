@@ -729,3 +729,42 @@ body:has(.bulk-bar) .workshop-help-button { bottom: 92px; }
 :is(.idea-card, .challenge-card, .question-panel, .spotlight-card, .discovery-content, .idea-discussion, .wall-comment, .guided-hero, .guided-question, .indent, .activity-feed em, .vote-card, .result-title strong, .session-row-title, .session-card) :is(h1, h2, h3, p, strong, small, a, em),
 .guided-hero h1, .guided-hero p, .guided-question, .stage-card h2, .stage-card p, .page-heading h1, .page-heading p, .projector .subtitle, .projector h1, .idea-orb strong, .wall-body { unicode-bidi: plaintext; }
 .student-status .eyebrow, .code-pill, .session-code { white-space: nowrap; }
+
+/* ---------- Introduction (About page + first visit) ---------- */
+.about-toc { display: flex; flex-wrap: wrap; gap: 8px; margin: -10px 0 26px; }
+.about-toc a { padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); font-size: 13px; font-weight: 600; color: var(--soft-text); }
+.about-toc a:hover { border-color: var(--accent); color: var(--accent); }
+.about-page section[id] { scroll-margin-top: 20px; }
+.about-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.about-steps li { display: flex; flex-direction: column; gap: 10px; padding: 20px; border-radius: 16px; border: 1px solid var(--line); background: var(--panel); position: relative; }
+.about-step-num { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; background: var(--accent-fill); color: var(--on-accent); }
+.about-steps strong { font-size: 16px; }
+.about-steps p { margin: 4px 0 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
+.about-guide { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.about-guide h3 { display: flex; align-items: center; gap: 10px; font-size: 18px; margin-bottom: 14px; }
+.about-guide h3 svg { color: var(--accent); }
+.about-guide ol { margin: 0; padding-inline-start: 22px; display: flex; flex-direction: column; gap: 10px; color: var(--soft-text); line-height: 1.65; }
+.about-guide ol li::marker { color: var(--accent); font-weight: 800; }
+.about-tip { display: flex; gap: 8px; align-items: flex-start; margin: 16px 0 0; padding: 12px 14px; border-radius: 12px; background: color-mix(in srgb, var(--accent-fill) 8%, transparent); color: var(--soft-text); font-size: 14px; line-height: 1.6; }
+.about-tip svg { flex-shrink: 0; color: var(--accent); margin-top: 3px; }
+.about-oneline { display: flex; gap: 18px; align-items: flex-start; margin: 40px 0 10px; padding: 28px; border-radius: 20px; border: 1px solid color-mix(in srgb, var(--accent-fill) 35%, var(--line)); background: linear-gradient(135deg, color-mix(in srgb, var(--accent-fill) 10%, var(--panel)), var(--panel) 70%); }
+.about-oneline > svg { flex-shrink: 0; color: var(--accent); }
+.about-oneline p { margin: 8px 0 0; font-size: 20px; line-height: 1.6; font-weight: 600; color: var(--text); }
+.about-more { margin-top: 24px; }
+.about-more p { color: var(--soft-text); line-height: 1.8; white-space: pre-line; }
+.intro-cta { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; margin: 10px 0 40px; padding: 28px; border-radius: 20px; border: 1px solid color-mix(in srgb, var(--accent-fill) 30%, var(--line)); background: linear-gradient(135deg, color-mix(in srgb, var(--accent-fill) 9%, var(--panel)), var(--panel) 65%); }
+.intro-cta h2 { font-size: 26px; margin: 10px 0 6px; }
+.intro-cta p { margin: 0; }
+.welcome-intro { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.welcome-badge { width: 60px; height: 60px; border-radius: 18px; display: flex; align-items: center; justify-content: center; background: var(--accent-fill); color: var(--on-accent); }
+.welcome-lead { font-weight: 700; font-size: 17px; margin: 0; }
+.welcome-intro ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; text-align: start; }
+.welcome-intro li { display: flex; gap: 10px; align-items: flex-start; line-height: 1.6; color: var(--soft-text); }
+.welcome-intro li svg { flex-shrink: 0; margin-top: 4px; color: var(--accent); }
+.welcome-intro .actions { justify-content: center; margin-top: 6px; }
+.new-here { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 0 18px; padding: 10px 12px; border-radius: 12px; font-size: 14px; color: var(--soft-text); background: color-mix(in srgb, var(--purple) 9%, var(--panel)); border: 1px solid color-mix(in srgb, var(--purple) 30%, var(--line)); }
+.new-here > svg { color: var(--purple); flex-shrink: 0; }
+.new-here a { color: var(--accent); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.new-here .icon-action { margin-inline-start: auto; width: 28px; height: 28px; }
+@media (max-width: 1000px) { .about-steps { grid-template-columns: 1fr 1fr; } .about-guide { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .about-steps { grid-template-columns: 1fr; } .about-oneline { flex-direction: column; padding: 22px; } .about-oneline p { font-size: 18px; } .intro-cta .btn-lg { width: 100%; } }

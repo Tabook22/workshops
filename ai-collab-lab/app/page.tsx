@@ -5,6 +5,7 @@ import {useState} from "react";
 import {ArrowUpRight,Sparkles,Users,Lightbulb,Layers3,Vote,Command,Globe2,ShieldCheck,Languages,WifiOff} from "lucide-react";
 import {Brand,ThemeSwitch,UiLanguageSwitch} from "../lib/client";
 import {useAppInfo} from "../lib/app-info-client";
+import {WelcomeIntro} from "../lib/first-visit";
 import {useUiLang,tx} from "../lib/i18n";
 import {skills,skillArabic,skillIcons} from "../lib/workshop";
 
@@ -27,5 +28,7 @@ export default function Home(){const [code,setCode]=useState("");const lang=useU
  <section className="skills-strip" aria-label={t('Skills students practise','المهارات التي يمارسها الطلاب')}><span className="eyebrow">{t('WHAT STUDENTS PRACTISE','ما يمارسه الطلاب')}</span><div>{skills.map((s,i)=><span key={s}>{skillIcons[i]} {t(s,skillArabic[i])}</span>)}</div></section>
  <section className="trust-row"><div><Languages size={20}/><span>{lang==='ar'?<><strong>العربية والإنجليزية</strong> مع تخطيط حقيقي من اليمين إلى اليسار</>:<><strong>Arabic & English</strong> with true right-to-left layout</>}</span></div><div><ShieldCheck size={20}/><span>{lang==='ar'?<><strong>الخصوصية أولاً</strong> — أسماء مستعارة فقط، بلا حسابات للطلاب</>:<><strong>Privacy by design</strong> — nicknames only, no student accounts</>}</span></div><div><WifiOff size={20}/><span>{lang==='ar'?<><strong>موثوقية عالية</strong> — المسودات والمشاركات محفوظة رغم انقطاع الاتصال</>:<><strong>Resilient</strong> — drafts and contributions survive reconnects</>}</span></div></section>
  <section className="landing-bottom"><div><Globe2 size={20}/><span>{t('Built for a room full of possibility.','صُمّمت لقاعة مليئة بالإمكانات.')}</span></div><form onSubmit={e=>{e.preventDefault();location.href=appUrl('/join?code=')+encodeURIComponent(code.trim())}}><input aria-label={t('Workshop code','رمز الورشة')} placeholder={t('Have a workshop code?','لديك رمز ورشة؟')} value={code} onChange={e=>setCode(e.target.value.toUpperCase())} required spellCheck={false} dir="ltr"/><button className="btn small primary">{t('Join','انضم')} <ArrowUpRight size={16}/></button></form></section>
+ <section className="intro-cta"><div><span className="eyebrow">{t('FIRST TIME HERE?','أول مرة هنا؟')}</span><h2>{t('Understand the app in one minute','افهم التطبيق في دقيقة')}</h2><p className="muted">{t('What it is, why it matters, and how students and teachers use it — in simple words.','ما هو التطبيق، ولماذا هو مهم، وكيف يستخدمه الطلاب والمعلمون — بكلمات بسيطة.')}</p></div><a className="btn primary btn-lg" href={appUrl('/about#what')}>{t('Read the guide','اقرأ الدليل')} <ArrowUpRight size={18}/></a></section>
+ <WelcomeIntro lang={lang}/>
  <footer className="landing-footer"><span>{t('HUMAN CREATIVITY. COLLECTIVE INTELLIGENCE. AI POSSIBILITY.','إبداع الإنسان. ذكاء الجماعة. إمكانات الذكاء الاصطناعي.')}</span><span className="footer-meta"><a href={appUrl('/about')}>{t('About','عن التطبيق')} {t(info.name,info.nameAr||info.name)}</a> · <span dir="ltr">v{info.version}</span></span></footer>
 </main>}
