@@ -17,6 +17,19 @@ A live UTAS workshop platform: Think · Share · Improve · Vote · Build.
 
 **Emergency:** pause, stop submissions, close voting, hide the wall, show QR, or restore the current stage. Timer expiry is advisory and never deletes content.
 
+## Learning features
+
+- **Student coach** (stages 1–4, 7): a goal, tap-to-insert sentence starters, a strong worked example and a "think deeper" prompt. A live quality meter checks four transparent rules (clear, names who, explains why/how, concrete detail) in English and Arabic. It never blocks submission. Content lives in `lib/learning.ts`.
+- **Facilitator notes** beside each guided step: learning goal, a question to ask the room, a facilitation tip, suggested time and the workplace skills practised.
+- **Human / AI / Together sorting activity** (stages 6–7) builds AI literacy, with an explanation for every answer.
+- **"What the room is saying"** word cloud and a live activity feed on the presenter and projector screens. These are plain word counts, not AI analysis.
+- **Prompt-quality checklist** next to the build prompt, plus a reflection insight explaining how each skill was practised.
+- **Readable Markdown report** export in addition to the JSON record.
+- **Dark and light templates** with a Dark / Light / Auto switch on every screen. Auto (the default) follows the device setting and updates live; an explicit choice is remembered per browser. Light is recommended for projectors in bright rooms. All colours are tokens in `app/design-system.css` (`:root` for dark, `:root[data-theme=light]` for light), so the palette can be re-branded in one place.
+- Student drafts are kept per stage in session storage, so a stage change or reload no longer erases unsent text.
+
+Live streams share one cached workshop read (max 1 s, in-flight requests coalesced, invalidated on every write; explicit GETs bypass it). This cuts database work from one 7-query batch per viewer every 2 s to roughly one per workshop. See `lib/snapshot.ts`.
+
 ## Local development
 
 Requires Node 22.13+ and npm. Install with `npm install`.
@@ -38,6 +51,28 @@ The verification script creates disposable local test workshops and checks serve
 
 ## Architecture and reliability
 
+Idea-map bubbles support pointer dragging with a movement threshold so a tap opens the idea while a drag only rearranges it. Alt + arrow keys move the focused bubble (Shift increases the step). Color, size and positions are stored in the browser per workshop; these personal arrangements do not change other participants' maps. Customize bubble selects appearance controls; Reset map restores defaults. Own-idea editing is server-authorized, respects session pause/closure and resubmits moderated edits for approval. Shortlisted contributions cannot be edited by students, protecting the meaning of existing ballots.
+
+Clicking an idea bubble opens a focused discussion dialog with the full contribution, author, approved comments and comment composer. Discover includes an Open idea & discuss action. Shortlisted ideas offer voting inside the dialog only during the voting stage, with the server enforcing pause, session closure, quotas and duplicate-vote rules. The dialog supports Escape, keyboard focus containment and a return-to-exploring action; closing a typed comment draft asks before discarding it.
+
+Team ideas now opens an interactive explorer: Discover presents one contribution at a time with previous/next navigation and a surprise option; Idea map displays color-coded contribution bubbles and actual parent relationships, with zoom and pages of up to ten nodes. Selecting a bubble updates the central preview and focused discussion. Phones default to Discover for readable text. Search and category filters apply to both modes. Map connections represent recorded parent IDs, not inferred semantic similarity. English/Arabic controls, keyboard-operable buttons and reduced-motion styling are included.
+
+Students have separate Your task and Team ideas tabs. The shared wall includes searchable, filtered contribution cards and comment threads, with incremental pagination. Each workshop code defines one shared team; there are no separate subgroups within a workshop. Comments use the existing ideas table with `type=comment` and a parent idea ID, so no schema migration is required. Comments are excluded from idea statistics and cannot be shortlisted. Moderation, workshop membership, parent visibility, pause, closure and a 20-comment limit per participant per idea are enforced by the server. Retry IDs make comment posting idempotent. Pending comments are visible only to their author and the presenter; other students see them after approval.
+
+### Hostinger VPS deployment at /workshops
+
+Presenter access on the VPS uses the configured username and password, a salted scrypt password hash, and a signed HttpOnly/Secure cookie lasting 12 hours. The private credentials file is `/home/nasser/apps/workshops/shared/presenter-auth.json` (mode 600), referenced by `PRESENTER_AUTH_FILE`; it is excluded from release archives and source control. Presenter login lists existing workshops and authorizes account-wide management. Legacy workshop keys cannot authorize VPS access when account authentication is enabled. Students still join without accounts. Ten failed login attempts per IP are limited for 15 minutes. Sign out clears the browser session cookie.
+
+Use `scripts/verify-presenter-auth.mjs` with `WORKSHOP_TEST_ORIGIN` and a securely supplied `WORKSHOP_PRESENTER_PASSWORD` to verify authentication. The full workshop verifier also accepts that password environment variable. Never put passwords in source control or public assets.
+
+`npm run build:vps` produces a self-contained release in `dist/vps`, requiring Node 22.16+ with no server-side npm install. The shared workshop API uses a native SQLite adapter with WAL, atomic vote statements and checksum-verified Drizzle migrations. Every client link, QR code, API call and event stream uses `/workshops`.
+
+The VPS release is installed under `/home/nasser/apps/workshops/releases/20261006-01`; `current` points to the active release. The user service is `workshops.service` (`systemctl --user status workshops`), bound to `127.0.0.1:3800`. User lingering is enabled so it starts after reboot. Persistent data lives in `/home/nasser/apps/workshops/shared/workshops.sqlite`, outside release directories. Back up it with SQLite's online backup API rather than copying a live WAL database alone. Never overwrite this database when updating the app.
+
+The Nginx installer is `sudo sh /home/nasser/apps/workshops/current/deploy/install-nginx.sh`. It adds only a workshop include to the existing HTTPS vhost, backs up the original configuration, validates before reload and restores it on validation failure. SSE buffering is disabled. The public health endpoint is `https://nasserdiary.com/workshops/healthz`. The original Sites deployment has separate data; no sessions are automatically migrated between providers.
+
+To verify a VPS release, set `WORKSHOP_TEST_ORIGIN=http://127.0.0.1:3800/workshops` and run `node scripts/verify-workshop.mjs`. It creates and closes disposable sessions. Preserve release directories for rollback: update `current` to a tested release and restart the user service. Database schema rollbacks require separate review; do not reverse migrations blindly.
+
 - React 19 + TypeScript + Vinext/Vite, deployed as a Cloudflare Worker.
 - Durable D1 database; generated Drizzle migrations own schema changes.
 - Server-Sent Events deliver snapshots about every two seconds. The browser reconnects automatically, with snapshot polling fallback and refresh when the tab becomes visible.
@@ -54,3 +89,5 @@ The verification script creates disposable local test workshops and checks serve
 This MVP is intended for supervised workshops. Keep presenter keys private and avoid collecting sensitive health/student records. Joining and public workshop content are accessible to anyone with the session code. There is no institutional SSO, email recovery, multi-device identity enforcement, or automated abuse classifier. Moderation is manual. Load testing at a full 100+ person event has not been performed; rehearse on the actual campus network before the session.
 
 The Site must permit anonymous public visitors for QR joining without accounts. Hosting access and persistent resources are managed through Sites; production database migrations apply during publishing. Source and lockfile are included for ongoing maintenance.
+
+Presenter idea wall: choose Cards, Bubbles, or List above the live wall. Each workshop's display choice is remembered on this browser. Bubbles retain zoom, dragging and customization; clicking one opens presenter moderation controls. The presenter layout does not change students' views.

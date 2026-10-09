@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+const origin=process.env.WORKSHOP_TEST_ORIGIN||'http://127.0.0.1:3800/workshops';
+const password=process.env.WORKSHOP_PRESENTER_PASSWORD;
+assert.ok(password,'Provide the test password via WORKSHOP_PRESENTER_PASSWORD.');
+let cookie='';
+async function post(path,body,status=200,authenticated=false){const r=await fetch(origin+path,{method:'POST',headers:{'Content-Type':'application/json',...(authenticated?{cookie}:{})},body:JSON.stringify(body)});const j=await r.json();assert.equal(r.status,status,JSON.stringify(j));if(path==='/api/account'&&r.ok&&body.action!=='logout')cookie=r.headers.getSetCookie()[0].split(';')[0];return j;}
+await post('/api/workshop',{action:'create'},401);
+await post('/api/account',{username:'nasser',password:'incorrect-password'},401);
+await post('/api/account',{username:'nasser',password});
+assert.ok(cookie.startsWith('presenter_session='));
+const {code,key}=await post('/api/workshop',{action:'create',name:'Presenter authentication verification'},201,true);
+await post('/api/workshop',{action:'control',code,patch:{stage:1}},403);
+await post('/api/workshop',{action:'unlock',code,key},401);
+const legacy=await fetch(origin+'/api/workshop?code='+code,{headers:{cookie:'admin_'+code+'='+key}});assert.equal((await legacy.json()).isPresenter,false);
+await post('/api/workshop',{action:'control',code,patch:{stage:1}},200,true);
+const account=await fetch(origin+'/api/account',{headers:{cookie}});const a=await account.json();assert.equal(a.authenticated,true);assert.ok(a.sessions.some(s=>s.code===code));
+const forged=await fetch(origin+'/api/account',{headers:{cookie:cookie+'tampered'}});assert.equal((await forged.json()).authenticated,false);
+const csrf=await fetch(origin+'/api/account',{method:'POST',headers:{'Content-Type':'application/json',Origin:'https://invalid.example'},body:JSON.stringify({username:'nasser',password})});assert.equal(csrf.status,403);
+await post('/api/workshop',{action:'join',code,nickname:'Anonymous test'},201);
+await post('/api/workshop',{action:'control',code,patch:{ended:true}},200,true);
+const logout=await fetch(origin+'/api/account',{method:'POST',headers:{'Content-Type':'application/json',cookie},body:JSON.stringify({action:'logout'})});assert.match(logout.headers.getSetCookie()[0],/Max-Age=0/);
+console.log('PASS: login, wrong password, protected creation/controls, legacy key rejection, session list, forged cookie, CSRF, anonymous student joining and logout cookie.');
