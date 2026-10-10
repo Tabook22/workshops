@@ -78,6 +78,20 @@ assert.deepEqual((await presenter.get(r1)).config.partners,[r2],'only other room
 assert.equal((await bob.get(r1)).locked,false,'an invited team can read');await carol.request({action:'joinRoom',code:r1,role:'guest'},201);
 assert.equal((await carol.get(code)).rooms.find(r=>r.code===r1).canVisit,true);
 await alice.request({action:'control',code:r1,patch:{visibility:'open'}});
+// Membership: invite-only rooms need the team's link (its token is for members only); the lead removes members or hands over the lead.
+await alice.request({action:'control',code:r1,patch:{joining:'invite'}});
+const token=(await alice.get(r1)).config.inviteToken;assert.match(token,/^[a-f0-9]{12}$/);assert.equal((await carol.get(r1)).config.inviteToken,undefined,'visitors never see the token');assert.equal((await carol.get(code)).rooms.find(r=>r.code===r1).joining,'invite');
+const dave=client();await dave.request({action:'join',code:r1,nickname:'QA Dave'},403);
+await dave.request({action:'join',code:r1,nickname:'QA Dave',invite:'wrong'},403);
+await dave.request({action:'join',code:r1,nickname:'QA Dave',invite:token},201);let daveId=(await dave.get(r1)).me.id;assert.equal((await dave.get(r1)).me.role,'member');
+await carol.request({action:'member',code:r1,participant:daveId,op:'remove'},403);
+await alice.request({action:'member',code:r1,participant:daveId,op:'remove'});assert.equal((await dave.get(r1)).me.role,'guest');
+await dave.request({action:'joinRoom',code:r1},403,'a removed member cannot rejoin an invite-only room without the link');
+await alice.request({action:'control',code:r1,patch:{resetInvite:true}});const token2=(await alice.get(r1)).config.inviteToken;assert.notEqual(token2,token);
+await dave.request({action:'joinRoom',code:r1,invite:token},403);await dave.request({action:'joinRoom',code:r1,invite:token2});
+await alice.request({action:'member',code:r1,participant:daveId,op:'lead'});assert.equal((await dave.get(r1)).me.role,'lead');assert.equal((await alice.get(r1)).me.role,'member');
+await dave.request({action:'member',code:r1,participant:(await alice.get(r1)).me.id,op:'lead'});assert.equal((await alice.get(r1)).me.role,'lead');
+await dave.request({action:'leaveRoom',code:r1});await alice.request({action:'control',code:r1,patch:{joining:'open'}});
 // Joining another team as a member moves you; your old room keeps your ideas as a guest.
 await bob.request({action:'joinRoom',code:r1});
 assert.equal((await bob.get(r1)).me.role,'member');assert.equal((await bob.get(r2)).me.role,'guest');assert.equal((await bob.get(code)).me.room,r1);

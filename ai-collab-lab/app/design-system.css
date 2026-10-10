@@ -1039,3 +1039,17 @@ button.map-room:focus-visible { box-shadow: 0 0 0 3px var(--ring, var(--accent))
 .partner-chip.on { border-color: hsl(var(--room-hue, 90) 62% 52%); background: color-mix(in srgb, hsl(var(--room-hue, 90) 62% 52%) 12%, var(--panel)); font-weight: 700; }
 .locked-room .waiting-icon { color: var(--danger, #dc2626); }
 @media (max-width: 640px) { .privacy-options { grid-template-columns: 1fr; } }
+/* ---------- Team membership and app updates ---------- */
+.join-setting, .team-members { margin: 4px 0 18px; }
+.join-setting h3, .team-members h3 { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; font-size: 15px; }
+.privacy-options.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.team-members { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); }
+.team-members ul { list-style: none; margin: 0 0 8px; padding: 0; }
+.team-members li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.team-members .member-name { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.team-members .pill { display: inline-flex; align-items: center; gap: 4px; }
+.invite-only { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
+.person-actions { display: inline-flex; gap: 2px; }
+.update-banner { position: fixed; z-index: 200; left: 50%; bottom: 18px; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; max-width: calc(100% - 32px); padding: 10px 12px 10px 16px; border-radius: 14px; background: var(--panel); color: var(--text); border: 1px solid var(--accent); box-shadow: 0 18px 40px -16px rgb(0 0 0 / .45); font-size: 14px; }
+.update-banner svg { color: var(--accent); flex: none; }
+@media (max-width: 560px) { .privacy-options.two { grid-template-columns: 1fr; } .update-banner { flex-wrap: wrap; } }

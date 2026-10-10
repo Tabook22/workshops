@@ -5,9 +5,12 @@ import { resolve } from 'node:path';
 
 const basePath = '/workshops';
 const target = resolve('dist/vps');
+// Each release gets an id; open pages compare it with the server's to notice a new version.
+const buildId = Date.now().toString(36);
 await build({
   configFile: false, root: resolve('vps'), base: basePath + '/', publicDir: resolve('public'),
   plugins: [react()],
+  define: { __APP_BUILD__: JSON.stringify(buildId) },
   build: { outDir: resolve(target, 'public'), emptyOutDir: true, target: 'es2022' }
 });
 await build({
@@ -23,6 +26,6 @@ await build({
 mkdirSync(target, { recursive: true });
 cpSync(resolve('drizzle'), resolve(target, 'drizzle'), { recursive: true });
 cpSync(resolve('deploy'), resolve(target, 'deploy'), { recursive: true });
-writeFileSync(resolve(target, 'runtime-config.json'), JSON.stringify({ basePath }) + '\n');
+writeFileSync(resolve(target, 'runtime-config.json'), JSON.stringify({ basePath, build: buildId }) + '\n');
 writeFileSync(resolve(target, 'package.json'), JSON.stringify({ name: 'ai-collab-lab-vps', private: true, type: 'module', engines: { node: '>=22.16.0' } }, null, 2) + '\n');
 console.log('Standalone VPS release ready in dist/vps. No npm install is needed on the server.');

@@ -93,7 +93,7 @@ const server = createServer(async (request, response) => {
     const url = new URL(request.url || '/', publicOrigin);
     const path = url.pathname;
     if (path === base) { response.writeHead(308, { Location: base + '/' + url.search }); response.end(); return; }
-    if (path === base + '/healthz' && request.method === 'GET') { response.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }); response.end('{"status":"ok"}'); return; }
+    if (path === base + '/healthz' && request.method === 'GET') { response.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }); response.end(JSON.stringify({ status: 'ok', build: buildConfig.build || '' })); return; }
     if ((path === base + '/api/workshop'||path===base+'/api/account'||path===base+'/api/app') && (request.method === 'GET' || request.method === 'POST') || path === base + '/api/translate' && request.method === 'POST' || path === base + '/api/upload' && (request.method === 'GET' || request.method === 'POST') || path === base + '/api/events' && request.method === 'GET') { await relay(request, response, url); return; }
     if (request.method !== 'GET' && request.method !== 'HEAD') { response.writeHead(405); response.end('Method not allowed'); return; }
     const local = path.slice(base.length);
