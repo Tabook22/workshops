@@ -44,6 +44,26 @@ assert.equal((await bob.get(code)).me.room,r2,'visiting does not change your tea
 let stat=(await presenter.get(code)).rooms.find(r=>r.code===r1);assert.equal(stat.guests,1);assert.equal(stat.comments,1);assert.equal(stat.ideas,1);assert.deepEqual(stat.people,[{lead:true,name:'QA Alice'}]);assert.ok(stat.lastActivity>0);
 assert.equal((await presenter.get(r1)).people.length,2);assert.equal((await bob.get(r1)).people,undefined);assert.equal((await alice.get(r1)).people.length,2,'the room lead sees who is in the room');
 
+// Files: members share images/PDFs in pieces; type comes from the bytes; guests, wrong types and oversize files are refused.
+const sendFile=async(c,room,bytes,{name='sketch.png',chunk=96*1024}={})=>{const id=crypto.randomUUID(),total=Math.max(1,Math.ceil(bytes.length/chunk));let res;for(let i=0;i<total;i++){const r=await fetch(origin+'/api/upload?code='+room+'&id='+id+'&index='+i+'&total='+total,{method:'POST',headers:{'content-type':'application/octet-stream','x-file-name':encodeURIComponent(name),cookie:[...c.cookies].map(([k,v])=>k+'='+v).join('; ')},body:bytes.slice(i*chunk,(i+1)*chunk)});res={status:r.status,body:await r.json()};if(r.status>=400)return res;}return {...res,id};};
+const png=new Uint8Array(150*1024);png.set([0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a]);for(let i=8;i<png.length;i++)png[i]=i%251;
+let up=await sendFile(alice,r1,png);assert.equal(up.status,201,JSON.stringify(up.body));assert.equal(up.body.status,'approved');
+const fileRes=await fetch(origin+'/api/upload?id='+up.id);assert.equal(fileRes.status,200);assert.equal(fileRes.headers.get('content-type'),'image/png');assert.match(fileRes.headers.get('content-security-policy'),/sandbox/);assert.deepEqual(new Uint8Array(await fileRes.arrayBuffer()),png);
+let files=(await bob.get(r1)).uploads;assert.equal(files.length,1);assert.equal(files[0].name,'sketch.png');assert.equal(files[0].mine,false);assert.equal(files[0].participant,undefined);
+assert.equal((await presenter.get(code)).rooms.find(r=>r.code===r1).uploads,1);
+assert.equal((await sendFile(bob,r1,png)).status,403,'visitors cannot share files');
+assert.equal((await sendFile(alice,r1,new TextEncoder().encode('<html><script>alert(1)</script>'),{name:'x.png'})).status,400,'type comes from the bytes');
+assert.equal((await sendFile(alice,code,png)).status,400,'files belong to team rooms');
+assert.equal((await sendFile(alice,r1,new Uint8Array(3.2*1024*1024).fill(1).map((v,i)=>i<5?[0x25,0x50,0x44,0x46,0x2d][i]:v))).status,400,'3 MB at most');
+await bob.request({action:'file',code:r1,id:up.id,op:'delete'},403);
+// Moderated room: a member's file waits for approval and is visible only to its owner and facilitators.
+await presenter.request({action:'control',code:r2,patch:{moderated:true}});const pdf=new TextEncoder().encode('%PDF-1.4 demo');
+up=await sendFile(carol,r2,pdf,{name:'brief.pdf'});assert.equal(up.body.status,'pending');
+assert.equal((await fetch(origin+'/api/upload?id='+up.id)).status,404);assert.equal((await carol.get(r2)).uploads[0].mine,true);assert.equal((await presenter.get(r2)).uploads.length,1);
+await bob.request({action:'file',code:r2,id:up.id,op:'approve'});
+assert.equal((await fetch(origin+'/api/upload?id='+up.id+'&download=1')).headers.get('content-disposition').startsWith('attachment'),true);
+await carol.request({action:'file',code:r2,id:up.id,op:'delete'});assert.equal((await presenter.get(r2)).uploads.length,0);assert.equal((await fetch(origin+'/api/upload?id='+up.id)).status,404);
+await presenter.request({action:'control',code:r2,patch:{moderated:false}});
 // Joining another team as a member moves you; your old room keeps your ideas as a guest.
 await bob.request({action:'joinRoom',code:r1});
 assert.equal((await bob.get(r1)).me.role,'member');assert.equal((await bob.get(r2)).me.role,'guest');assert.equal((await bob.get(code)).me.room,r1);

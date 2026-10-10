@@ -29,6 +29,13 @@
       "when": 1791609395432,
       "tag": "0003_rooms",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1791645900171,
+      "tag": "0004_uploads",
+      "breakpoints": true
     }
   ]
 }

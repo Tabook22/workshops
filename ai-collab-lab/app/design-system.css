@@ -937,3 +937,30 @@ button.map-room:focus-visible { box-shadow: 0 0 0 3px var(--ring, var(--accent))
 .feed-parent { margin: 4px 0 2px; font-size: 12px; color: var(--muted); }
 .feed-text { margin: 0; font-size: 14px; color: var(--soft-text, var(--text)); white-space: pre-wrap; overflow-wrap: anywhere; }
 @media (max-width: 720px) { .room-activity { grid-template-columns: 1fr; } .map-floor { grid-template-columns: 1fr; } }
+
+/* ---------- Room files ---------- */
+.room-files { margin: 8px 0; }
+.room-files-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.room-files-head h3 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 15px; }
+.room-activity-files { grid-column: 1 / -1; padding-top: 14px; border-top: 1px solid var(--line); }
+.upload-progress { height: 6px; border-radius: 3px; background: var(--track, var(--line)); overflow: hidden; margin: 8px 0; }
+.upload-progress span { display: block; height: 100%; background: var(--accent-fill); transition: width .2s ease; }
+.file-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-top: 10px; }
+.file-card { display: flex; flex-direction: column; min-width: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); overflow: hidden; }
+.file-card.pending { border-style: dashed; border-color: color-mix(in srgb, var(--amber) 55%, transparent); }
+.file-thumb { display: grid; place-items: center; height: 130px; padding: 0; border: 0; border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--text) 5%, transparent); cursor: pointer; color: var(--muted); text-decoration: none; }
+.file-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.file-thumb.pdf { gap: 4px; font-weight: 800; font-size: 12px; }
+.file-thumb.pdf svg { color: var(--coral, var(--danger)); }
+.file-info { display: flex; flex-direction: column; gap: 3px; padding: 8px 10px 4px; min-width: 0; }
+.file-info strong { font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-info small { color: var(--muted); font-size: 11px; }
+.file-info .pill { align-self: flex-start; }
+.file-actions { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px 8px 8px; margin-top: auto; }
+.file-empty { padding: 22px; }
+.file-preview { display: block; max-width: 100%; max-height: 70vh; margin: 0 auto 10px; border-radius: 10px; }
+.feed-file { display: inline-flex; align-items: center; gap: 8px; margin: 6px 0 2px; max-width: 100%; color: var(--text); text-decoration: none; font-size: 13px; }
+.feed-file img { width: 64px; height: 48px; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); flex: none; }
+.feed-file span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.type-chip.t-file { display: inline-flex; align-items: center; gap: 3px; }
+.type-chip.t-file { --tone: var(--blue); }

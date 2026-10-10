@@ -7,6 +7,7 @@ import { GET as workshopGet, POST as workshopPost } from '../app/api/workshop/ro
 import { GET as eventsGet } from '../app/api/events/route';
 import { GET as appGet, POST as appPost } from '../app/api/app/route';
 import { POST as translatePost } from '../app/api/translate/route';
+import { GET as uploadGet, POST as uploadPost } from '../app/api/upload/route';
 import { closeDatabase } from './database';
 import { database } from './database';
 import { authEnabled, presenterAuthenticated, accountLogin, updateCredentials, currentUsername } from './auth';
@@ -35,6 +36,8 @@ function sendFile(response: ServerResponse, filename: string, head: boolean) {
   if (head) response.end(); else createReadStream(filename).pipe(response);
 }
 async function relay(request: IncomingMessage, response: ServerResponse, url: URL) {
+  // File pieces are raw bytes, not JSON.
+  const upload = url.pathname === base + '/api/upload';
   const controller = new AbortController();
   response.on('close', () => controller.abort());
   const requestHeaders = new Headers();
@@ -47,7 +50,7 @@ async function relay(request: IncomingMessage, response: ServerResponse, url: UR
     const chunks: Buffer[] = []; let size = 0;
     for await (const chunk of request) {
       const buffer = Buffer.from(chunk); size += buffer.length;
-      if (size > 128000) { response.writeHead(413); response.end('Request too large'); return; }
+      if (size > (upload ? 100000 : 128000)) { response.writeHead(413); response.end('Request too large'); return; }
       chunks.push(buffer);
     }
     body = Buffer.concat(chunks);
@@ -57,7 +60,7 @@ async function relay(request: IncomingMessage, response: ServerResponse, url: UR
   const origin=fetched.headers.get('origin');
   let parsed: Record<string, unknown> = {};
   let malformed = false;
-  if (request.method === 'POST') { try { const value = JSON.parse(body?.toString() || '{}'); if (value && typeof value === 'object') parsed = value; else malformed = true; } catch { malformed = true; } }
+  if (request.method === 'POST' && !upload) { try { const value = JSON.parse(body?.toString() || '{}'); if (value && typeof value === 'object') parsed = value; else malformed = true; } catch { malformed = true; } }
   if(request.method==='POST' && origin && origin!==new URL(publicOrigin).origin) result=Response.json({error:'Invalid request origin.'},{status:403});
   else if(malformed) result=Response.json({error:'Invalid request.'},{status:400});
   else if(url.pathname===base+'/api/account') {
@@ -74,6 +77,7 @@ async function relay(request: IncomingMessage, response: ServerResponse, url: UR
     else result=await workshopPost(fetched);
   } else if(url.pathname===base+'/api/app') result = request.method === 'POST' ? await appPost(fetched) : await appGet(fetched);
   else if(url.pathname===base+'/api/translate'&&request.method==='POST') result = await translatePost(fetched);
+  else if(upload) result = request.method === 'POST' ? await uploadPost(fetched) : await uploadGet(fetched);
   else result = url.pathname === base + '/api/events' ? await eventsGet(fetched) : request.method === 'POST' ? await workshopPost(fetched) : await workshopGet(fetched);
   for (const [name, value] of result.headers) if (name !== 'set-cookie') response.setHeader(name, value);
   const cookies = result.headers.getSetCookie(); if (cookies.length) response.setHeader('Set-Cookie', cookies);
@@ -90,7 +94,7 @@ const server = createServer(async (request, response) => {
     const path = url.pathname;
     if (path === base) { response.writeHead(308, { Location: base + '/' + url.search }); response.end(); return; }
     if (path === base + '/healthz' && request.method === 'GET') { response.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }); response.end('{"status":"ok"}'); return; }
-    if ((path === base + '/api/workshop'||path===base+'/api/account'||path===base+'/api/app') && (request.method === 'GET' || request.method === 'POST') || path === base + '/api/translate' && request.method === 'POST' || path === base + '/api/events' && request.method === 'GET') { await relay(request, response, url); return; }
+    if ((path === base + '/api/workshop'||path===base+'/api/account'||path===base+'/api/app') && (request.method === 'GET' || request.method === 'POST') || path === base + '/api/translate' && request.method === 'POST' || path === base + '/api/upload' && (request.method === 'GET' || request.method === 'POST') || path === base + '/api/events' && request.method === 'GET') { await relay(request, response, url); return; }
     if (request.method !== 'GET' && request.method !== 'HEAD') { response.writeHead(405); response.end('Method not allowed'); return; }
     const local = path.slice(base.length);
     if (path.startsWith(base + '/') && ['/', '/join', '/join/', '/presenter', '/presenter/', '/project', '/project/', '/about', '/about/'].includes(local)) { sendFile(response, resolve(root, 'index.html'), request.method === 'HEAD'); return; }
