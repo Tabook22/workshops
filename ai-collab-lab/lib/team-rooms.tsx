@@ -4,9 +4,9 @@
    and the presenter follows every room from one overview. */
 import {useState,type ReactNode} from 'react';
 import {QRCodeSVG} from 'qrcode.react';
-import {DoorOpen,Users,Lightbulb,Plus,Copy,Monitor,ExternalLink,Trash2,Megaphone,ArrowLeft,Eye,UserPlus,Crown,Pause,Play,ArrowRight,Share2} from 'lucide-react';
+import {DoorOpen,Users,Lightbulb,Plus,Copy,Monitor,ExternalLink,Trash2,Megaphone,ArrowLeft,Eye,UserPlus,Crown,Pause,Play,ArrowRight,Share2,Pencil,Search} from 'lucide-react';
 import {stages,stageArabic,type Snapshot,type RoomSummary,type Language,type Config} from './workshop';
-import {action,Modal,copyText} from './client';
+import {action,Modal,copyText,useWorkshop,useToast} from './client';
 import {appUrl} from './urls';
 
 type L=(en:string,ar:string)=>string;
@@ -34,12 +34,11 @@ export function RoomsBoard({data,lang}:{data:Snapshot;lang:Language}){const t=tr
   <p className="muted" style={{marginTop:24,textAlign:'center'}}>{t('Join the workshop, then open the Team rooms tab to find your team.','انضم إلى الورشة، ثم افتح تبويب غرف الفرق لتجد فريقك.')}</p></>}
 
 /** Presenter overview: create rooms, guide every room at once, and open any room. */
-export function RoomsPanel({data,lang,busy,run,control,present,notify}:{data:Snapshot;lang:Language;busy:boolean;run:(body:Record<string,unknown>,success?:string)=>Promise<boolean>;control:(patch:Partial<Config>)=>Promise<boolean>;present:()=>void;notify:(m:string)=>void}){
+export function RoomsPanel({data,lang,busy,run,control,present,notify,reload}:{data:Snapshot;lang:Language;busy:boolean;run:(body:Record<string,unknown>,success?:string)=>Promise<boolean>;control:(patch:Partial<Config>)=>Promise<boolean>;present:()=>void;notify:(m:string)=>void;reload:()=>Promise<void>}){
  const t=translator(lang);const c=data.config;const rooms=data.rooms||[];
- const [name,setName]=useState(''),[focus,setFocus]=useState(''),[count,setCount]=useState(4),[stage,setStage]=useState(2),[draft,setDraft]=useState<string|null>(null),[deleting,setDeleting]=useState('');
+ const [name,setName]=useState(''),[focus,setFocus]=useState(''),[count,setCount]=useState(4),[stage,setStage]=useState(2),[draft,setDraft]=useState<string|null>(null);
  // The message box shows what every room sees until the presenter starts typing.
  const message=draft??(c.broadcast||''),setMessage=setDraft;
- const copy=async(code:string)=>{if(await copyText(joinLink(code)))notify(t('Invite link copied','تم نسخ رابط الدعوة'))};
  const teamName=(n:number)=>t(`Team ${n}`,`الفريق ${n}`);
  if(!c.teamRooms&&!rooms.length)return <div className="stack">
   <p>{t('Split the audience into team rooms. Each team develops its own project through the same steps — ideas, improvements, voting and a project brief — while this main workshop stays the shared space for the whole class.','قسّم الحضور إلى غرف فرق. يطوّر كل فريق مشروعه الخاص بالخطوات نفسها — الأفكار والتحسين والتصويت وملخص المشروع — وتبقى هذه الورشة الرئيسية مساحة مشتركة للجميع.')}</p>
@@ -56,11 +55,43 @@ export function RoomsPanel({data,lang,busy,run,control,present,notify}:{data:Sna
    <div className="actions"><label className="inline-field">{t('Move every room to','انقل كل الغرف إلى')}<select value={stage} onChange={e=>setStage(Number(e.target.value))}>{stages.map((s,i)=><option key={s} value={i}>{i+1}. {t(s,stageArabic[i])}</option>)}</select></label><button className="btn secondary" disabled={busy} onClick={()=>void run({action:'roomsControl',patch:{stage}},t('All rooms moved','تم نقل كل الغرف'))}><ArrowRight size={16}/>{t('Move','نقل')}</button><button className="btn secondary" disabled={busy} onClick={()=>void run({action:'roomsControl',patch:{paused:true}},t('All rooms paused','تم إيقاف كل الغرف'))}><Pause size={16}/>{t('Pause all','إيقاف الكل')}</button><button className="btn secondary" disabled={busy} onClick={()=>void run({action:'roomsControl',patch:{paused:false,submissionsOpen:true}},t('All rooms resumed','تم استئناف كل الغرف'))}><Play size={16}/>{t('Resume all','استئناف الكل')}</button><button className="btn secondary" onClick={()=>{void control({screen:'rooms'});present()}}><Monitor size={16}/>{t('Show rooms on projector','عرض الغرف على الشاشة')}</button></div>
    <form className="room-create" onSubmit={e=>{e.preventDefault();void control({broadcast:message}).then(ok=>{if(ok)setDraft(null);return ok}).then(ok=>ok&&notify(message?t('Message sent to every room','تم إرسال الرسالة إلى كل الغرف'):t('Message cleared','تم مسح الرسالة')))}}><input value={message} maxLength={300} placeholder={t('Message to every room, e.g. 5 minutes left — choose your best idea','رسالة لكل الغرف، مثل: بقيت 5 دقائق — اختاروا أفضل فكرة')} onChange={e=>setMessage(e.target.value)}/><button className="btn primary" disabled={busy||message===(c.broadcast||'')}><Megaphone size={16}/>{t('Send','إرسال')}</button>{c.broadcast&&<button type="button" className="btn ghost" disabled={busy} onClick={()=>void control({broadcast:''}).then(()=>setDraft(null))}>{t('Clear','مسح')}</button>}</form>
   </section>}
-  {rooms.length>0&&<div className="room-grid">{rooms.map(r=><RoomTile key={r.code} room={r} lang={lang}>
-   {deleting===r.code?<><span className="muted">{t('Delete this room and everything in it?','حذف هذه الغرفة وكل ما فيها؟')}</span><button className="btn small danger" disabled={busy} onClick={()=>void run({action:'deleteRoom',room:r.code,confirm:r.code},t('Room deleted','تم حذف الغرفة')).then(()=>setDeleting(''))}>{t('Delete','حذف')}</button><button className="btn small secondary" onClick={()=>setDeleting('')}>{t('Keep','إبقاء')}</button></>
-   :<><a className="btn small primary" href={appUrl('/presenter?code=')+r.code} target="_blank" rel="noreferrer"><ExternalLink size={14}/>{t('Open & guide','فتح وتوجيه')}</a><a className="btn small secondary" href={appUrl('/project?code=')+r.code} target="_blank" rel="noreferrer"><Monitor size={14}/>{t('Project','عرض')}</a><button className="btn small secondary" onClick={()=>void copy(r.code)}><Copy size={14}/>{t('Invite link','رابط الدعوة')}</button><button className="btn small ghost icon-btn" aria-label={t('Delete room','حذف الغرفة')} onClick={()=>setDeleting(r.code)}><Trash2 size={14}/></button></>}
-  </RoomTile>)}</div>}
+  {rooms.length>0&&<RoomManager rooms={rooms} lang={lang} busy={busy} run={run} reload={reload} notify={notify}/>}
  </div>}
+
+const screens:[string,string,string][]=[['stage','Current step','الخطوة الحالية'],['wall','Idea wall','جدار الأفكار'],['voting','Voting results','نتائج التصويت'],['qr','Join QR code','رمز الانضمام']];
+type RoomSort='created'|'name'|'members'|'ideas'|'stage'|'pending';
+const roomSorts:[RoomSort,string,string][]=[['created','Order created','ترتيب الإنشاء'],['name','Name A–Z','الاسم أبجدياً'],['members','Most members','الأكثر أعضاء'],['ideas','Most ideas','الأكثر أفكاراً'],['stage','Furthest along','الأكثر تقدماً'],['pending','Needs approval','بانتظار الموافقة']];
+const sortRooms:Record<RoomSort,(a:RoomSummary,b:RoomSummary)=>number>={created:(a,b)=>a.created-b.created,name:(a,b)=>a.name.localeCompare(b.name,undefined,{sensitivity:'base',numeric:true}),members:(a,b)=>b.members-a.members,ideas:(a,b)=>b.ideas-a.ideas,stage:(a,b)=>b.stage-a.stage,pending:(a,b)=>b.pending-a.pending};
+const SORT_KEY='ai-collab-room-sort';
+const readSort=():RoomSort=>{try{const v=localStorage.getItem(SORT_KEY);if(roomSorts.some(([k])=>k===v))return v as RoomSort}catch{/* private mode */}return 'created'};
+
+/** Every room of a workshop: search, sort, edit, choose what each room's screen shows, open, invite or delete. */
+function RoomManager({rooms,lang,busy,run,reload,notify}:{rooms:RoomSummary[];lang:Language;busy:boolean;run:(body:Record<string,unknown>,success?:string)=>Promise<boolean>;reload:()=>Promise<void>;notify:(m:string)=>void}){
+ const t=translator(lang);
+ const [query,setQuery]=useState(''),[sort,setSort]=useState<RoomSort>(readSort),[allScreen,setAllScreen]=useState('stage'),[deleting,setDeleting]=useState(''),[editing,setEditing]=useState<RoomSummary|null>(null),[form,setForm]=useState({name:'',challenge:'',question:''}),[working,setWorking]=useState(false),[error,setError]=useState('');
+ const disabled=busy||working;
+ const list=rooms.filter(r=>!query||(r.name+' '+r.challenge+' '+r.code).toLowerCase().includes(query.toLowerCase())).sort(sortRooms[sort]);
+ function chooseSort(v:RoomSort){setSort(v);try{localStorage.setItem(SORT_KEY,v)}catch{/* private mode */}}
+ async function roomControl(code:string,patch:Record<string,unknown>,success:string){setWorking(true);setError('');try{await action({action:'control',code,patch});await reload();notify(success);return true}catch(e){setError((e as Error).message);return false}finally{setWorking(false)}}
+ const copy=async(code:string)=>{if(await copyText(joinLink(code)))notify(t('Invite link copied','تم نسخ رابط الدعوة'))};
+ function edit(r:RoomSummary){setEditing(r);setForm({name:r.name,challenge:r.challenge,question:r.question})}
+ return <section className="room-manager">
+  <div className="room-toolbar"><label className="room-search"><Search size={15}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder={t('Search rooms…','ابحث في الغرف…')} aria-label={t('Search rooms','ابحث في الغرف')}/></label><label className="inline-field">{t('Sort','ترتيب')}<select value={sort} onChange={e=>chooseSort(e.target.value as RoomSort)}>{roomSorts.map(([k,en,ar])=><option key={k} value={k}>{t(en,ar)}</option>)}</select></label><label className="inline-field">{t('All room screens show','كل شاشات الغرف تعرض')}<select value={allScreen} onChange={e=>setAllScreen(e.target.value)}>{screens.map(([k,en,ar])=><option key={k} value={k}>{t(en,ar)}</option>)}</select></label><button className="btn small secondary" disabled={disabled} onClick={()=>void run({action:'roomsControl',patch:{screen:allScreen}},t('Every room screen updated','تم تحديث شاشات كل الغرف'))}><Monitor size={14}/>{t('Apply','تطبيق')}</button></div>
+  {error&&<div role="alert" className="error">{error}</div>}
+  <div className="room-grid">{list.map(r=><RoomTile key={r.code} room={r} lang={lang}>
+   {deleting===r.code?<><span className="muted">{t('Delete this room and everything in it?','حذف هذه الغرفة وكل ما فيها؟')}</span><button className="btn small danger" disabled={disabled} onClick={()=>void run({action:'deleteRoom',room:r.code,confirm:r.code},t('Room deleted','تم حذف الغرفة')).then(()=>setDeleting(''))}>{t('Delete','حذف')}</button><button className="btn small secondary" onClick={()=>setDeleting('')}>{t('Keep','إبقاء')}</button></>
+   :<><label className="room-screen"><Monitor size={14}/><span className="sr-only">{t('This room’s screen shows','شاشة هذه الغرفة تعرض')}</span><select value={screens.some(([k])=>k===r.screen)?r.screen:'stage'} disabled={disabled} title={t('What this room’s screen shows','ما تعرضه شاشة هذه الغرفة')} onChange={e=>void roomControl(r.code,{screen:e.target.value},t('Room screen updated','تم تحديث شاشة الغرفة'))}>{screens.map(([k,en,ar])=><option key={k} value={k}>{t(en,ar)}</option>)}</select></label>
+    <a className="btn small primary" href={appUrl('/presenter?code=')+r.code} target="_blank" rel="noreferrer"><ExternalLink size={14}/>{t('Open & guide','فتح وتوجيه')}</a><a className="btn small secondary" href={appUrl('/project?code=')+r.code} target="_blank" rel="noreferrer"><Monitor size={14}/>{t('Project','عرض')}</a><button className="btn small secondary" onClick={()=>void copy(r.code)}><Copy size={14}/>{t('Invite link','رابط الدعوة')}</button><button className="btn small ghost icon-btn" aria-label={t('Edit room','تعديل الغرفة')} title={t('Edit room','تعديل الغرفة')} onClick={()=>edit(r)}><Pencil size={14}/></button><button className="btn small ghost icon-btn" aria-label={t('Delete room','حذف الغرفة')} title={t('Delete room','حذف الغرفة')} onClick={()=>setDeleting(r.code)}><Trash2 size={14}/></button></>}
+  </RoomTile>)}</div>
+  {!list.length&&<p className="muted">{t('No rooms match your search.','لا توجد غرف تطابق البحث.')}</p>}
+  {editing&&<Modal title={t('Edit room','تعديل الغرفة')+' · '+roomNumber(editing.code)} onClose={()=>setEditing(null)}><form className="stack" onSubmit={e=>{e.preventDefault();void roomControl(editing.code,form,t('Room saved','تم حفظ الغرفة')).then(ok=>ok&&setEditing(null))}}><label>{t('Room name','اسم الغرفة')}<input value={form.name} maxLength={60} required onChange={e=>setForm({...form,name:e.target.value})}/></label><label>{t('Project focus','محور المشروع')}<input value={form.challenge} maxLength={100} required onChange={e=>setForm({...form,challenge:e.target.value})}/></label><label>{t('Challenge question','سؤال التحدي')}<textarea value={form.question} maxLength={1000} required onChange={e=>setForm({...form,question:e.target.value})}/></label><button className="btn primary" disabled={disabled}>{t('Save room','حفظ الغرفة')}</button></form></Modal>}
+ </section>}
+
+/** The rooms manager for one workshop, opened from the presenter dashboard. Stays live while open. */
+export function WorkshopRooms({code,lang}:{code:string;lang:Language}){const t=translator(lang);const {data,refresh,error}=useWorkshop(code);const {toast,notify}=useToast();const [busy,setBusy]=useState(false),[failure,setFailure]=useState('');
+ async function run(body:Record<string,unknown>,success?:string){setBusy(true);setFailure('');try{await action({...body,code});await refresh();if(success)notify(success);return true}catch(e){setFailure((e as Error).message);return false}finally{setBusy(false)}}
+ if(!data)return <p className="connecting">{error||<><span className="spinner"/>{t('Loading rooms…','جارٍ تحميل الغرف…')}</>}</p>;
+ return <>{failure&&<div role="alert" className="error">{failure}</div>}<RoomsPanel data={data} lang={lang} busy={busy} run={run} control={patch=>run({action:'control',patch})} reload={refresh} notify={notify} present={()=>window.open(appUrl('/project?code=')+code,'_blank','noopener')}/>{toast&&<div className="toast" role="status">{toast}</div>}</>}
 
 /** Student tab on the main workshop: find your team, visit others, or start a room. */
 export function StudentRooms({data,lang}:{data:Snapshot;lang:Language}){const t=translator(lang);const c=data.config;const rooms=data.rooms||[];const mine=data.me?.room||null;const current=rooms.find(r=>r.code===mine);

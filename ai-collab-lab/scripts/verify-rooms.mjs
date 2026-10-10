@@ -54,6 +54,11 @@ for(const r of [r1,r2,r3]){const s=await presenter.get(r);assert.equal(s.config.
 await presenter.request({action:'control',code,patch:{broadcast:'Five minutes left'}});assert.equal((await carol.get(r2)).parent.broadcast,'Five minutes left');
 await presenter.request({action:'control',code,patch:{gallery:false}});await carol.request({action:'joinRoom',code:r1,role:'guest'},403);
 await alice.request({action:'control',code,patch:{broadcast:'Not the presenter'}},403);
+// Editing a room and choosing what its screen shows, for one room or all rooms.
+await presenter.request({action:'control',code:r2,patch:{name:'Team Oryx',challenge:'Study rooms'}});let listed=(await presenter.get(code)).rooms.find(r=>r.code===r2);assert.equal(listed.name,'Team Oryx');assert.equal(listed.challenge,'Study rooms');assert.ok(listed.created>0);
+await presenter.request({action:'roomsControl',code,patch:{screen:'wall'}});assert.ok((await presenter.get(code)).rooms.every(r=>r.screen==='wall'));
+await presenter.request({action:'control',code:r1,patch:{screen:'qr'}});assert.equal((await presenter.get(code)).rooms.find(r=>r.code===r1).screen,'qr');
+await carol.request({action:'control',code:r1,patch:{name:'Hijack'}},403);
 
 // Deleting a room, ending/reopening and deleting the workshop cascade to rooms.
 await presenter.request({action:'deleteRoom',code,room:r3,confirm:'WRONG'},400);

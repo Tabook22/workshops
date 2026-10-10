@@ -4,6 +4,7 @@ import {Modal, action, download, useToast} from '../lib/client';
 import {stages, stageArabic, type Language} from '../lib/workshop';
 import {tx, type UiLang} from '../lib/i18n';
 import {appUrl} from '../lib/urls';
+import {WorkshopRooms} from '../lib/team-rooms';
 
 export type Session = {code: string; name: string; challenge?: string; question?: string; description?: string; language?: Language; stage?: number; ended: boolean; created?: number; participants?: number; ideas?: number; rooms?: number};
 type View = 'cards' | 'list';
@@ -43,6 +44,7 @@ export default function WorkshopDashboard({sessions, lang, onCreate, onSettings,
   const [selected, setSelected] = useState<string[]>([]);
   const [editing, setEditing] = useState<Session | null>(null);
   const [deleting, setDeleting] = useState<Session[] | null>(null);
+  const [roomsFor, setRoomsFor] = useState<Session | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [dragging, setDragging] = useState<string | null>(null);
@@ -135,6 +137,7 @@ export default function WorkshopDashboard({sessions, lang, onCreate, onSettings,
   const check = (s: Session) => <button type="button" role="checkbox" aria-checked={selected.includes(s.code)} className={'select-box' + (selected.includes(s.code) ? ' on' : '')} aria-label={t('Select ', 'تحديد ') + (s.challenge || s.name)} onClick={() => toggle(s.code)}>{selected.includes(s.code) ? <CheckSquare size={18} /> : <Square size={18} />}</button>;
   const actions = (s: Session) => <div className="session-actions">
     <button type="button" className="icon-action" title={t('Edit details', 'تعديل التفاصيل')} aria-label={t('Edit ', 'تعديل ') + (s.challenge || s.name)} onClick={() => setEditing(s)} disabled={busy}><Pencil size={16} /></button>
+    <button type="button" className="icon-action" title={t('Team rooms', 'غرف الفرق')} aria-label={t('Team rooms of ', 'غرف الفرق في ') + (s.challenge || s.name)} onClick={() => setRoomsFor(s)} disabled={busy}><DoorOpen size={16} /></button>
     <button type="button" className="icon-action" title={s.ended ? t('Reopen workshop', 'إعادة فتح الورشة') : t('End workshop', 'إنهاء الورشة')} aria-label={(s.ended ? t('Reopen ', 'إعادة فتح ') : t('End ', 'إنهاء ')) + (s.challenge || s.name)} onClick={() => void setEnded(s, !s.ended)} disabled={busy}>{s.ended ? <RotateCcw size={16} /> : <Power size={16} />}</button>
     <button type="button" className="icon-action" title={t('Download backup (JSON)', 'تنزيل نسخة احتياطية (JSON)')} aria-label={t('Download backup of ', 'تنزيل نسخة احتياطية من ') + (s.challenge || s.name)} onClick={() => void backup([s])} disabled={busy}><Download size={16} /></button>
     <button type="button" className="icon-action danger-action" title={t('Delete workshop', 'حذف الورشة')} aria-label={t('Delete ', 'حذف ') + (s.challenge || s.name)} onClick={() => setDeleting([s])} disabled={busy}><Trash2 size={16} /></button>
@@ -165,7 +168,7 @@ export default function WorkshopDashboard({sessions, lang, onCreate, onSettings,
         <div className="session-card-top">{handle(s)}{check(s)}{status(s)}<span className="pill" dir="ltr">{s.code}</span></div>
         <h3 dir="auto"><a className="session-link" href={href(s)}>{s.challenge || s.name}</a></h3>
         <p className="muted" dir="auto">{s.name}{!s.ended && stageLabel(s) ? ` · ${stageLabel(s)}` : ''}</p>
-        <div className="session-card-foot"><span title={t('Participants', 'المشاركون')}><Users size={14} />{s.participants ?? 0}</span><span title={t('Ideas', 'الأفكار')}><Lightbulb size={14} />{s.ideas ?? 0}</span>{!!s.rooms&&<span title={t('Team rooms', 'غرف الفرق')}><DoorOpen size={14} />{s.rooms}</span>}<span>{date(s)}</span>{actions(s)}</div>
+        <div className="session-card-foot"><span title={t('Participants', 'المشاركون')}><Users size={14} />{s.participants ?? 0}</span><span title={t('Ideas', 'الأفكار')}><Lightbulb size={14} />{s.ideas ?? 0}</span>{!!s.rooms&&<button type="button" className="rooms-count" title={t('Manage team rooms', 'إدارة غرف الفرق')} onClick={() => setRoomsFor(s)}><DoorOpen size={14} />{s.rooms}</button>}<span>{date(s)}</span>{actions(s)}</div>
       </article>)}</div>
     : <div className="session-list" role="table" aria-label={t('Workshops', 'الورش')}>
         <div className="session-row session-row-head" role="row"><span role="columnheader" /><span role="columnheader" /><span role="columnheader">{t('Workshop', 'الورشة')}</span><span role="columnheader">{t('Status', 'الحالة')}</span><span role="columnheader">{t('Code', 'الرمز')}</span><span role="columnheader" className="num">{t('People', 'المشاركون')}</span><span role="columnheader" className="num">{t('Ideas', 'الأفكار')}</span><span role="columnheader">{t('Created', 'التاريخ')}</span><span role="columnheader" /></div>
@@ -181,6 +184,7 @@ export default function WorkshopDashboard({sessions, lang, onCreate, onSettings,
     {selected.length > 0 && <div className="bulk-bar" role="region" aria-label={t('Selected workshops', 'الورش المحددة')}><strong>{t(`${selected.length} selected`, `${selected.length} محددة`)}</strong><button className="btn small secondary" disabled={busy} onClick={() => void backup(sessions.filter(s => selected.includes(s.code)))}><Download size={15} />{t('Download backup', 'تنزيل نسخة احتياطية')}</button><button className="btn small secondary" disabled={busy} onClick={() => void run(() => Promise.all(sessions.filter(s => selected.includes(s.code) && !s.ended).map(s => action({action: 'control', code: s.code, patch: {ended: true}}))), t('Selected workshops ended', 'تم إنهاء الورش المحددة'))}><Power size={15} />{t('End', 'إنهاء')}</button><button className="btn small danger" disabled={busy} onClick={() => setDeleting(sessions.filter(s => selected.includes(s.code)))}><Trash2 size={15} />{t('Delete', 'حذف')}</button><button className="btn small ghost icon-btn" aria-label={t('Clear selection', 'إلغاء التحديد')} onClick={() => setSelected([])}><X size={16} /></button></div>}
 
     {editing && <EditWorkshop session={editing} lang={lang} busy={busy} onClose={() => setEditing(null)} onSave={patch => run(() => action({action: 'control', code: editing.code, patch}), t('Workshop details saved', 'تم حفظ تفاصيل الورشة')).then(ok => { if (ok) setEditing(null); })} />}
+    {roomsFor && <Modal wide title={t('Team rooms', 'غرف الفرق') + ' · ' + (roomsFor.challenge || roomsFor.name)} onClose={() => { setRoomsFor(null); void reload(); }}><WorkshopRooms code={roomsFor.code} lang={lang} /></Modal>}
     {deleting && <DeleteWorkshops list={deleting} lang={lang} busy={busy} onClose={() => setDeleting(null)} onBackup={() => void backup(deleting)} onConfirm={async () => { const list = deleting; const ok = await run(async () => { for (const s of list) await action({action: 'deleteWorkshop', code: s.code, confirm: s.code}); }, list.length === 1 ? t('Workshop deleted', 'تم حذف الورشة') : t(`${list.length} workshops deleted`, `تم حذف ${list.length} ورش`)); if (ok) { setDeleting(null); setSelected(sel => sel.filter(c => !list.some(s => s.code === c))); } }} />}
     {toast && <div className="toast" role="status">{toast}</div>}
   </section>;

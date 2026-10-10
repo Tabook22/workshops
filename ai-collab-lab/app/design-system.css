@@ -826,3 +826,9 @@ body:has(.bulk-bar) .workshop-help-button { bottom: 92px; }
 .my-room-link svg { color: var(--accent); flex: none; }
 .student-tabs { flex-wrap: wrap; }
 @media (max-width: 560px) { .room-grid { grid-template-columns: 1fr; } }
+.room-toolbar { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin-top: 4px; }
+.room-search { display: inline-flex; align-items: center; gap: 6px; flex: 1 1 180px; min-width: 0; padding: 0 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--input); color: var(--muted); }
+.room-search input { border: 0; background: transparent; padding: 8px 0; min-width: 0; width: 100%; box-shadow: none; }
+.room-screen { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); flex-basis: 100%; }
+.room-screen select { width: auto; flex: 1; padding: 6px 8px; font-size: 13px; }
+.rooms-count { display: inline-flex; align-items: center; gap: 4px; border: 0; background: none; color: inherit; font: inherit; padding: 0; cursor: pointer; text-decoration: underline dotted; }
