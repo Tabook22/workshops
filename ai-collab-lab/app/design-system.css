@@ -832,3 +832,16 @@ body:has(.bulk-bar) .workshop-help-button { bottom: 92px; }
 .room-screen { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); flex-basis: 100%; }
 .room-screen select { width: auto; flex: 1; padding: 6px 8px; font-size: 13px; }
 .rooms-count { display: inline-flex; align-items: center; gap: 4px; border: 0; background: none; color: inherit; font: inherit; padding: 0; cursor: pointer; text-decoration: underline dotted; }
+.showcase h1 { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.showcase h1 svg { color: var(--accent); flex: none; }
+.showcase-brief { margin: 28px auto; max-width: 1150px; text-align: start; }
+.showcase-brief p { white-space: pre-wrap; line-height: 1.7; }
+.showcase-stats { display: flex; justify-content: center; gap: 24px; color: var(--muted); font-size: 18px; }
+.showcase-stats span { display: inline-flex; align-items: center; gap: 6px; }
+.showcase-ask { color: var(--accent); margin-top: 30px; }
+.showcase-nav { justify-content: center; margin-top: 24px; }
+.showcase-results { max-width: 1000px; margin: 24px auto; text-align: start; }
+.showcase-vote { margin: 0 0 18px; }
+.showcase-vote h2 { margin: 6px 0; }
+.showcase-vote .eyebrow { display: inline-flex; align-items: center; gap: 6px; }
+.showcase-solution { flex-basis: 100%; margin: 0 0 4px; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }

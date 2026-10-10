@@ -60,6 +60,17 @@ await presenter.request({action:'roomsControl',code,patch:{screen:'wall'}});asse
 await presenter.request({action:'control',code:r1,patch:{screen:'qr'}});assert.equal((await presenter.get(code)).rooms.find(r=>r.code===r1).screen,'qr');
 await carol.request({action:'control',code:r1,patch:{name:'Hijack'}},403);
 
+// Showcase: one changeable class vote per student, never for your own team, hidden until allowed.
+await presenter.request({action:'control',code,patch:{gallery:true}});
+await carol.request({action:'showcaseVote',code,room:r1},400);
+await presenter.request({action:'control',code,patch:{showcaseVoting:true,liveResults:false,screen:'showcase',showcaseRoom:r1}});
+await alice.request({action:'showcaseVote',code,room:r1},400);
+await alice.request({action:'showcaseVote',code,room:r2});await carol.request({action:'showcaseVote',code,room:r1});await carol.request({action:'showcaseVote',code,room:r3});
+await outsider.request({action:'showcaseVote',code,room:r2},401);await alice.request({action:'showcaseVote',code:r1,room:r2},400);
+assert.equal((await alice.get(code)).rooms.find(r=>r.code===r2).votes,null,'results hidden while voting');assert.equal((await alice.get(code)).me.showcaseVote,r2);
+let tally=(await presenter.get(code)).rooms;assert.equal(tally.find(r=>r.code===r2).votes,1);assert.equal(tally.find(r=>r.code===r3).votes,1);assert.equal(tally.find(r=>r.code===r1).votes,0,'a changed vote moves');
+assert.equal((await presenter.get(code)).stats.votes,0,'showcase votes are not idea votes');assert.deepEqual((await alice.get(code)).me.votes,[]);
+await presenter.request({action:'control',code,patch:{showcaseVoting:false}});await alice.request({action:'showcaseVote',code,room:r3},400);assert.equal((await alice.get(code)).rooms.find(r=>r.code===r2).votes,1);
 // Deleting a room, ending/reopening and deleting the workshop cascade to rooms.
 await presenter.request({action:'deleteRoom',code,room:r3,confirm:'WRONG'},400);
 await presenter.request({action:'deleteRoom',code,room:r3,confirm:r3});await presenter.get(r3,404);assert.equal((await presenter.get(code)).rooms.length,2);
