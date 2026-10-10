@@ -1053,3 +1053,34 @@ button.map-room:focus-visible { box-shadow: 0 0 0 3px var(--ring, var(--accent))
 .update-banner { position: fixed; z-index: 200; left: 50%; bottom: 18px; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; max-width: calc(100% - 32px); padding: 10px 12px 10px 16px; border-radius: 14px; background: var(--panel); color: var(--text); border: 1px solid var(--accent); box-shadow: 0 18px 40px -16px rgb(0 0 0 / .45); font-size: 14px; }
 .update-banner svg { color: var(--accent); flex: none; }
 @media (max-width: 560px) { .privacy-options.two { grid-template-columns: 1fr; } .update-banner { flex-wrap: wrap; } }
+
+/* ---------- People in a room: leader seat and person icons ---------- */
+.map-room.clickable { cursor: pointer; }
+.map-room.clickable:hover, .map-room.clickable:focus-visible { transform: translateY(-3px); box-shadow: var(--shadow, 0 8px 24px #0002); outline: none; }
+.map-room.clickable:focus-visible { box-shadow: 0 0 0 3px var(--ring, var(--accent)); }
+.seats { display: flex; flex-direction: column; gap: 10px; padding: 12px; border-radius: 12px; cursor: default; background-color: color-mix(in srgb, hsl(var(--room-hue, 90) 62% 52%) 7%, transparent); background-image: radial-gradient(var(--map-dot) 1px, transparent 1.2px); background-size: 12px 12px; }
+.leader-seat { display: flex; align-items: center; gap: 12px; padding: 8px 10px; border-radius: 12px; background: var(--panel); border: 1px solid color-mix(in srgb, var(--amber) 45%, var(--line)); box-shadow: 0 6px 16px -10px color-mix(in srgb, var(--amber) 70%, transparent); }
+.leader-seat.empty { border-style: dashed; border-color: var(--line); box-shadow: none; background: color-mix(in srgb, var(--panel) 70%, transparent); }
+.leader-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.leader-text small { font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--amber); }
+.leader-seat.empty .leader-text small { color: var(--muted); }
+.leader-text strong { font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.leader-text em { font-size: 11px; color: var(--muted); }
+.person-icon { position: relative; flex: none; display: inline-grid; place-items: center; width: 34px; height: 34px; padding: 0; border-radius: 50%; border: 0; color: #fff; background: hsl(var(--avatar-hue, 200) 55% 46%); box-shadow: 0 0 0 2px var(--panel), 0 4px 10px -4px rgb(0 0 0 / .35); cursor: pointer; transition: transform .15s var(--ease, ease); font: inherit; font-size: 12px; font-weight: 800; }
+button.person-icon:hover, button.person-icon:focus-visible { transform: translateY(-2px) scale(1.06); outline: none; }
+button.person-icon:focus-visible { box-shadow: 0 0 0 2px var(--panel), 0 0 0 4px var(--ring, var(--accent)); }
+.person-icon[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--panel), 0 0 0 4px var(--accent); }
+.person-icon.leader { width: 46px; height: 46px; box-shadow: 0 0 0 3px var(--panel), 0 0 0 5px var(--amber), 0 8px 18px -6px color-mix(in srgb, var(--amber) 80%, transparent); }
+.person-icon.leader .crown { position: absolute; top: -11px; left: 50%; transform: translateX(-50%); color: var(--amber); fill: var(--amber); filter: drop-shadow(0 1px 1px rgb(0 0 0 / .25)); }
+.person-icon.ghost { background: transparent; color: color-mix(in srgb, var(--muted) 55%, transparent); border: 2px dashed color-mix(in srgb, var(--muted) 40%, transparent); box-shadow: none; cursor: default; }
+.person-icon.more { background: var(--chip, var(--line)); color: var(--text); cursor: default; }
+.member-seats { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-height: 36px; }
+.seat-count { margin-inline-start: auto; display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: var(--muted); }
+.person-pop { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 10px; background: var(--panel); border: 1px solid var(--accent); font-size: 13px; animation: pop-in .15s ease; }
+.person-pop span { color: var(--muted); }
+.person-pop-close { margin-inline-start: auto; border: 0; background: none; color: var(--muted); font-size: 18px; line-height: 1; cursor: pointer; padding: 0 4px; }
+@keyframes pop-in { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: none; } }
+.rooms-map.large .person-icon { width: 42px; height: 42px; }
+.rooms-map.large .person-icon.leader { width: 54px; height: 54px; }
+.rooms-map.large .leader-text strong { font-size: 18px; }
+@media (prefers-reduced-motion: reduce) { .person-icon, .person-pop { transition: none; animation: none; } }
