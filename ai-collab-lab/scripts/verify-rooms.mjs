@@ -40,6 +40,9 @@ await bob.request({action:'submit',code:r1,id:crypto.randomUUID(),title:'Guest i
 await bob.request({action:'comment',code:r1,id:crypto.randomUUID(),parent:ideaId,text:'Add Arabic voice guidance?'},201);
 assert.equal((await alice.get(r1)).stats.participants,1,'guests are not counted as members');
 assert.equal((await bob.get(code)).me.room,r2,'visiting does not change your team');
+// Room status for the visual views: visitors, messages, people (lead first) and last activity; the people list is for facilitators only.
+let stat=(await presenter.get(code)).rooms.find(r=>r.code===r1);assert.equal(stat.guests,1);assert.equal(stat.comments,1);assert.equal(stat.ideas,1);assert.deepEqual(stat.people,[{lead:true,name:'QA Alice'}]);assert.ok(stat.lastActivity>0);
+assert.equal((await presenter.get(r1)).people.length,2);assert.equal((await bob.get(r1)).people,undefined);assert.equal((await alice.get(r1)).people.length,2,'the room lead sees who is in the room');
 
 // Joining another team as a member moves you; your old room keeps your ideas as a guest.
 await bob.request({action:'joinRoom',code:r1});
