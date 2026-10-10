@@ -964,3 +964,53 @@ button.map-room:focus-visible { box-shadow: 0 0 0 3px var(--ring, var(--accent))
 .feed-file span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .type-chip.t-file { display: inline-flex; align-items: center; gap: 3px; }
 .type-chip.t-file { --tone: var(--blue); }
+
+/* ---------- Room cards (rooms drawn as rooms) ---------- */
+.room-card-grid { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 22px; padding: 4px 2px 10px; }
+.room-card { --room: hsl(var(--room-hue, 90) 62% 52%); --glow: transparent; position: relative; display: flex; flex-direction: column; min-width: 0; border-radius: 18px; background: var(--panel); border: 1px solid color-mix(in srgb, var(--room) 28%, var(--line)); box-shadow: 0 1px 2px rgb(0 0 0 / .05), 0 10px 28px -14px rgb(0 0 0 / .32), 0 0 0 0 var(--glow); transition: transform .2s var(--ease, ease), box-shadow .2s var(--ease, ease), border-color .2s; overflow: hidden; }
+.room-card:hover { transform: translateY(-4px); box-shadow: 0 2px 4px rgb(0 0 0 / .06), 0 22px 40px -18px rgb(0 0 0 / .42), 0 0 0 0 var(--glow); }
+.room-card.mine { border-color: var(--accent); }
+.room-card.dragging { transform: scale(1.03) rotate(-.6deg); box-shadow: 0 30px 60px -20px rgb(0 0 0 / .5); z-index: 5; opacity: .96; }
+/* Status glow: an active room lights up. */
+.room-card.s-active { --glow: rgb(34 197 94 / .55); border-color: rgb(34 197 94 / .55); box-shadow: 0 1px 2px rgb(0 0 0 / .05), 0 14px 34px -14px rgb(34 197 94 / .55), 0 0 0 3px rgb(34 197 94 / .12); }
+.room-card.s-recent { border-color: color-mix(in srgb, #eab308 45%, var(--line)); }
+.room-card.s-paused, .room-card.s-ended { filter: saturate(.55); }
+.room-card-roof { position: relative; display: flex; align-items: center; gap: 8px; padding: 12px 14px 12px; background: linear-gradient(135deg, color-mix(in srgb, var(--room) 26%, transparent), color-mix(in srgb, var(--room) 8%, transparent)); border-bottom: 1px solid color-mix(in srgb, var(--room) 25%, transparent); }
+.room-card-roof::before { content: ""; position: absolute; inset: 0 0 auto; height: 5px; background: var(--room); }
+.room-card-roof h3 { flex: 1; min-width: 0; margin: 0; font-size: 17px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.room-card-body { display: flex; flex-direction: column; gap: 12px; padding: 14px; flex: 1; }
+.room-card-topic { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.room-card-people { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-height: 58px; padding: 10px; border-radius: 12px; background-color: color-mix(in srgb, var(--room) 7%, transparent); background-image: radial-gradient(var(--map-dot) 1px, transparent 1.2px); background-size: 12px 12px; }
+.room-card-people .your-team { margin-inline-start: auto; }
+.room-card-discussion { display: flex; align-items: flex-start; gap: 8px; padding: 10px 12px; border-radius: 12px; font-size: 13px; line-height: 1.45; background: color-mix(in srgb, var(--text) 4%, transparent); border-inline-start: 3px solid var(--room); }
+.room-card-discussion svg { flex: none; margin-top: 2px; color: var(--room); }
+.room-card-discussion > span:not(.heat) { flex: 1; min-width: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+.room-card-discussion.none { color: var(--muted); font-style: italic; border-inline-start-color: var(--line); }
+.room-card-discussion .heat { flex: none; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; color: #15803d; background: rgb(34 197 94 / .14); font-style: normal; }
+.room-card-progress { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: 12px; color: var(--muted); }
+.room-card-progress .stage-track { flex: 1 1 120px; }
+.room-card-progress span { display: inline-flex; align-items: center; gap: 4px; }
+.room-card-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 12px 14px; border-top: 1px solid var(--line); background: color-mix(in srgb, var(--text) 2.5%, transparent); }
+.room-card-actions .room-screen { flex-basis: 100%; }
+.room-card-actions .showcase-solution { flex-basis: 100%; }
+/* Status light */
+.status-light { flex: none; display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px 3px 7px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: .02em; white-space: nowrap; color: var(--muted); background: color-mix(in srgb, var(--panel) 80%, transparent); border: 1px solid var(--line); }
+.status-light i { width: 9px; height: 9px; border-radius: 50%; background: #9ca3af; }
+.status-light.s-active { color: #15803d; border-color: rgb(34 197 94 / .45); background: rgb(34 197 94 / .1); }
+.status-light.s-active i { background: #22c55e; box-shadow: 0 0 0 0 #22c55e88, 0 0 8px #22c55e; animation: live-pulse 1.8s infinite; }
+.status-light.s-recent { color: #a16207; border-color: rgb(234 179 8 / .45); background: rgb(234 179 8 / .1); }
+.status-light.s-recent i { background: #eab308; box-shadow: 0 0 6px #eab308aa; }
+.status-light.s-paused { color: var(--amber); }
+.status-light.s-paused i { background: var(--amber); }
+.status-light.s-ended i { background: var(--muted); }
+:root[data-theme="dark"] .status-light.s-active { color: #4ade80; }
+:root[data-theme="dark"] .status-light.s-recent { color: #facc15; }
+:root[data-theme="dark"] .room-card-discussion .heat { color: #4ade80; }
+@media (prefers-reduced-motion: reduce) { .status-light.s-active i { animation: none; } .room-card { transition: none; } .room-card:hover { transform: none; } }
+/* Drag handle */
+.room-handle { flex: none; display: inline-grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 8px; background: transparent; color: var(--muted); cursor: grab; touch-action: none; }
+.room-handle:hover, .room-handle:focus-visible { background: color-mix(in srgb, var(--text) 8%, transparent); color: var(--text); outline: none; }
+.room-handle:focus-visible { box-shadow: 0 0 0 2px var(--ring, var(--accent)); }
+.room-handle:active { cursor: grabbing; }
+.rooms-table tr.dragging { background: color-mix(in srgb, var(--accent-fill) 14%, transparent); }
+.map-room-roof .status-light { padding: 2px 7px 2px 6px; font-size: 10px; }

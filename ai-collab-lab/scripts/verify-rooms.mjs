@@ -77,6 +77,10 @@ for(const r of [r1,r2,r3]){const s=await presenter.get(r);assert.equal(s.config.
 await presenter.request({action:'control',code,patch:{broadcast:'Five minutes left'}});assert.equal((await carol.get(r2)).parent.broadcast,'Five minutes left');
 await presenter.request({action:'control',code,patch:{gallery:false}});await carol.request({action:'joinRoom',code:r1,role:'guest'},403);
 await alice.request({action:'control',code,patch:{broadcast:'Not the presenter'}},403);
+// Dragged room order is saved on the main workshop and every screen lists rooms in it; the latest message shows on the card.
+await presenter.request({action:'control',code,patch:{roomOrder:[r3,r1,r2]}});assert.deepEqual((await carol.get(code)).rooms.map(r=>r.code),[r3,r1,r2]);assert.deepEqual((await carol.get(r2)).rooms.map(r=>r.code),[r3,r1,r2]);
+await alice.request({action:'control',code,patch:{roomOrder:[r2]}},403);
+const fal=(await presenter.get(code)).rooms.find(r=>r.code===r1);assert.equal(fal.latest.nickname,'QA Bob');assert.equal(fal.latest.type,'comment');assert.ok(fal.recent>=2);
 // Editing a room and choosing what its screen shows, for one room or all rooms.
 await presenter.request({action:'control',code:r2,patch:{name:'Team Oryx',challenge:'Study rooms'}});let listed=(await presenter.get(code)).rooms.find(r=>r.code===r2);assert.equal(listed.name,'Team Oryx');assert.equal(listed.challenge,'Study rooms');assert.ok(listed.created>0);
 await presenter.request({action:'roomsControl',code,patch:{screen:'wall'}});assert.ok((await presenter.get(code)).rooms.every(r=>r.screen==='wall'));

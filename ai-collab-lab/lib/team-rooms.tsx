@@ -4,11 +4,11 @@
    and the presenter follows every room from one overview. */
 import {useState,type ReactNode} from 'react';
 import {QRCodeSVG} from 'qrcode.react';
-import {DoorOpen,Users,Lightbulb,Plus,Copy,Monitor,ExternalLink,Trash2,Megaphone,ArrowLeft,Eye,UserPlus,Crown,Pause,Play,ArrowRight,Share2,Pencil,Search,Trophy,Vote,ChevronLeft,ChevronRight,Check} from 'lucide-react';
+import {DoorOpen,Users,Lightbulb,Plus,Copy,Monitor,ExternalLink,Trash2,Megaphone,ArrowLeft,Eye,UserPlus,Crown,Pause,Play,ArrowRight,Share2,Pencil,Search,Trophy,Vote,ChevronLeft,ChevronRight,Check,GripVertical} from 'lucide-react';
 import {stages,stageArabic,type Snapshot,type RoomSummary,type Language,type Config} from './workshop';
 import {action,Modal,copyText,useWorkshop,useToast} from './client';
 import {appUrl} from './urls';
-import {RoomsMap,RoomsList,RoomStats,StageTrack,RoomActivity,ViewSwitch,readView,saveView,timeAgo,isLive,type RoomView} from './rooms-visual';
+import {RoomsMap,RoomsList,RoomStats,StageTrack,RoomActivity,ViewSwitch,readView,saveView,isLive,RoomCard,type RoomView} from './rooms-visual';
 
 type L=(en:string,ar:string)=>string;
 const translator=(lang:Language):L=>(en,ar)=>lang==='ar'?ar:en;
@@ -19,14 +19,8 @@ const roomNumber=(code:string)=>code.slice(code.lastIndexOf('-')+1);
 /** A message from the presenter shown in the main workshop and every room. */
 export function Broadcast({text,lang}:{text?:string;lang:Language}){if(!text)return null;const t=translator(lang);return <div className="broadcast" role="status"><Megaphone size={18}/><span><strong>{t('From the presenter','من مقدم الورشة')}</strong>{text}</span></div>}
 
-export function RoomTile({room,lang,mine=false,children}:{room:RoomSummary;lang:Language;mine?:boolean;children?:ReactNode}){const t=translator(lang);
- return <article className={'room-tile'+(mine?' mine':'')}>
-  <div className="room-tile-top"><span className="room-name"><DoorOpen size={17}/>{room.name}</span><span className="pill" dir="ltr">{roomNumber(room.code)}</span></div>
-  <p className="room-focus">{room.challenge}</p>
-  <RoomStats room={room} lang={lang}/>
-  <div className="room-meta"><span className="pill lime">{room.stage+1}. {t(stages[room.stage],stageArabic[room.stage])}</span>{isLive(room)&&<span className="live-dot" title={t('Active now','نشطة الآن')}/>}<span className="muted">{timeAgo(room.lastActivity,lang)}</span>{room.paused&&<span className="pill">{t('Paused','متوقفة')}</span>}{room.ended&&<span className="pill">{t('Ended','انتهت')}</span>}{mine&&<span className="pill lime">{t('Your team','فريقك')}</span>}</div>
-  {children&&<div className="room-actions">{children}</div>}
- </article>}
+/** Every room card in the app (students, showcase, presenter) uses the same room drawing. */
+export function RoomTile(props:{room:RoomSummary;lang:Language;mine?:boolean;handle?:ReactNode;dragging?:boolean;children?:ReactNode}){return <RoomCard {...props}/>}
 
 /** Projector screen: every team's progress at a glance. */
 export function RoomsBoard({data,lang}:{data:Snapshot;lang:Language}){const t=translator(lang);const rooms=data.rooms||[];
@@ -64,11 +58,11 @@ export function RoomsPanel({data,lang,busy,run,control,present,notify,reload}:{d
  </div>}
 
 const screens:[string,string,string][]=[['stage','Current step','الخطوة الحالية'],['wall','Idea wall','جدار الأفكار'],['voting','Voting results','نتائج التصويت'],['qr','Join QR code','رمز الانضمام']];
-type RoomSort='created'|'name'|'members'|'ideas'|'stage'|'pending'|'active';
-const roomSorts:[RoomSort,string,string][]=[['created','Order created','ترتيب الإنشاء'],['name','Name A–Z','الاسم أبجدياً'],['members','Most members','الأكثر أعضاء'],['ideas','Most ideas','الأكثر أفكاراً'],['stage','Furthest along','الأكثر تقدماً'],['pending','Needs approval','بانتظار الموافقة'],['active','Recently active','الأحدث نشاطاً']];
-const sortRooms:Record<RoomSort,(a:RoomSummary,b:RoomSummary)=>number>={created:(a,b)=>a.created-b.created,name:(a,b)=>a.name.localeCompare(b.name,undefined,{sensitivity:'base',numeric:true}),members:(a,b)=>b.members-a.members,ideas:(a,b)=>b.ideas-a.ideas,stage:(a,b)=>b.stage-a.stage,pending:(a,b)=>b.pending-a.pending,active:(a,b)=>(b.lastActivity||0)-(a.lastActivity||0)};
+type RoomSort='custom'|'created'|'name'|'members'|'ideas'|'stage'|'pending'|'active';
+const roomSorts:[RoomSort,string,string][]=[['custom','My order (drag)','ترتيبي (بالسحب)'],['created','Order created','ترتيب الإنشاء'],['name','Name A–Z','الاسم أبجدياً'],['members','Most members','الأكثر أعضاء'],['ideas','Most ideas','الأكثر أفكاراً'],['stage','Furthest along','الأكثر تقدماً'],['pending','Needs approval','بانتظار الموافقة'],['active','Recently active','الأحدث نشاطاً']];
+const sortRooms:Record<RoomSort,(a:RoomSummary,b:RoomSummary)=>number>={custom:()=>0,created:(a,b)=>a.created-b.created,name:(a,b)=>a.name.localeCompare(b.name,undefined,{sensitivity:'base',numeric:true}),members:(a,b)=>b.members-a.members,ideas:(a,b)=>b.ideas-a.ideas,stage:(a,b)=>b.stage-a.stage,pending:(a,b)=>b.pending-a.pending,active:(a,b)=>(b.lastActivity||0)-(a.lastActivity||0)};
 const SORT_KEY='ai-collab-room-sort';
-const readSort=():RoomSort=>{try{const v=localStorage.getItem(SORT_KEY);if(roomSorts.some(([k])=>k===v))return v as RoomSort}catch{/* private mode */}return 'created'};
+const readSort=():RoomSort=>{try{const v=localStorage.getItem(SORT_KEY);if(roomSorts.some(([k])=>k===v))return v as RoomSort}catch{/* private mode */}return 'custom'};
 
 /** Every room of a workshop: search, sort, edit, choose what each room's screen shows, open, invite or delete. */
 function RoomManager({rooms,lang,busy,run,reload,notify}:{rooms:RoomSummary[];lang:Language;busy:boolean;run:(body:Record<string,unknown>,success?:string)=>Promise<boolean>;reload:()=>Promise<void>;notify:(m:string)=>void}){
@@ -76,7 +70,17 @@ function RoomManager({rooms,lang,busy,run,reload,notify}:{rooms:RoomSummary[];la
  const [query,setQuery]=useState(''),[sort,setSort]=useState<RoomSort>(readSort),[allScreen,setAllScreen]=useState('stage'),[deleting,setDeleting]=useState(''),[editing,setEditing]=useState<RoomSummary|null>(null),[form,setForm]=useState({name:'',challenge:'',question:''}),[working,setWorking]=useState(false),[error,setError]=useState(''),[view,setView]=useState<RoomView>(()=>readView('map')),[openCode,setOpenCode]=useState('');
  const disabled=busy||working;const opened=rooms.find(r=>r.code===openCode);
  const chooseView=(v:RoomView)=>{setView(v);saveView(v)};
- const list=rooms.filter(r=>!query||(r.name+' '+r.challenge+' '+r.code).toLowerCase().includes(query.toLowerCase())).sort(sortRooms[sort]);
+ // Rooms arrive in the saved order; dragging rearranges a local copy, then saves it for every screen.
+ const [dragOrder,setDragOrder]=useState<string[]|null>(null),[dragging,setDragging]=useState('');
+ const sorted=sort==='custom'?rooms:[...rooms].sort(sortRooms[sort]);
+ const ordered=dragOrder?dragOrder.map(c=>rooms.find(r=>r.code===c)).filter((r):r is RoomSummary=>!!r):sorted;
+ const list=ordered.filter(r=>!query||(r.name+' '+r.challenge+' '+r.code).toLowerCase().includes(query.toLowerCase()));
+ async function saveOrder(order:string[]){await run({action:'control',patch:{roomOrder:order}},t('Room order saved for every screen','تم حفظ ترتيب الغرف لكل الشاشات'));setDragOrder(null)}
+ function beginDrag(e:React.PointerEvent<HTMLButtonElement>,code:string){if(e.button!==0)return;e.preventDefault();e.currentTarget.setPointerCapture(e.pointerId);setDragOrder(ordered.map(r=>r.code));setDragging(code);if(sort!=='custom')chooseSort('custom')}
+ function moveDrag(e:React.PointerEvent<HTMLButtonElement>){if(!dragging)return;const over=(document.elementFromPoint(e.clientX,e.clientY) as HTMLElement|null)?.closest<HTMLElement>('[data-room]');const target=over?.dataset.room;if(!over||!target||target===dragging)return;const box=over.getBoundingClientRect();const rtl=getComputedStyle(over).direction==='rtl';const after=view==='list'?e.clientY>box.top+box.height/2:e.clientY>box.bottom-box.height/4||(e.clientY>box.top+box.height/4&&(rtl?e.clientX<box.left+box.width/2:e.clientX>box.left+box.width/2));setDragOrder(o=>{if(!o)return o;const l=o.filter(c=>c!==dragging);l.splice(l.indexOf(target)+(after?1:0),0,dragging);return l.join()===o.join()?o:l})}
+ function endDrag(e:React.PointerEvent<HTMLButtonElement>){if(e.currentTarget.hasPointerCapture(e.pointerId))e.currentTarget.releasePointerCapture(e.pointerId);if(!dragging)return;setDragging('');if(dragOrder&&dragOrder.join()!==rooms.map(r=>r.code).join())void saveOrder(dragOrder);else setDragOrder(null)}
+ function keyDrag(e:React.KeyboardEvent,code:string){const back=e.key==='ArrowUp'||e.key==='ArrowLeft',fwd=e.key==='ArrowDown'||e.key==='ArrowRight';if(!back&&!fwd)return;e.preventDefault();const o=ordered.map(r=>r.code);const i=o.indexOf(code),j=i+(back?-1:1);if(j<0||j>=o.length)return;[o[i],o[j]]=[o[j],o[i]];if(sort!=='custom')chooseSort('custom');setDragOrder(o);void saveOrder(o).then(()=>requestAnimationFrame(()=>document.querySelector<HTMLElement>(`[data-room="${code}"] .room-handle`)?.focus()))}
+ const handle=(r:RoomSummary)=><button type="button" className="room-handle" disabled={disabled&&!dragging} aria-label={t(`Move ${r.name}. Drag, or use the arrow keys.`,`نقل ${r.name}. اسحب أو استخدم مفاتيح الأسهم.`)} title={t('Drag to reorder','اسحب لإعادة الترتيب')} onPointerDown={e=>beginDrag(e,r.code)} onPointerMove={moveDrag} onPointerUp={endDrag} onPointerCancel={endDrag} onKeyDown={e=>keyDrag(e,r.code)}><GripVertical size={16}/></button>;
  function chooseSort(v:RoomSort){setSort(v);try{localStorage.setItem(SORT_KEY,v)}catch{/* private mode */}}
  async function roomControl(code:string,patch:Record<string,unknown>,success:string){setWorking(true);setError('');try{await action({action:'control',code,patch});await reload();notify(success);return true}catch(e){setError((e as Error).message);return false}finally{setWorking(false)}}
  const copy=async(code:string)=>{if(await copyText(joinLink(code)))notify(t('Invite link copied','تم نسخ رابط الدعوة'))};
@@ -89,8 +93,8 @@ function RoomManager({rooms,lang,busy,run,reload,notify}:{rooms:RoomSummary[];la
   <div className="room-toolbar"><ViewSwitch view={view} onChange={chooseView} lang={lang}/><label className="room-search"><Search size={15}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder={t('Search rooms…','ابحث في الغرف…')} aria-label={t('Search rooms','ابحث في الغرف')}/></label><label className="inline-field">{t('Sort','ترتيب')}<select value={sort} onChange={e=>chooseSort(e.target.value as RoomSort)}>{roomSorts.map(([k,en,ar])=><option key={k} value={k}>{t(en,ar)}</option>)}</select></label><label className="inline-field">{t('All room screens show','كل شاشات الغرف تعرض')}<select value={allScreen} onChange={e=>setAllScreen(e.target.value)}>{screens.map(([k,en,ar])=><option key={k} value={k}>{t(en,ar)}</option>)}</select></label><button className="btn small secondary" disabled={disabled} onClick={()=>void run({action:'roomsControl',patch:{screen:allScreen}},t('Every room screen updated','تم تحديث شاشات كل الغرف'))}><Monitor size={14}/>{t('Apply','تطبيق')}</button></div>
   {error&&<div role="alert" className="error">{error}</div>}
   {view==='map'?<RoomsMap rooms={list} lang={lang} title={t('Main workshop','الورشة الرئيسية')} onOpen={r=>setOpenCode(r.code)}/>
-  :view==='list'?<RoomsList rooms={list} lang={lang} onOpen={r=>setOpenCode(r.code)}/>
-  :<div className="room-grid">{list.map(r=><RoomTile key={r.code} room={r} lang={lang}><button className="btn small secondary" onClick={()=>setOpenCode(r.code)}><Eye size={14}/>{t('Details & activity','التفاصيل والنشاط')}</button>{actionsFor(r)}</RoomTile>)}</div>}
+  :view==='list'?<RoomsList rooms={list} lang={lang} onOpen={r=>setOpenCode(r.code)} handle={handle} dragging={dragging}/>
+  :<div className="room-grid room-card-grid">{list.map(r=><RoomTile key={r.code} room={r} lang={lang} handle={handle(r)} dragging={dragging===r.code}><button className="btn small secondary" onClick={()=>setOpenCode(r.code)}><Eye size={14}/>{t('Details & activity','التفاصيل والنشاط')}</button>{actionsFor(r)}</RoomTile>)}</div>}
   {opened&&<Modal wide title={opened.name+' · '+roomNumber(opened.code)} onClose={()=>setOpenCode('')}><div className="room-detail"><p className="room-focus">{opened.challenge}</p><div className="room-detail-step"><StageTrack stage={opened.stage} lang={lang}/><span>{t('Step','الخطوة')} {opened.stage+1}/9 · {t(stages[opened.stage],stageArabic[opened.stage])}</span>{isLive(opened)&&<span className="pill lime"><span className="live-dot"/>{t('Active now','نشطة الآن')}</span>}{opened.paused&&<span className="pill">{t('Paused','متوقفة')}</span>}{opened.ended&&<span className="pill">{t('Ended','انتهت')}</span>}</div><RoomStats room={opened} lang={lang} large/><div className="room-actions">{actionsFor(opened)}</div><RoomActivity code={opened.code} lang={lang}/></div></Modal>}
   {!list.length&&<p className="muted">{t('No rooms match your search.','لا توجد غرف تطابق البحث.')}</p>}
   {editing&&<Modal title={t('Edit room','تعديل الغرفة')+' · '+roomNumber(editing.code)} onClose={()=>setEditing(null)}><form className="stack" onSubmit={e=>{e.preventDefault();void roomControl(editing.code,form,t('Room saved','تم حفظ الغرفة')).then(ok=>ok&&setEditing(null))}}><label>{t('Room name','اسم الغرفة')}<input value={form.name} maxLength={60} required onChange={e=>setForm({...form,name:e.target.value})}/></label><label>{t('Project focus','محور المشروع')}<input value={form.challenge} maxLength={100} required onChange={e=>setForm({...form,challenge:e.target.value})}/></label><label>{t('Challenge question','سؤال التحدي')}<textarea value={form.question} maxLength={1000} required onChange={e=>setForm({...form,question:e.target.value})}/></label><button className="btn primary" disabled={disabled}>{t('Save room','حفظ الغرفة')}</button></form></Modal>}
