@@ -41,7 +41,7 @@ await bob.request({action:'comment',code:r1,id:crypto.randomUUID(),parent:ideaId
 assert.equal((await alice.get(r1)).stats.participants,1,'guests are not counted as members');
 assert.equal((await bob.get(code)).me.room,r2,'visiting does not change your team');
 // Room status for the visual views: visitors, messages, people (lead first) and last activity; the people list is for facilitators only.
-let stat=(await presenter.get(code)).rooms.find(r=>r.code===r1);assert.equal(stat.guests,1);assert.equal(stat.comments,1);assert.equal(stat.ideas,1);assert.deepEqual(stat.people,[{lead:true,name:'QA Alice'}]);assert.ok(stat.lastActivity>0);
+let stat=(await presenter.get(code)).rooms.find(r=>r.code===r1);assert.equal(stat.guests,1);assert.equal(stat.comments,1);assert.equal(stat.ideas,1);assert.deepEqual(stat.people,[{lead:true,contributed:true,name:'QA Alice'}]);assert.ok(stat.lastActivity>0);
 assert.equal((await presenter.get(r1)).people.length,2);assert.equal((await bob.get(r1)).people,undefined);assert.equal((await alice.get(r1)).people.length,2,'the room lead sees who is in the room');
 
 // Files: members share images/PDFs in pieces; type comes from the bytes; guests, wrong types and oversize files are refused.
@@ -92,6 +92,24 @@ await dave.request({action:'joinRoom',code:r1,invite:token},403);await dave.requ
 await alice.request({action:'member',code:r1,participant:daveId,op:'lead'});assert.equal((await dave.get(r1)).me.role,'lead');assert.equal((await alice.get(r1)).me.role,'member');
 await dave.request({action:'member',code:r1,participant:(await alice.get(r1)).me.id,op:'lead'});assert.equal((await alice.get(r1)).me.role,'lead');
 await dave.request({action:'leaveRoom',code:r1});await alice.request({action:'control',code:r1,patch:{joining:'open'}});
+// Raised hand: members ask for help, visitors cannot; the presenter lowers it.
+await carol.request({action:'hand',code:r1,raise:true},403);await alice.request({action:'hand',code:r1,raise:true});
+assert.ok((await presenter.get(code)).rooms.find(r=>r.code===r1).hand>0);await presenter.request({action:'hand',code:r1,raise:false});assert.equal((await presenter.get(code)).rooms.find(r=>r.code===r1).hand,null);
+// Reactions: one of each per person, toggled; visitors react where they may comment.
+await bob.request({action:'react',code:r1,id:ideaId,emoji:'💡'});await alice.request({action:'react',code:r1,id:ideaId,emoji:'💡'});await alice.request({action:'react',code:r1,id:ideaId,emoji:'👍'});
+let reacted=(await bob.get(r1)).ideas.find(i=>i.id===ideaId);assert.deepEqual(reacted.reactions,{'💡':2,'👍':1});assert.deepEqual(reacted.myReactions,['💡']);
+await bob.request({action:'react',code:r1,id:ideaId,emoji:'💡',on:false});assert.deepEqual((await bob.get(r1)).ideas.find(i=>i.id===ideaId).reactions,{'💡':1,'👍':1});
+await bob.request({action:'react',code:r1,id:ideaId,emoji:'💩'},400);assert.equal((await presenter.get(code)).rooms.find(r=>r.code===r1).reactions,2);
+// Team identity, chosen by the leader from a fixed set.
+await alice.request({action:'control',code:r1,patch:{emoji:'🦅',hue:225}});await alice.request({action:'control',code:r1,patch:{emoji:'<script>',hue:17}});
+let ident=(await carol.get(code)).rooms.find(r=>r.code===r1);assert.equal(ident.emoji,'🦅');assert.equal(ident.hue,225);
+// Lit seats: who has posted is shown to the presenter and the room's leader only.
+assert.equal((await presenter.get(code)).rooms.find(r=>r.code===r1).people[0].contributed,true);assert.equal(ident.people[0].contributed,undefined);assert.equal((await alice.get(r1)).rooms.find(r=>r.code===r1).people[0].contributed,true);
+// Feedback mission: counts other teams commented on after it starts; rooms count feedback received.
+await presenter.request({action:'control',code,patch:{mission:{target:1}}});assert.equal((await bob.get(code)).mission.done,0);
+await bob.request({action:'comment',code:r1,id:crypto.randomUUID(),parent:ideaId,text:'Mission feedback: add a map legend.'},201);
+assert.equal((await bob.get(code)).mission.done,1);let mm=(await presenter.get(code)).mission;assert.equal(mm.target,1);assert.ok(mm.completed>=1);assert.ok((await presenter.get(code)).rooms.find(r=>r.code===r1).feedback>=2);
+await alice.request({action:'control',code,patch:{mission:null}},403);await presenter.request({action:'control',code,patch:{mission:null}});assert.equal((await bob.get(code)).mission,undefined);
 // Joining another team as a member moves you; your old room keeps your ideas as a guest.
 await bob.request({action:'joinRoom',code:r1});
 assert.equal((await bob.get(r1)).me.role,'member');assert.equal((await bob.get(r2)).me.role,'guest');assert.equal((await bob.get(code)).me.room,r1);

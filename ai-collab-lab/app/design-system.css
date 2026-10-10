@@ -1084,3 +1084,63 @@ button.person-icon:focus-visible { box-shadow: 0 0 0 2px var(--panel), 0 0 0 4px
 .rooms-map.large .person-icon.leader { width: 54px; height: 54px; }
 .rooms-map.large .leader-text strong { font-size: 18px; }
 @media (prefers-reduced-motion: reduce) { .person-icon, .person-pop { transition: none; animation: none; } }
+
+/* ---------- Engagement: reactions, raised hands, team identity, mission, lit seats ---------- */
+.reaction-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 8px 0 4px; }
+.reaction { display: inline-flex; align-items: center; gap: 5px; min-height: 32px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--text); font: inherit; font-size: 15px; cursor: pointer; transition: transform .12s var(--ease, ease), border-color .12s, background .12s; }
+.reaction b { font-size: 12px; font-weight: 800; }
+.reaction:hover:not(:disabled) { transform: translateY(-1px) scale(1.05); border-color: var(--accent); }
+.reaction.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent-fill) 20%, var(--panel)); }
+.reaction.on span { animation: react-pop .25s ease; }
+@keyframes react-pop { 50% { transform: scale(1.35); } }
+.reaction-counts { display: inline-flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; font-size: 12px; color: var(--muted); }
+.error-text { color: var(--danger, #dc2626); font-size: 12px; }
+/* Raised hand */
+.raise-hand { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.raise-hand.raised { padding: 10px 12px; border-radius: 12px; border: 2px solid var(--amber); background: color-mix(in srgb, var(--amber) 12%, var(--panel)); }
+.raise-hand.raised > span:not(.hand-wave) { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.raise-hand small { color: var(--muted); }
+.hand-wave { font-size: 26px; display: inline-block; transform-origin: 70% 90%; animation: hand-wave 1.6s ease-in-out infinite; }
+@keyframes hand-wave { 0%, 60%, 100% { transform: rotate(0); } 10%, 30% { transform: rotate(16deg); } 20%, 40% { transform: rotate(-10deg); } }
+.hand-badge { flex: none; display: inline-flex; align-items: center; gap: 4px; padding: 2px 9px 2px 6px; border-radius: 999px; font-size: 11px; font-weight: 800; color: #92400e; background: color-mix(in srgb, var(--amber) 28%, #fff); border: 1px solid var(--amber); animation: hand-badge 1.4s ease-in-out infinite; }
+:root[data-theme="dark"] .hand-badge { color: #fde68a; background: color-mix(in srgb, var(--amber) 25%, transparent); }
+@keyframes hand-badge { 50% { box-shadow: 0 0 0 5px color-mix(in srgb, var(--amber) 25%, transparent); } }
+.room-card.hand-raised, .map-room.hand-raised { border-color: var(--amber); animation: hand-flash 1.4s ease-in-out infinite; }
+@keyframes hand-flash { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--amber) 0%, transparent), 0 10px 28px -14px rgb(0 0 0 / .32); } 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--amber) 35%, transparent), 0 14px 34px -12px color-mix(in srgb, var(--amber) 60%, transparent); } }
+.hand-alert { position: relative; }
+.hand-alert .badge-dot { margin-inline-start: 6px; }
+/* Team identity */
+.room-emoji { flex: none; font-size: 18px; line-height: 1; }
+.room-emoji.big { font-size: 24px; }
+.identity-picker { display: flex; flex-direction: column; gap: 6px; }
+.emoji-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+.emoji-option { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); font-size: 20px; cursor: pointer; transition: transform .12s; }
+.emoji-option:hover { transform: scale(1.1); }
+.emoji-option.on { border: 2px solid var(--accent); background: color-mix(in srgb, var(--accent-fill) 18%, var(--panel)); }
+.hue-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.hue-option { width: 30px; height: 30px; border-radius: 50%; border: 3px solid var(--panel); background: hsl(var(--room-hue) 62% 52%); box-shadow: 0 0 0 1px var(--line); cursor: pointer; }
+.hue-option.on { box-shadow: 0 0 0 3px var(--accent); }
+/* Feedback mission */
+.mission-banner { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 12px 0; padding: 12px 14px; border-radius: 14px; border: 1px solid color-mix(in srgb, var(--blue, #2563eb) 35%, var(--line)); background: color-mix(in srgb, var(--blue, #2563eb) 8%, var(--panel)); }
+.mission-banner.complete { border-color: rgb(34 197 94 / .5); background: rgb(34 197 94 / .08); }
+.mission-ring { --share: 0; flex: none; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: conic-gradient(var(--blue, #2563eb) calc(var(--share) * 360deg), var(--track, var(--line)) 0); }
+.mission-banner.complete .mission-ring { background: #22c55e; color: #fff; }
+.mission-ring > span { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--panel); font-size: 12px; font-weight: 800; }
+.mission-banner.complete .mission-ring > span { background: transparent; color: #fff; }
+.mission-text { flex: 1 1 200px; display: flex; flex-direction: column; min-width: 0; }
+.mission-text small { color: var(--muted); }
+.mission-control h3 { display: flex; align-items: center; gap: 8px; }
+.mission-progress { font-size: 14px; }
+.mission-progress b { font-size: 20px; }
+/* Lit seats: who has posted (only the leader and the presenter see this) */
+.person-icon.lit { box-shadow: 0 0 0 2px var(--panel), 0 0 0 4px #22c55e, 0 0 14px rgb(34 197 94 / .6); }
+.person-icon.leader.lit { box-shadow: 0 0 0 3px var(--panel), 0 0 0 5px var(--amber), 0 0 16px rgb(34 197 94 / .7); }
+.person-icon.quiet { opacity: .45; filter: grayscale(.6); }
+.seat-legend { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
+.seat-legend i { width: 9px; height: 9px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e; }
+@media (prefers-reduced-motion: reduce) { .hand-wave, .hand-badge, .room-card.hand-raised, .map-room.hand-raised, .reaction.on span { animation: none; } }
+.hand-ribbon { display: flex; align-items: center; gap: 8px; padding: 6px 14px; font-size: 13px; color: #92400e; background: color-mix(in srgb, var(--amber) 24%, var(--panel)); border-bottom: 1px solid var(--amber); }
+.hand-ribbon .hand-wave { font-size: 18px; }
+.hand-ribbon span:last-child { color: var(--muted); font-size: 12px; }
+.map-room .hand-ribbon { margin: 0 -14px; }
+:root[data-theme="dark"] .hand-ribbon { color: #fde68a; }

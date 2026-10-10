@@ -12,6 +12,7 @@ import {useTranslatedSnapshot,TranslationNotice} from '../../lib/translate-clien
 import {NewHereBanner} from '../../lib/first-visit';
 import {Broadcast,StudentRooms,RoomBanner,MyRoomLink,ShowcaseVote} from '../../lib/team-rooms';
 import {RoomFiles} from '../../lib/rooms-visual';
+import {MissionBanner} from '../../lib/engage';
 import Console from '../../lib/console';
 
 /** A student's own language choice (EN / العربية / both) wins over the workshop default and is remembered. */
@@ -71,6 +72,7 @@ export default function Join(){
   <TranslationNotice data={data} lang={lang}/>
   {room&&<RoomBanner data={data} lang={lang} onLead={()=>setLeading(true)} refresh={refresh}/>}
   <Broadcast text={room?room.broadcast:c.broadcast} lang={lang}/>
+  {(me.role!=='guest'||!room)&&<MissionBanner data={data} lang={lang} onFind={room?undefined:()=>setTab('rooms')}/>}
   <nav className="student-tabs" aria-label={ar?'مساحة الورشة':'Workshop workspace'}><button className={activeTab==='task'?'active':''} aria-pressed={activeTab==='task'} onClick={()=>setTab('task')}>{guest?tr('About this room','عن هذه الغرفة'):tr('Your task','مهمتك')}</button><button className={activeTab==='wall'?'active':''} aria-pressed={activeTab==='wall'} onClick={()=>setTab('wall')}>{room?tr('Room ideas','أفكار الغرفة'):tr('Team ideas','أفكار الفريق')} <span className="pill">{teamCount}</span></button>{room&&<button className={activeTab==='files'?'active':''} aria-pressed={activeTab==='files'} onClick={()=>setTab('files')}>{tr('Files','الملفات')} <span className="pill">{data.uploads?.length||0}</span></button>}{roomsTab&&<button className={activeTab==='rooms'?'active':''} aria-pressed={activeTab==='rooms'} onClick={()=>setTab('rooms')}>{tr('Team rooms','غرف الفرق')} <span className="pill">{data.rooms!.length}</span></button>}</nav>
   <Timer end={c.timerEnd}/>
   {data.locked?<div className="waiting locked-room"><div className="waiting-icon"><Lock size={30}/></div><h1>{tr('This room is private','هذه الغرفة خاصة')}</h1><p>{tr('This team has chosen to keep its discussion to itself or to invited teams only. You can still see it on the map.','اختار هذا الفريق أن يبقي نقاشه لنفسه أو للفرق المدعوة فقط. ويمكنك رؤيته على الخريطة.')}</p><a className="btn primary full-width" href={'?code='+room!.code}><ArrowLeft size={17}/>{tr('Back to the main workshop','العودة إلى الورشة الرئيسية')}</a></div>:activeTab==='files'&&room?<RoomFiles data={data} lang={lang} refresh={refresh} canUpload={!guest&&!c.ended} manage={data.isPresenter}/>:activeTab==='rooms'&&roomsTab?<StudentRooms data={data} lang={lang}/>:activeTab==='wall'?<StudentWall data={data} lang={lang} refresh={refresh}/>:guest&&!c.ended?<div className="waiting"><div className="waiting-icon"><Eye size={30}/></div><h1>{c.challenge}</h1><p>{c.question}</p><p>{tr(`This team is at step: ${prompts[stage]}`,`هذا الفريق في مرحلة: ${promptsAr[stage]}`)}</p><button className="btn primary full-width" onClick={()=>setTab('wall')}>{tr('Read their ideas & comment','اقرأ أفكارهم وعلّق')} <ArrowRight size={18}/></button></div>:<>
