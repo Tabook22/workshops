@@ -1,5 +1,5 @@
 import { database, cookie } from '../../../db/server';
-import { reply, failure, clean, invalidate, presenterFor, type Session } from '../../../lib/snapshot';
+import { reply, failure, clean, invalidate, presenterFor, canReadRoom, type Session } from '../../../lib/snapshot';
 import type { Config } from '../../../lib/workshop';
 export const dynamic='force-dynamic';
 /* Files shared in team rooms. A file arrives in pieces of at most CHUNK bytes, because the VPS proxy limits
@@ -49,6 +49,8 @@ export async function GET(req:Request){try{
  const db=database();const row=await db.prepare('SELECT code,participant,name,type,data,status FROM uploads WHERE id=?').bind(id).first<{code:string;participant:string;name:string;type:string;data:unknown;status:string}>();
  if(!row||row.status==='deleted')return failure('File not found.',404);
  if(row.status!=='approved'){const a=await access(req,db,row.code);if(!a||!(a.facilitator||a.me?.id===row.participant))return failure('File not found.',404);}
+ // Files of a private room are only for the teams allowed in (and the presenter).
+ else{const session=await db.prepare('SELECT * FROM sessions WHERE code=?').bind(row.code).first<Session>();if(!session||!await canReadRoom(req,db,session))return failure('File not found.',404);}
  const inline=row.type.startsWith('image/')&&q.get('download')!=='1';
  const data=bytes(row.data);return new Response(data.slice().buffer as ArrayBuffer,{headers:{'Content-Type':row.type,'Content-Disposition':`${inline?'inline':'attachment'}; filename*=UTF-8''${encodeURIComponent(row.name)}`,'X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'none'; sandbox",'Cache-Control':'private, max-age=3600'}});
 }catch(e){console.error('File read failed',e);return failure('The file is unavailable. Please retry.',503);}}

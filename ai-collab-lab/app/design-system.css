@@ -1014,3 +1014,28 @@ button.map-room:focus-visible { box-shadow: 0 0 0 3px var(--ring, var(--accent))
 .room-handle:active { cursor: grabbing; }
 .rooms-table tr.dragging { background: color-mix(in srgb, var(--accent-fill) 14%, transparent); }
 .map-room-roof .status-light { padding: 2px 7px 2px 6px; font-size: 10px; }
+
+/* ---------- Room privacy and rooms tabs ---------- */
+.rooms-tabs { flex-wrap: wrap; align-self: flex-start; }
+.visibility-badge { flex: none; display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; white-space: nowrap; color: var(--muted); background: color-mix(in srgb, var(--panel) 80%, transparent); border: 1px solid var(--line); }
+.visibility-badge.v-private { color: var(--danger, #dc2626); border-color: color-mix(in srgb, var(--danger, #dc2626) 35%, transparent); }
+.visibility-badge.v-partners { color: var(--blue, #2563eb); border-color: color-mix(in srgb, var(--blue, #2563eb) 35%, transparent); }
+.visibility-badge.invited { color: #15803d; border-color: rgb(34 197 94 / .45); background: rgb(34 197 94 / .1); }
+.privacy-editor { margin: 6px 0 16px; }
+.privacy-editor h3 { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; font-size: 15px; }
+.privacy-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.privacy-option { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 12px; text-align: start; font: inherit; color: var(--text); border-radius: 14px; border: 2px solid var(--line); background: var(--panel); cursor: pointer; transition: border-color .15s, box-shadow .15s, transform .15s; }
+.privacy-option:hover { transform: translateY(-2px); box-shadow: 0 10px 22px -14px rgb(0 0 0 / .4); }
+.privacy-option small { color: var(--muted); font-size: 12px; line-height: 1.4; }
+.privacy-option svg { color: var(--muted); }
+.privacy-option.active { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-fill) 25%, transparent); }
+.privacy-option.active.v-open svg { color: #16a34a; }
+.privacy-option.active.v-partners svg { color: var(--blue, #2563eb); }
+.privacy-option.active.v-private svg { color: var(--danger, #dc2626); }
+.partner-pick { margin-top: 12px; }
+.partner-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.partner-chip { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); cursor: pointer; font-size: 14px; }
+.partner-chip input { margin: 0; }
+.partner-chip.on { border-color: hsl(var(--room-hue, 90) 62% 52%); background: color-mix(in srgb, hsl(var(--room-hue, 90) 62% 52%) 12%, var(--panel)); font-weight: 700; }
+.locked-room .waiting-icon { color: var(--danger, #dc2626); }
+@media (max-width: 640px) { .privacy-options { grid-template-columns: 1fr; } }

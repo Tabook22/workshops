@@ -47,7 +47,7 @@ assert.equal((await presenter.get(r1)).people.length,2);assert.equal((await bob.
 // Files: members share images/PDFs in pieces; type comes from the bytes; guests, wrong types and oversize files are refused.
 const sendFile=async(c,room,bytes,{name='sketch.png',chunk=96*1024}={})=>{const id=crypto.randomUUID(),total=Math.max(1,Math.ceil(bytes.length/chunk));let res;for(let i=0;i<total;i++){const r=await fetch(origin+'/api/upload?code='+room+'&id='+id+'&index='+i+'&total='+total,{method:'POST',headers:{'content-type':'application/octet-stream','x-file-name':encodeURIComponent(name),cookie:[...c.cookies].map(([k,v])=>k+'='+v).join('; ')},body:bytes.slice(i*chunk,(i+1)*chunk)});res={status:r.status,body:await r.json()};if(r.status>=400)return res;}return {...res,id};};
 const png=new Uint8Array(150*1024);png.set([0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a]);for(let i=8;i<png.length;i++)png[i]=i%251;
-let up=await sendFile(alice,r1,png);assert.equal(up.status,201,JSON.stringify(up.body));assert.equal(up.body.status,'approved');
+let up=await sendFile(alice,r1,png);const pngId=up.id;assert.equal(up.status,201,JSON.stringify(up.body));assert.equal(up.body.status,'approved');
 const fileRes=await fetch(origin+'/api/upload?id='+up.id);assert.equal(fileRes.status,200);assert.equal(fileRes.headers.get('content-type'),'image/png');assert.match(fileRes.headers.get('content-security-policy'),/sandbox/);assert.deepEqual(new Uint8Array(await fileRes.arrayBuffer()),png);
 let files=(await bob.get(r1)).uploads;assert.equal(files.length,1);assert.equal(files[0].name,'sketch.png');assert.equal(files[0].mine,false);assert.equal(files[0].participant,undefined);
 assert.equal((await presenter.get(code)).rooms.find(r=>r.code===r1).uploads,1);
@@ -64,6 +64,20 @@ await bob.request({action:'file',code:r2,id:up.id,op:'approve'});
 assert.equal((await fetch(origin+'/api/upload?id='+up.id+'&download=1')).headers.get('content-disposition').startsWith('attachment'),true);
 await carol.request({action:'file',code:r2,id:up.id,op:'delete'});assert.equal((await presenter.get(r2)).uploads.length,0);assert.equal((await fetch(origin+'/api/upload?id='+up.id)).status,404);
 await presenter.request({action:'control',code:r2,patch:{moderated:false}});
+// Privacy: the lead keeps the room to the team, opens it to selected teams, or to all; the presenter always sees inside.
+await carol.request({action:'control',code:r1,patch:{visibility:'private'}},403);
+await alice.request({action:'control',code:r1,patch:{visibility:'private'}});
+let peek=await bob.get(r1);assert.equal(peek.locked,true);assert.equal(peek.ideas.length,0);assert.equal(peek.uploads.length,0);assert.deepEqual(peek.config.canvas,{});
+assert.equal((await alice.get(r1)).locked,false);assert.ok((await presenter.get(r1)).ideas.length>0,'the presenter sees private rooms');
+await bob.request({action:'comment',code:r1,id:crypto.randomUUID(),parent:ideaId,text:'Should be refused now'},403);
+assert.equal((await fetch(origin+'/api/upload?id='+pngId)).status,404,'private files stay private');
+let fromMain=(await carol.get(code)).rooms.find(r=>r.code===r1);assert.equal(fromMain.canVisit,false);assert.equal(fromMain.latest,null);assert.equal(fromMain.visibility,'private');
+await carol.request({action:'joinRoom',code:r1,role:'guest'},403);
+await alice.request({action:'control',code:r1,patch:{visibility:'partners',partners:[r2,'UTAS-999999-R1',r1]}});
+assert.deepEqual((await presenter.get(r1)).config.partners,[r2],'only other rooms of this workshop can be partners');
+assert.equal((await bob.get(r1)).locked,false,'an invited team can read');await carol.request({action:'joinRoom',code:r1,role:'guest'},201);
+assert.equal((await carol.get(code)).rooms.find(r=>r.code===r1).canVisit,true);
+await alice.request({action:'control',code:r1,patch:{visibility:'open'}});
 // Joining another team as a member moves you; your old room keeps your ideas as a guest.
 await bob.request({action:'joinRoom',code:r1});
 assert.equal((await bob.get(r1)).me.role,'member');assert.equal((await bob.get(r2)).me.role,'guest');assert.equal((await bob.get(code)).me.room,r1);

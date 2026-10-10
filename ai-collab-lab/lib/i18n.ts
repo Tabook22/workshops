@@ -56,6 +56,7 @@ const errors: Record<string, string> = {
   'Workshop not found. Check the session code.': 'لم يتم العثور على الورشة. تحقق من رمز الجلسة.',
   'Workshop not found.': 'لم يتم العثور على الورشة.',
   'Room not found.': 'لم يتم العثور على الغرفة.',
+  'This team keeps its discussion private.': 'يحتفظ هذا الفريق بنقاشه خاصاً.',
   'Invalid upload.': 'رفع غير صالح.',
   'The file is too large (3 MB at most).': 'الملف كبير جداً (3 ميغابايت كحد أقصى).',
   'Files can be shared in team rooms.': 'يمكن مشاركة الملفات في غرف الفرق.',
