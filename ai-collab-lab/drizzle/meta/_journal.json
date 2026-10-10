@@ -22,6 +22,13 @@
       "when": 1791561374845,
       "tag": "0002_translations",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1791609395432,
+      "tag": "0003_rooms",
+      "breakpoints": true
     }
   ]
 }

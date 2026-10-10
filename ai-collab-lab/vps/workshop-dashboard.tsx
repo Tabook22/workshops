@@ -1,11 +1,11 @@
 import {useEffect, useMemo, useRef, useState} from 'react';
-import {Plus, Users, Lightbulb, ArrowUpRight, Search, LayoutGrid, List, GripVertical, Pencil, Trash2, Download, Power, RotateCcw, CheckSquare, Square, X, ArrowUpDown, Settings2} from 'lucide-react';
+import {Plus, Users, Lightbulb, ArrowUpRight, Search, LayoutGrid, List, GripVertical, Pencil, Trash2, Download, Power, RotateCcw, CheckSquare, Square, X, ArrowUpDown, Settings2, DoorOpen} from 'lucide-react';
 import {Modal, action, download, useToast} from '../lib/client';
 import {stages, stageArabic, type Language} from '../lib/workshop';
 import {tx, type UiLang} from '../lib/i18n';
 import {appUrl} from '../lib/urls';
 
-export type Session = {code: string; name: string; challenge?: string; question?: string; description?: string; language?: Language; stage?: number; ended: boolean; created?: number; participants?: number; ideas?: number};
+export type Session = {code: string; name: string; challenge?: string; question?: string; description?: string; language?: Language; stage?: number; ended: boolean; created?: number; participants?: number; ideas?: number; rooms?: number};
 type View = 'cards' | 'list';
 type Sort = 'custom' | 'newest' | 'oldest' | 'name' | 'participants' | 'ideas' | 'status';
 type Filter = 'all' | 'active' | 'ended';
@@ -165,7 +165,7 @@ export default function WorkshopDashboard({sessions, lang, onCreate, onSettings,
         <div className="session-card-top">{handle(s)}{check(s)}{status(s)}<span className="pill" dir="ltr">{s.code}</span></div>
         <h3 dir="auto"><a className="session-link" href={href(s)}>{s.challenge || s.name}</a></h3>
         <p className="muted" dir="auto">{s.name}{!s.ended && stageLabel(s) ? ` · ${stageLabel(s)}` : ''}</p>
-        <div className="session-card-foot"><span title={t('Participants', 'المشاركون')}><Users size={14} />{s.participants ?? 0}</span><span title={t('Ideas', 'الأفكار')}><Lightbulb size={14} />{s.ideas ?? 0}</span><span>{date(s)}</span>{actions(s)}</div>
+        <div className="session-card-foot"><span title={t('Participants', 'المشاركون')}><Users size={14} />{s.participants ?? 0}</span><span title={t('Ideas', 'الأفكار')}><Lightbulb size={14} />{s.ideas ?? 0}</span>{!!s.rooms&&<span title={t('Team rooms', 'غرف الفرق')}><DoorOpen size={14} />{s.rooms}</span>}<span>{date(s)}</span>{actions(s)}</div>
       </article>)}</div>
     : <div className="session-list" role="table" aria-label={t('Workshops', 'الورش')}>
         <div className="session-row session-row-head" role="row"><span role="columnheader" /><span role="columnheader" /><span role="columnheader">{t('Workshop', 'الورشة')}</span><span role="columnheader">{t('Status', 'الحالة')}</span><span role="columnheader">{t('Code', 'الرمز')}</span><span role="columnheader" className="num">{t('People', 'المشاركون')}</span><span role="columnheader" className="num">{t('Ideas', 'الأفكار')}</span><span role="columnheader">{t('Created', 'التاريخ')}</span><span role="columnheader" /></div>

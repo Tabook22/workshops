@@ -789,3 +789,40 @@ body:has(.bulk-bar) .workshop-help-button { bottom: 92px; }
 .small-link { margin: 0; font-size: 11px; display: inline-flex; align-items: center; gap: 3px; }
 @media (max-width: 1000px) { .landing-head { display: none; } .landing-row { grid-template-columns: 1fr; } .landing-label { padding-top: 4px; } .preset-options { grid-template-columns: 1fr; } }
 .settings-tabs { flex-wrap: wrap; }
+
+/* ---------- Team rooms ---------- */
+.broadcast { display: flex; gap: 10px; align-items: flex-start; margin: 14px 0; padding: 12px 14px; border-radius: 12px; border: 1px solid color-mix(in srgb, var(--amber) 45%, transparent); background: color-mix(in srgb, var(--amber) 12%, transparent); color: var(--text); }
+.broadcast svg { flex: none; color: var(--amber); margin-top: 2px; }
+.broadcast strong { display: block; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--amber); margin-bottom: 2px; }
+.room-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin: 16px 0; }
+.room-tile { display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); min-width: 0; }
+.room-tile.mine { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+.room-tile-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.room-name { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 17px; min-width: 0; overflow-wrap: anywhere; }
+.room-name svg { flex: none; color: var(--accent); }
+.room-focus { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+.room-meta { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; font-size: 13px; color: var(--muted); }
+.room-meta > span { display: inline-flex; align-items: center; gap: 4px; }
+.room-actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: auto; padding-top: 4px; }
+.rooms-panel h3 { margin: 0 0 10px; }
+.rooms-section { padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.room-create { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 6px; }
+.room-create input { flex: 1 1 200px; min-width: 0; }
+.inline-field { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; }
+.inline-field select { width: auto; }
+.room-explain { margin: 0; padding-inline-start: 20px; line-height: 1.7; color: var(--muted); }
+.room-banner { margin: 14px 0; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); display: flex; flex-direction: column; gap: 10px; }
+.room-banner.guest { border-style: dashed; }
+.room-banner-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.room-banner h2 { display: flex; align-items: center; gap: 8px; margin: 4px 0 2px; font-size: 20px; overflow-wrap: anywhere; }
+.room-banner h2 svg { flex: none; color: var(--accent); }
+.room-banner .pill { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.room-guest { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+.room-guest p { margin: 0; flex: 1 1 220px; color: var(--muted); font-size: 14px; }
+.student-rooms .my-room h2 { margin: 6px 0; }
+.my-room-link { display: flex; width: 100%; align-items: center; gap: 12px; margin: 0 0 14px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--accent); background: color-mix(in srgb, var(--accent-fill) 8%, transparent); color: var(--text); cursor: pointer; text-align: start; font: inherit; }
+.my-room-link span { flex: 1; display: flex; flex-direction: column; }
+.my-room-link small { color: var(--muted); }
+.my-room-link svg { color: var(--accent); flex: none; }
+.student-tabs { flex-wrap: wrap; }
+@media (max-width: 560px) { .room-grid { grid-template-columns: 1fr; } }

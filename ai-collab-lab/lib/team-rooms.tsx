@@ -1,0 +1,99 @@
+"use client";
+/* Team rooms: each room is a small workshop of its own, linked to the main workshop.
+   Teams develop their own project through the same stages, can visit other rooms as guests,
+   and the presenter follows every room from one overview. */
+import {useState,type ReactNode} from 'react';
+import {QRCodeSVG} from 'qrcode.react';
+import {DoorOpen,Users,Lightbulb,Plus,Copy,Monitor,ExternalLink,Trash2,Megaphone,ArrowLeft,Eye,UserPlus,Crown,Pause,Play,ArrowRight,Share2} from 'lucide-react';
+import {stages,stageArabic,type Snapshot,type RoomSummary,type Language,type Config} from './workshop';
+import {action,Modal,copyText} from './client';
+import {appUrl} from './urls';
+
+type L=(en:string,ar:string)=>string;
+const translator=(lang:Language):L=>(en,ar)=>lang==='ar'?ar:en;
+const joinLink=(code:string)=>(typeof location!=='undefined'?location.origin:'')+appUrl('/join?code=')+code;
+const goTo=(code:string)=>{location.href=appUrl('/join?code=')+code};
+const roomNumber=(code:string)=>code.slice(code.lastIndexOf('-')+1);
+
+/** A message from the presenter shown in the main workshop and every room. */
+export function Broadcast({text,lang}:{text?:string;lang:Language}){if(!text)return null;const t=translator(lang);return <div className="broadcast" role="status"><Megaphone size={18}/><span><strong>{t('From the presenter','من مقدم الورشة')}</strong>{text}</span></div>}
+
+export function RoomTile({room,lang,mine=false,children}:{room:RoomSummary;lang:Language;mine?:boolean;children?:ReactNode}){const t=translator(lang);
+ return <article className={'room-tile'+(mine?' mine':'')}>
+  <div className="room-tile-top"><span className="room-name"><DoorOpen size={17}/>{room.name}</span><span className="pill" dir="ltr">{roomNumber(room.code)}</span></div>
+  <p className="room-focus">{room.challenge}</p>
+  <div className="room-meta"><span className="pill lime">{room.stage+1}. {t(stages[room.stage],stageArabic[room.stage])}</span><span title={t('Members','الأعضاء')}><Users size={14}/>{room.members}</span><span title={t('Ideas','الأفكار')}><Lightbulb size={14}/>{room.ideas}</span>{room.pending>0&&<span className="pill status-pending">{room.pending} {t('pending','قيد المراجعة')}</span>}{room.paused&&<span className="pill">{t('Paused','متوقفة')}</span>}{room.ended&&<span className="pill">{t('Ended','انتهت')}</span>}{mine&&<span className="pill lime">{t('Your team','فريقك')}</span>}</div>
+  {children&&<div className="room-actions">{children}</div>}
+ </article>}
+
+/** Projector screen: every team's progress at a glance. */
+export function RoomsBoard({data,lang}:{data:Snapshot;lang:Language}){const t=translator(lang);const rooms=data.rooms||[];
+ return <><div className="section-heading"><h1>{t('Our team rooms','غرف فرقنا')}</h1><span className="muted">{rooms.length} {t('teams','فرق')} · {rooms.reduce((n,r)=>n+r.members,0)} {t('members','عضو')} · {rooms.reduce((n,r)=>n+r.ideas,0)} {t('ideas','فكرة')}</span></div>
+  <Broadcast text={data.config.broadcast} lang={lang}/>
+  {rooms.length?<div className="room-grid">{rooms.map(r=><RoomTile key={r.code} room={r} lang={lang}/>)}</div>:<p className="subtitle">{t('Team rooms will appear here.','ستظهر غرف الفرق هنا.')}</p>}
+  <p className="muted" style={{marginTop:24,textAlign:'center'}}>{t('Join the workshop, then open the Team rooms tab to find your team.','انضم إلى الورشة، ثم افتح تبويب غرف الفرق لتجد فريقك.')}</p></>}
+
+/** Presenter overview: create rooms, guide every room at once, and open any room. */
+export function RoomsPanel({data,lang,busy,run,control,present,notify}:{data:Snapshot;lang:Language;busy:boolean;run:(body:Record<string,unknown>,success?:string)=>Promise<boolean>;control:(patch:Partial<Config>)=>Promise<boolean>;present:()=>void;notify:(m:string)=>void}){
+ const t=translator(lang);const c=data.config;const rooms=data.rooms||[];
+ const [name,setName]=useState(''),[focus,setFocus]=useState(''),[count,setCount]=useState(4),[stage,setStage]=useState(2),[draft,setDraft]=useState<string|null>(null),[deleting,setDeleting]=useState('');
+ // The message box shows what every room sees until the presenter starts typing.
+ const message=draft??(c.broadcast||''),setMessage=setDraft;
+ const copy=async(code:string)=>{if(await copyText(joinLink(code)))notify(t('Invite link copied','تم نسخ رابط الدعوة'))};
+ const teamName=(n:number)=>t(`Team ${n}`,`الفريق ${n}`);
+ if(!c.teamRooms&&!rooms.length)return <div className="stack">
+  <p>{t('Split the audience into team rooms. Each team develops its own project through the same steps — ideas, improvements, voting and a project brief — while this main workshop stays the shared space for the whole class.','قسّم الحضور إلى غرف فرق. يطوّر كل فريق مشروعه الخاص بالخطوات نفسها — الأفكار والتحسين والتصويت وملخص المشروع — وتبقى هذه الورشة الرئيسية مساحة مشتركة للجميع.')}</p>
+  <ul className="room-explain"><li>{t('Students join a team from the Team rooms tab, or with the room’s own link or QR code.','ينضم الطلاب إلى فريق من تبويب غرف الفرق، أو برابط الغرفة أو رمز QR الخاص بها.')}</li><li>{t('The first member leads the room and can move it through the steps. You can open and guide any room.','أول عضو يقود الغرفة ويمكنه نقلها بين الخطوات، ويمكنك فتح أي غرفة وتوجيهها.')}</li><li>{t('Students can visit other rooms as guests to read and comment — great for peer feedback.','يمكن للطلاب زيارة غرف أخرى كضيوف للقراءة والتعليق — مفيد للتغذية الراجعة بين الزملاء.')}</li></ul>
+  <button className="btn primary" disabled={busy} onClick={()=>void control({teamRooms:true})}><DoorOpen size={17}/>{t('Turn on team rooms','تفعيل غرف الفرق')}</button></div>;
+ return <div className="stack rooms-panel">
+  <section className="rooms-section"><h3>{t('Create rooms','إنشاء الغرف')}</h3>
+   <div className="actions"><label className="inline-field">{t('Quick start','بداية سريعة')}<select value={count} onChange={e=>setCount(Number(e.target.value))}>{[2,3,4,5,6,8,10,12].map(n=><option key={n} value={n}>{n} {t('teams','فرق')}</option>)}</select></label><button className="btn secondary" disabled={busy} onClick={()=>void run({action:'createRoom',names:Array.from({length:count},(_,i)=>teamName(rooms.length+i+1))},t(`${count} rooms created`,`تم إنشاء ${count} غرف`))}><Plus size={16}/>{t('Create teams','إنشاء الفرق')}</button></div>
+   <form className="room-create" onSubmit={e=>{e.preventDefault();void run({action:'createRoom',name,challenge:focus},t('Room created','تم إنشاء الغرفة')).then(ok=>{if(ok){setName('');setFocus('')}})}}><input value={name} maxLength={60} required placeholder={t('Room name, e.g. Team Falcon','اسم الغرفة، مثل: فريق الصقر')} onChange={e=>setName(e.target.value)}/><input value={focus} maxLength={100} placeholder={t('Project focus (optional)','محور المشروع (اختياري)')} onChange={e=>setFocus(e.target.value)}/><button className="btn primary" disabled={busy||!name.trim()}><Plus size={16}/>{t('Add room','إضافة غرفة')}</button></form>
+   <p className="inline-help">{t('Without a focus, a room starts from the main challenge. Each room can change its own challenge in its settings.','دون محور، تبدأ الغرفة من التحدي الرئيسي. ويمكن لكل غرفة تعديل تحديها من إعداداتها.')}</p>
+   <div className="toggle-list"><label className="toggle-row"><input type="checkbox" role="switch" checked={c.studentRooms!==false} disabled={busy} onChange={e=>void control({studentRooms:e.target.checked})}/><span className="toggle-text"><strong>{t('Students can create their own rooms','يمكن للطلاب إنشاء غرفهم')}</strong><small>{t('A team with its own idea opens a room and invites anyone.','الفريق صاحب الفكرة يفتح غرفة ويدعو من يشاء.')}</small></span></label><label className="toggle-row"><input type="checkbox" role="switch" checked={c.gallery!==false} disabled={busy} onChange={e=>void control({gallery:e.target.checked})}/><span className="toggle-text"><strong>{t('Students can visit other rooms','يمكن للطلاب زيارة الغرف الأخرى')}</strong><small>{t('Visitors read and comment but cannot post ideas or vote there.','الزوار يقرؤون ويعلّقون لكن لا يضيفون أفكاراً ولا يصوّتون.')}</small></span></label></div>
+  </section>
+  {rooms.length>0&&<section className="rooms-section"><h3>{t('Guide all rooms','توجيه كل الغرف')}</h3>
+   <div className="actions"><label className="inline-field">{t('Move every room to','انقل كل الغرف إلى')}<select value={stage} onChange={e=>setStage(Number(e.target.value))}>{stages.map((s,i)=><option key={s} value={i}>{i+1}. {t(s,stageArabic[i])}</option>)}</select></label><button className="btn secondary" disabled={busy} onClick={()=>void run({action:'roomsControl',patch:{stage}},t('All rooms moved','تم نقل كل الغرف'))}><ArrowRight size={16}/>{t('Move','نقل')}</button><button className="btn secondary" disabled={busy} onClick={()=>void run({action:'roomsControl',patch:{paused:true}},t('All rooms paused','تم إيقاف كل الغرف'))}><Pause size={16}/>{t('Pause all','إيقاف الكل')}</button><button className="btn secondary" disabled={busy} onClick={()=>void run({action:'roomsControl',patch:{paused:false,submissionsOpen:true}},t('All rooms resumed','تم استئناف كل الغرف'))}><Play size={16}/>{t('Resume all','استئناف الكل')}</button><button className="btn secondary" onClick={()=>{void control({screen:'rooms'});present()}}><Monitor size={16}/>{t('Show rooms on projector','عرض الغرف على الشاشة')}</button></div>
+   <form className="room-create" onSubmit={e=>{e.preventDefault();void control({broadcast:message}).then(ok=>{if(ok)setDraft(null);return ok}).then(ok=>ok&&notify(message?t('Message sent to every room','تم إرسال الرسالة إلى كل الغرف'):t('Message cleared','تم مسح الرسالة')))}}><input value={message} maxLength={300} placeholder={t('Message to every room, e.g. 5 minutes left — choose your best idea','رسالة لكل الغرف، مثل: بقيت 5 دقائق — اختاروا أفضل فكرة')} onChange={e=>setMessage(e.target.value)}/><button className="btn primary" disabled={busy||message===(c.broadcast||'')}><Megaphone size={16}/>{t('Send','إرسال')}</button>{c.broadcast&&<button type="button" className="btn ghost" disabled={busy} onClick={()=>void control({broadcast:''}).then(()=>setDraft(null))}>{t('Clear','مسح')}</button>}</form>
+  </section>}
+  {rooms.length>0&&<div className="room-grid">{rooms.map(r=><RoomTile key={r.code} room={r} lang={lang}>
+   {deleting===r.code?<><span className="muted">{t('Delete this room and everything in it?','حذف هذه الغرفة وكل ما فيها؟')}</span><button className="btn small danger" disabled={busy} onClick={()=>void run({action:'deleteRoom',room:r.code,confirm:r.code},t('Room deleted','تم حذف الغرفة')).then(()=>setDeleting(''))}>{t('Delete','حذف')}</button><button className="btn small secondary" onClick={()=>setDeleting('')}>{t('Keep','إبقاء')}</button></>
+   :<><a className="btn small primary" href={appUrl('/presenter?code=')+r.code} target="_blank" rel="noreferrer"><ExternalLink size={14}/>{t('Open & guide','فتح وتوجيه')}</a><a className="btn small secondary" href={appUrl('/project?code=')+r.code} target="_blank" rel="noreferrer"><Monitor size={14}/>{t('Project','عرض')}</a><button className="btn small secondary" onClick={()=>void copy(r.code)}><Copy size={14}/>{t('Invite link','رابط الدعوة')}</button><button className="btn small ghost icon-btn" aria-label={t('Delete room','حذف الغرفة')} onClick={()=>setDeleting(r.code)}><Trash2 size={14}/></button></>}
+  </RoomTile>)}</div>}
+ </div>}
+
+/** Student tab on the main workshop: find your team, visit others, or start a room. */
+export function StudentRooms({data,lang}:{data:Snapshot;lang:Language}){const t=translator(lang);const c=data.config;const rooms=data.rooms||[];const mine=data.me?.room||null;const current=rooms.find(r=>r.code===mine);
+ const [name,setName]=useState(''),[focus,setFocus]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState(''),[confirm,setConfirm]=useState('');
+ async function enter(body:Record<string,unknown>){setBusy(true);setError('');try{const r=await action(body) as {code?:string};goTo(r.code||String(body.code))}catch(e){setError((e as Error).message);setBusy(false)}}
+ return <section className="student-rooms">
+  {current?<div className="panel my-room"><span className="eyebrow">{t('YOUR TEAM ROOM','غرفة فريقك')}</span><h2>{current.name}</h2><p className="muted">{current.challenge}</p><button className="btn primary full-width" onClick={()=>goTo(current.code)}>{t('Open my room','افتح غرفتي')} <ArrowRight size={17}/></button></div>
+  :<p className="inline-help">{t('Choose a team to develop your own project with. You can still visit other rooms to see their ideas and comment.','اختر فريقاً لتطوير مشروعكم الخاص. ويمكنك زيارة الغرف الأخرى لرؤية أفكارها والتعليق عليها.')}</p>}
+  {rooms.length?<div className="room-grid">{rooms.map(r=>{const isMine=r.code===mine;return <RoomTile key={r.code} room={r} lang={lang} mine={isMine}>
+   {isMine?<button className="btn small primary" onClick={()=>goTo(r.code)}>{t('Open','افتح')}</button>
+   :confirm===r.code?<><span className="muted">{t(`Move from ${current?.name} to this team?`,`الانتقال من ${current?.name} إلى هذا الفريق؟`)}</span><button className="btn small primary" disabled={busy} onClick={()=>void enter({action:'joinRoom',code:r.code})}>{t('Move','انتقال')}</button><button className="btn small secondary" onClick={()=>setConfirm('')}>{t('Cancel','إلغاء')}</button></>
+   :<>{!r.ended&&<button className="btn small primary" disabled={busy} onClick={()=>current?setConfirm(r.code):void enter({action:'joinRoom',code:r.code})}><UserPlus size={14}/>{t('Join this team','انضم لهذا الفريق')}</button>}{c.gallery!==false&&<button className="btn small secondary" disabled={busy} onClick={()=>void enter({action:'joinRoom',code:r.code,role:'guest'})}><Eye size={14}/>{t('Visit','زيارة')}</button>}</>}
+  </RoomTile>})}</div>:<div className="empty"><span className="empty-icon"><DoorOpen size={26}/></span><h3>{t('No team rooms yet','لا توجد غرف فرق بعد')}</h3>{c.studentRooms!==false?t('Start one below and invite your teammates.','أنشئ غرفة أدناه وادعُ زملاءك.'):t('Your presenter will open the rooms.','سيفتح مقدم الورشة الغرف.')}</div>}
+  {c.studentRooms!==false&&!c.ended&&<form className="panel stack" onSubmit={e=>{e.preventDefault();void enter({action:'createRoom',code:data.code,name,challenge:focus})}}><h3>{t('Start a room for your team','أنشئ غرفة لفريقك')}</h3><label>{t('Room name','اسم الغرفة')}<input value={name} maxLength={60} required onChange={e=>setName(e.target.value)} placeholder={t('e.g. Team Falcon','مثل: فريق الصقر')}/></label><label>{t('Your project idea (optional)','فكرة مشروعكم (اختياري)')}<input value={focus} maxLength={100} onChange={e=>setFocus(e.target.value)} placeholder={t('e.g. Smart parking for campus','مثل: مواقف ذكية للحرم الجامعي')}/></label><small className="muted">{t('You will lead the room: you move it through the steps and can invite anyone with its link.','ستقود الغرفة: تنقلها بين الخطوات ويمكنك دعوة أي شخص برابطها.')}</small><button className="btn primary full-width" disabled={busy||!name.trim()}><Plus size={17}/>{t('Create room','إنشاء الغرفة')}</button></form>}
+  {error&&<div role="alert" className="error">{error}</div>}
+ </section>}
+
+/** Shown inside a team room: where you are, your role, inviting others and moving between rooms. */
+export function RoomBanner({data,lang,onLead,refresh}:{data:Snapshot;lang:Language;onLead:()=>void;refresh:()=>Promise<void>}){const t=translator(lang);const parent=data.parent!;const role=data.me?.role||'member';const others=(data.rooms||[]).filter(r=>r.code!==data.code);
+ const [modal,setModal]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState(''),[copied,setCopied]=useState(false);
+ async function join(){setBusy(true);setError('');try{await action({action:'joinRoom',code:data.code});await refresh()}catch(e){setError((e as Error).message)}finally{setBusy(false)}}
+ async function visit(code:string){setBusy(true);setError('');try{await action({action:'joinRoom',code,role:'guest'});goTo(code)}catch(e){setError((e as Error).message);setBusy(false)}}
+ const link=joinLink(data.code);
+ return <section className={'room-banner'+(role==='guest'?' guest':'')}>
+  <div className="room-banner-top"><div><span className="eyebrow">{t('TEAM ROOM','غرفة الفريق')} · <span dir="ltr">{roomNumber(data.code)}</span></span><h2><DoorOpen size={20}/>{data.config.name}</h2><span className="muted">{t('Part of','ضمن')} {parent.name}</span></div>
+   <span className={'pill '+(role==='guest'?'':'lime')}>{role==='lead'?<><Crown size={13}/> {t('Room lead','قائد الغرفة')}</>:role==='guest'?<><Eye size={13}/> {t('Visitor','زائر')}</>:<><Users size={13}/> {t('Member','عضو')}</>}</span></div>
+  <div className="actions">{role==='lead'&&<button className="btn small primary" onClick={onLead}><Crown size={15}/>{t('Lead the room','قيادة الغرفة')}</button>}{role!=='guest'&&<button className="btn small secondary" onClick={()=>setModal('invite')}><Share2 size={15}/>{t('Invite','دعوة')}</button>}{parent.gallery&&others.length>0&&<button className="btn small secondary" onClick={()=>setModal('rooms')}><DoorOpen size={15}/>{t('Other rooms','الغرف الأخرى')}</button>}<a className="btn small ghost" href={appUrl('/join?code=')+parent.code}><ArrowLeft size={15}/>{t('Main workshop','الورشة الرئيسية')}</a></div>
+  {role==='guest'&&<div className="room-guest"><p>{t('You are visiting: read the ideas and leave comments to help this team. Members add ideas and vote.','أنت في زيارة: اقرأ الأفكار واترك تعليقات لمساعدة هذا الفريق. الأعضاء يضيفون الأفكار ويصوّتون.')}</p>{!data.config.ended&&<button className="btn small primary" disabled={busy} onClick={()=>void join()}><UserPlus size={15}/>{t('Join this team instead','انضم لهذا الفريق بدلاً من ذلك')}</button>}</div>}
+  {role==='lead'&&<p className="inline-help">{t('As the room lead you move your team through the steps, choose the idea to develop, run the vote and prepare your project brief.','بصفتك قائد الغرفة تنقل فريقك بين الخطوات، وتختار الفكرة للتطوير، وتدير التصويت، وتجهز ملخص مشروعكم.')}</p>}
+  {error&&<div role="alert" className="error">{error}</div>}
+  {modal==='invite'&&<Modal title={t('Invite people to this room','ادعُ آخرين إلى هذه الغرفة')} onClose={()=>setModal('')}><div className="qr"><QRCodeSVG value={link} size={240} level="M" bgColor="#fff" fgColor="#101216" marginSize={0} title={t('Scan to join this room','امسح للانضمام إلى هذه الغرفة')}/><div className="session-code" dir="ltr">{data.code}</div><p className="join-link" dir="ltr">{link}</p></div><p className="inline-help">{t('Anyone with this link or code can join your room, even if they are new to the workshop.','يمكن لأي شخص لديه هذا الرابط أو الرمز الانضمام إلى غرفتك، حتى لو كان جديداً على الورشة.')}</p><button className="btn primary full-width" onClick={()=>void copyText(link).then(ok=>setCopied(ok))}><Copy size={16}/>{copied?t('Link copied ✓','تم نسخ الرابط ✓'):t('Copy invite link','نسخ رابط الدعوة')}</button></Modal>}
+  {modal==='rooms'&&<Modal wide title={t('Visit another room','زيارة غرفة أخرى')} onClose={()=>setModal('')}><p className="inline-help">{t('See what other teams are building and leave helpful comments. Visiting does not change your own team.','شاهد ما تبنيه الفرق الأخرى واترك تعليقات مفيدة. الزيارة لا تغيّر فريقك.')}</p><div className="room-grid">{others.map(r=><RoomTile key={r.code} room={r} lang={lang}><button className="btn small primary" disabled={busy} onClick={()=>void visit(r.code)}><Eye size={14}/>{t('Visit','زيارة')}</button></RoomTile>)}</div></Modal>}
+ </section>}
+
+/** On the main workshop's task screen: a shortcut back to your team. */
+export function MyRoomLink({data,lang}:{data:Snapshot;lang:Language}){const t=translator(lang);const room=(data.rooms||[]).find(r=>r.code===data.me?.room);if(!room)return null;return <button className="my-room-link" onClick={()=>goTo(room.code)}><DoorOpen size={18}/><span><small>{t('Your team room','غرفة فريقك')}</small><strong>{room.name}</strong></span><ArrowRight size={17}/></button>}
