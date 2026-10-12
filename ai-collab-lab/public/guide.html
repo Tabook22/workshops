@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="How to join, share ideas, comment, vote, and work in team rooms. English and Arabic.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script>try{var p=localStorage.getItem('ai-collab-theme');if(p==='dark'||p==='light')document.documentElement.dataset.theme=p}catch(e){}</script>
+<title>AI Collab Lab Participant Guide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Noto+Sans+Arabic:wght@400;600;700&display=swap">
+<style>
+body{margin:0}
+/* Layout: one reading column of numbered steps; each step pairs short instructions with a phone drawn like the real app. */
+:root{
+  --bg:#f4f5ef; --panel:#ffffff; --line:#dde2d5; --text:#13171c; --muted:#5a626d;
+  --accent:#4a7a00; --accent-soft:#e9f6c8; --lime:#c6f257; --on-lime:#142008;
+  --lead:#a86300; --lead-soft:#fff1d9; --room:#6a54d6; --room-soft:#efecff; --warn:#cf4e36;
+  --display:"Manrope","Noto Sans Arabic",system-ui,sans-serif;
+  --body:"DM Sans","Noto Sans Arabic",system-ui,sans-serif;
+  /* the phone mockups always use the app's own dark screen */
+  --ph-bg:#0d0f12; --ph-panel:#1b1e24; --ph-chip:#23272e; --ph-line:#2c3036; --ph-text:#eef0f3; --ph-muted:#a2a8b2;
+  --ph-lime:#d6ff73; --ph-on:#151b0c; --ph-amber:#ffcf8e; --ph-teal:#9ddcdd; --ph-violet:#c8baff; --ph-coral:#ff9f8a;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1114; --panel:#171a1f; --line:#2a2f36; --text:#eef0f3; --muted:#a2a8b2;
+  --accent:#d6ff73; --accent-soft:#232b14; --lime:#d6ff73; --on-lime:#151b0c;
+  --lead:#ffcf8e; --lead-soft:#2d2416; --room:#c8baff; --room-soft:#221f33; --warn:#ff9f8a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1114; --panel:#171a1f; --line:#2a2f36; --text:#eef0f3; --muted:#a2a8b2;
+  --accent:#d6ff73; --accent-soft:#232b14; --lime:#d6ff73; --on-lime:#151b0c;
+  --lead:#ffcf8e; --lead-soft:#2d2416; --room:#c8baff; --room-soft:#221f33; --warn:#ff9f8a; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font:16px/1.6 var(--body)}
+html[lang=ar] body{font-family:"Noto Sans Arabic",var(--body);line-height:1.8}
+html:not([lang=ar]) .ar, html[lang=ar] .en{display:none!important}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:20px;padding-block:0 64px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.2;margin:0}
+html[lang=ar] h1,html[lang=ar] h2,html[lang=ar] h3{font-family:"Noto Sans Arabic",var(--display)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar-in{max-width:1040px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:12px}
+.logo{font:800 15px/1 var(--display);letter-spacing:.02em;display:flex;align-items:center;gap:8px}
+.back{font:600 14px var(--body);color:var(--muted);text-decoration:none;white-space:nowrap}
+.back:hover{color:var(--text)}
+.logo b{background:var(--lime);color:var(--on-lime);padding:3px 6px;border-radius:6px}
+.lang{margin-inline-start:auto;display:flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--panel)}
+.lang button{border:0;background:none;color:var(--muted);font:600 14px var(--body);padding:6px 14px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed=true]{background:var(--lime);color:var(--on-lime)}
+
+/* hero */
+.hero{padding-block:44px 28px;display:grid;gap:18px}
+.eyebrow{font:700 12px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+html[lang=ar] .eyebrow{letter-spacing:0}
+.hero h1{font-size:clamp(32px,6vw,54px);font-weight:800;max-width:16ch}
+.hero p{font-size:18px;color:var(--muted);max-width:60ch;margin:0}
+.flow{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;padding:0;list-style:none}
+.flow li{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 6px;font-weight:600;font-size:14px}
+html[lang=ar] .flow li{padding:6px 6px 6px 14px}
+.flow li span{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font:800 13px var(--display)}
+
+/* need-to-know */
+.need{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-block:8px 10px}
+.need div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:4px}
+.need strong{font-family:var(--display);font-size:15px}
+.need small{color:var(--muted);font-size:14px;line-height:1.5}
+.need i{font-style:normal;font-size:22px}
+
+/* contents */
+.toc{margin-block:28px 8px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.toc a{display:grid;gap:4px;text-decoration:none;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.toc a:hover{border-color:var(--accent)}
+.toc b{font-family:var(--display);font-size:16px}
+.toc small{color:var(--muted);font-size:13px}
+
+/* parts and steps */
+.part{scroll-margin-top:72px;margin-top:56px;display:grid;gap:6px;padding-bottom:14px;border-bottom:2px solid var(--text)}
+.part h2{font-size:clamp(24px,4vw,32px)}
+.part p{margin:0;color:var(--muted)}
+.role{display:inline-flex;align-items:center;gap:6px;width:max-content;font:700 12px/1 var(--body);letter-spacing:.06em;text-transform:uppercase;padding:6px 10px;border-radius:999px}
+html[lang=ar] .role{letter-spacing:0}
+.r-all{background:var(--accent-soft);color:var(--accent)}
+.r-room{background:var(--room-soft);color:var(--room)}
+.r-lead{background:var(--lead-soft);color:var(--lead)}
+
+.step{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:36px;align-items:start;padding-block:36px;border-bottom:1px solid var(--line)}
+.step:last-child{border-bottom:0}
+.step h3{font-size:24px;display:flex;align-items:baseline;gap:12px}
+.num{flex:none;font:800 15px/1 var(--display);color:var(--on-lime);background:var(--lime);border-radius:10px;width:36px;height:36px;display:grid;place-items:center;transform:translateY(-3px)}
+.copy{min-width:0;display:grid;gap:14px}
+.copy > p{margin:0;max-width:62ch}
+ol.do{margin:0;padding:0;list-style:none;counter-reset:d;display:grid;gap:10px}
+ol.do li{counter-increment:d;display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start}
+ol.do li::before{content:counter(d);width:26px;height:26px;border-radius:50%;border:2px solid var(--accent);color:var(--accent);display:grid;place-items:center;font:800 13px/1 var(--display);margin-top:1px}
+.btn-ref{display:inline-block;font:600 .92em var(--body);background:var(--panel);border:1px solid var(--line);border-bottom-width:2px;padding:0 7px;border-radius:7px;white-space:nowrap}
+.tip{background:var(--accent-soft);border-radius:12px;padding:12px 14px;font-size:15px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px}
+.tip.lead{background:var(--lead-soft)}
+.tip.room{background:var(--room-soft)}
+.tip.warn{background:color-mix(in srgb,var(--warn) 14%,var(--panel))}
+.tip b:first-child{font-size:18px;line-height:1.3}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.mini{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:15px}
+.mini strong{display:block;font-family:var(--display);margin-bottom:2px}
+
+/* ---------- phone mockups (fixed app look) ---------- */
+.phone{width:280px;max-width:100%;justify-self:center;background:#050607;border-radius:38px;padding:10px;box-shadow:0 30px 60px -28px #0008,0 0 0 1px #ffffff14 inset;position:sticky;top:80px}
+.scr{background:var(--ph-bg);color:var(--ph-text);border-radius:30px;overflow:hidden;min-height:470px;font:13px/1.45 var(--body);display:flex;flex-direction:column}
+html[lang=ar] .scr{font-family:"Noto Sans Arabic",var(--body)}
+.notch{height:22px;display:flex;justify-content:center;align-items:center}
+.notch::before{content:"";width:70px;height:6px;border-radius:9px;background:#000}
+.ap{padding:4px 14px 16px;display:grid;gap:10px;align-content:start;flex:1}
+.ap-top{display:flex;align-items:center;justify-content:space-between;font:800 11px var(--display);letter-spacing:.04em}
+.ap-top em{font-style:normal;background:var(--ph-lime);color:var(--ph-on);padding:2px 4px;border-radius:4px}
+.live{display:flex;align-items:center;gap:5px;font:600 10px var(--body);color:var(--ph-lime)}
+.live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ph-lime);box-shadow:0 0 0 3px #d6ff7333}
+.ap h4{margin:0;font:800 19px/1.2 var(--display)}
+html[lang=ar] .ap h4{font-family:"Noto Sans Arabic",var(--display)}
+.ap .mut{color:var(--ph-muted);font-size:11.5px;margin:0}
+.ap .k{font:700 9.5px var(--body);letter-spacing:.12em;color:var(--ph-muted);text-transform:uppercase}
+.fld{background:#111419;border:1px solid var(--ph-line);border-radius:10px;padding:9px 10px;color:var(--ph-muted);font-size:12.5px}
+.fld.big{min-height:70px}
+.fld.filled{color:var(--ph-text)}
+.fld.code{font:800 18px var(--display);letter-spacing:.08em;color:var(--ph-text);text-align:center}
+.pb{position:relative;border-radius:10px;padding:10px;text-align:center;font:700 12.5px var(--body);background:var(--ph-lime);color:var(--ph-on)}
+.pb.sec{background:var(--ph-chip);color:var(--ph-text)}
+.pb.ghost{background:none;border:1px solid var(--ph-line);color:var(--ph-text)}
+.pb.sm{padding:6px 8px;font-size:11px;border-radius:8px;display:inline-block}
+.tabs{display:flex;gap:4px;overflow:hidden;background:var(--ph-panel);padding:3px;border-radius:10px}
+.tabs span{flex:1;text-align:center;font:600 10px var(--body);padding:6px 2px;border-radius:7px;color:var(--ph-muted);white-space:nowrap;position:relative}
+.tabs span.on{background:var(--ph-chip);color:var(--ph-text)}
+.card{background:var(--ph-panel);border:1px solid var(--ph-line);border-radius:12px;padding:10px;display:grid;gap:6px}
+.card .t{font:700 13px var(--display)}
+html[lang=ar] .card .t{font-family:"Noto Sans Arabic",var(--display)}
+.chip{display:inline-block;font:700 9px var(--body);letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:5px;background:#ffcf8e26;color:var(--ph-amber);width:max-content}
+.chip.pend{background:#ffffff14;color:var(--ph-muted)}
+.chip.lead{background:#ffcf8e26;color:var(--ph-amber)}
+.reacts{display:flex;gap:4px;flex-wrap:wrap}
+.reacts span{background:var(--ph-chip);border-radius:999px;padding:2px 7px;font-size:11px}
+.reacts span.me{background:#d6ff7326;outline:1px solid var(--ph-lime)}
+.cmt{border-inline-start:2px solid var(--ph-line);padding-inline-start:8px;font-size:11.5px}
+.cmt b{font-weight:700;color:var(--ph-teal)}
+.row{display:flex;gap:6px;align-items:center}
+.row > *{min-width:0}
+.grow{flex:1}
+.seats{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.seat{width:22px;height:22px;border-radius:50%;background:var(--ph-chip);display:grid;place-items:center;font-size:11px}
+.seat.lit{background:#9ddcdd40;color:var(--ph-teal)}
+.seat.crown{background:#ffcf8e33;width:auto;padding:0 8px;border-radius:999px;font:700 10px var(--body);color:var(--ph-amber)}
+.seat.empty{background:none;border:1px dashed var(--ph-line)}
+.roof{height:6px;border-radius:12px 12px 0 0;margin:-10px -10px 4px}
+.light{display:inline-flex;align-items:center;gap:4px;font:600 9.5px var(--body);color:var(--ph-lime)}
+.light::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.light.q{color:var(--ph-muted)}
+.sw{width:30px;height:17px;border-radius:999px;background:var(--ph-lime);position:relative;flex:none}
+.sw::after{content:"";position:absolute;top:2px;inset-inline-end:2px;width:13px;height:13px;border-radius:50%;background:var(--ph-on)}
+.seg{display:flex;background:var(--ph-chip);border-radius:8px;padding:2px;gap:2px}
+.seg span{flex:1;text-align:center;font:600 10px var(--body);padding:5px 2px;border-radius:6px;color:var(--ph-muted)}
+.seg span.on{background:var(--ph-lime);color:var(--ph-on)}
+.banner{background:#80caff1f;border:1px solid #80caff55;color:#cfe9ff;border-radius:10px;padding:8px 10px;font-size:11.5px}
+.qr{width:96px;height:96px;margin:0 auto;border-radius:8px;background:
+  conic-gradient(from 90deg at 30% 30%,#fff 0 25%,transparent 0) 0 0/24px 24px,
+  repeating-linear-gradient(90deg,#fff 0 6px,#111 0 12px),#fff;border:8px solid #fff;filter:contrast(1.2)}
+.ring{width:46px;height:46px;border-radius:50%;background:conic-gradient(var(--ph-lime) 0 66%,var(--ph-chip) 0);display:grid;place-items:center;flex:none}
+.ring b{width:36px;height:36px;border-radius:50%;background:var(--ph-panel);display:grid;place-items:center;font:800 12px var(--display)}
+.meter{height:6px;border-radius:9px;background:var(--ph-chip);overflow:hidden}
+.meter i{display:block;height:100%;width:75%;background:var(--ph-lime)}
+.starters{display:flex;gap:4px;flex-wrap:wrap}
+.starters span{font-size:10px;border:1px dashed var(--ph-line);border-radius:999px;padding:2px 7px;color:var(--ph-muted)}
+.stages{display:flex;gap:3px}
+.stages i{flex:1;height:5px;border-radius:9px;background:var(--ph-chip)}
+.stages i.d{background:var(--ph-lime)}
+
+/* the "tap here" marker */
+.tap{position:relative;z-index:1}
+.tap::after{content:attr(data-n);position:absolute;top:-9px;inset-inline-end:-7px;width:20px;height:20px;border-radius:50%;background:#ff5d8f;color:#fff;font:800 11px/20px var(--display);text-align:center;box-shadow:0 0 0 0 #ff5d8f88;animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #ff5d8f88}70%{box-shadow:0 0 0 9px #ff5d8f00}100%{box-shadow:0 0 0 0 #ff5d8f00}}
+@media (prefers-reduced-motion:reduce){.tap::after{animation:none}}
+.legend{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.legend i{width:18px;height:18px;border-radius:50%;background:#ff5d8f;color:#fff;font:800 10px/18px var(--display);text-align:center;font-style:normal;flex:none}
+
+/* FAQ */
+.faq{display:grid;gap:10px;margin-top:20px}
+.faq details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+.faq summary{cursor:pointer;font:700 16px var(--display)}
+html[lang=ar] .faq summary{font-family:"Noto Sans Arabic",var(--display)}
+.faq p{margin:8px 0 0;color:var(--muted)}
+.foot{margin-top:48px;color:var(--muted);font-size:14px;text-align:center}
+
+@media (max-width:760px){
+  .step{grid-template-columns:minmax(0,1fr);gap:22px}
+  .phone{position:static}
+  .wrap{padding-inline:16px}
+  .bar-in{padding-inline:16px}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-in">
+    <a class="back" href="join"><span class="en">← Workshop</span><span class="ar">→ الورشة</span></a>
+    <div class="logo"><b>AI</b> COLLAB LAB</div>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="b-en" aria-pressed="true">EN</button>
+      <button type="button" id="b-ar" aria-pressed="false">العربية</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section class="hero">
+  <span class="eyebrow"><span class="en">Participant guide</span><span class="ar">دليل المشارك</span></span>
+  <h1><span class="en">How to take part in the workshop</span><span class="ar">كيف تشارك في الورشة</span></h1>
+  <p class="en">Everything happens on your phone. You join with a code, share ideas, comment on other people’s ideas, vote, and build a project with your team. This guide shows each screen and exactly what to tap.</p>
+  <p class="ar">كل شيء يتم من هاتفك. تنضم برمز، وتشارك أفكارك، وتعلّق على أفكار الآخرين، وتصوّت، وتبني مشروعاً مع فريقك. يعرض هذا الدليل كل شاشة وما الذي تضغط عليه بالضبط.</p>
+  <ol class="flow">
+    <li><span>1</span><b class="en">Think</b><b class="ar">فكّر</b></li>
+    <li><span>2</span><b class="en">Share</b><b class="ar">شارك</b></li>
+    <li><span>3</span><b class="en">Improve</b><b class="ar">حسّن</b></li>
+    <li><span>4</span><b class="en">Vote</b><b class="ar">صوّت</b></li>
+    <li><span>5</span><b class="en">Build</b><b class="ar">ابنِ</b></li>
+  </ol>
+  <div class="need">
+    <div><i>📱</i><strong class="en">A phone or laptop</strong><strong class="ar">هاتف أو حاسوب</strong><small class="en">Any browser. Nothing to install.</small><small class="ar">أي متصفح. لا حاجة لتثبيت أي شيء.</small></div>
+    <div><i>🔢</i><strong class="en">The workshop code</strong><strong class="ar">رمز الورشة</strong><small class="en">Shown on the big screen, or scan the QR code.</small><small class="ar">يظهر على الشاشة الكبيرة، أو امسح رمز QR.</small></div>
+    <div><i>🙂</i><strong class="en">No account, no password</strong><strong class="ar">بلا حساب ولا كلمة مرور</strong><small class="en">A first name or nickname is enough.</small><small class="ar">يكفي اسمك الأول أو اسم مستعار.</small></div>
+    <div><i>🌐</i><strong class="en">English or Arabic</strong><strong class="ar">العربية أو الإنجليزية</strong><small class="en">Switch any time with EN / العربية in the app.</small><small class="ar">بدّل في أي وقت من زر EN / العربية في التطبيق.</small></div>
+  </div>
+  <div class="legend"><i>1</i><span class="en">A pink number on a phone picture marks what to tap, in that order.</span><span class="ar">الرقم الوردي على صورة الهاتف يحدد ما تضغط عليه، بالترتيب.</span></div>
+</section>
+
+<nav class="toc" aria-label="Contents">
+  <a href="#part-1"><span class="role r-all"><span class="en">Everyone</span><span class="ar">الجميع</span></span><b class="en">Part 1 · Join and take part</b><b class="ar">الجزء 1 · الانضمام والمشاركة</b><small class="en">Join, write, comment, react, vote</small><small class="ar">انضم، اكتب، علّق، تفاعل، صوّت</small></a>
+  <a href="#part-2"><span class="role r-room"><span class="en">Team members</span><span class="ar">أعضاء الفرق</span></span><b class="en">Part 2 · Team rooms</b><b class="ar">الجزء 2 · غرف الفرق</b><small class="en">Join or create a room, visit others</small><small class="ar">انضم إلى غرفة أو أنشئها، وزر الغرف الأخرى</small></a>
+  <a href="#part-3"><span class="role r-lead"><span class="en">Room leaders</span><span class="ar">قادة الغرف</span></span><b class="en">Part 3 · Lead your team</b><b class="ar">الجزء 3 · قُد فريقك</b><small class="en">Guide the steps, manage members</small><small class="ar">وجّه الخطوات وأدِر الأعضاء</small></a>
+  <a href="#part-4"><span class="role r-all"><span class="en">Everyone</span><span class="ar">الجميع</span></span><b class="en">Part 4 · Showcase and finish</b><b class="ar">الجزء 4 · العرض والختام</b><small class="en">Vote for the best project, help</small><small class="ar">صوّت لأفضل مشروع، والمساعدة</small></a>
+</nav>
+
+<!-- ================= PART 1 ================= -->
+<div class="part" id="part-1">
+  <span class="role r-all"><span class="en">Everyone</span><span class="ar">الجميع</span></span>
+  <h2><span class="en">Part 1 · Join and take part</span><span class="ar">الجزء 1 · الانضمام والمشاركة</span></h2>
+</div>
+
+<article class="step">
+  <div class="copy">
+    <h3><span class="num">1</span><span class="en">Join the workshop</span><span class="ar">انضم إلى الورشة</span></h3>
+    <ol class="do">
+      <li><span class="en">Scan the <b>QR code</b> on the big screen with your phone camera. It opens the workshop directly.</span><span class="ar">امسح <b>رمز QR</b> المعروض على الشاشة الكبيرة بكاميرا هاتفك. سيفتح الورشة مباشرة.</span></li>
+      <li><span class="en">No camera? Open <b>nasserdiary.com/workshops/join</b>, type the code (for example <b>UTAS-123456</b>) and tap <span class="btn-ref">Find workshop</span>.</span><span class="ar">لا تعمل الكاميرا؟ افتح <b>nasserdiary.com/workshops/join</b> واكتب الرمز (مثل <b>UTAS-123456</b>) واضغط <span class="btn-ref">ابحث عن الورشة</span>.</span></li>
+      <li><span class="en">Type your first name or a nickname, then tap <span class="btn-ref">Join the team</span>. Prefer not to give a name? Tap <span class="btn-ref">Continue anonymously</span>.</span><span class="ar">اكتب اسمك الأول أو اسماً مستعاراً ثم اضغط <span class="btn-ref">انضم إلى الفريق</span>. لا تريد ذكر اسمك؟ اضغط <span class="btn-ref">المتابعة دون اسم</span>.</span></li>
+      <li><span class="en">You see <b>You’re in!</b> Tap <span class="btn-ref">Let’s build</span> and wait for the first task.</span><span class="ar">تظهر رسالة <b>أنت معنا!</b> اضغط <span class="btn-ref">لنبدأ البناء</span> وانتظر المهمة الأولى.</span></li>
+    </ol>
+    <div class="tip"><b>💡</b><span class="en">Use the same phone and browser for the whole workshop. The app remembers you there, so if you close the page, scan the QR code again and you are back with your ideas.</span><span class="ar">استخدم الهاتف والمتصفح نفسيهما طوال الورشة. يتذكرك التطبيق عليهما، فإذا أغلقت الصفحة امسح رمز QR مرة أخرى وستعود إلى أفكارك.</span></div>
+  </div>
+  <div class="phone" aria-hidden="true"><div class="scr"><div class="notch"></div><div class="ap">
+    <div class="ap-top"><span><em>AI</em> COLLAB LAB</span><span class="mut">EN · العربية</span></div>
+    <span class="k en">Think · Share · Improve · Vote · Build</span><span class="k ar">فكّر · شارك · حسّن · صوّت · ابنِ</span>
+    <h4><span class="en">Welcome to the team</span><span class="ar">مرحباً بك في الفريق</span></h4>
+    <p class="mut"><span class="en">TODAY’S CHALLENGE · Healthcare on campus</span><span class="ar">تحدي اليوم · الرعاية الصحية في الحرم</span></p>
+    <span class="k en">Workshop code</span><span class="k ar">رمز الورشة</span>
+    <div class="fld code">UTAS-123456</div>
+    <span class="k en">What should we call you?</span><span class="k ar">ماذا نناديك؟</span>
+    <div class="fld filled tap" data-n="1">Sara</div>
+    <div class="pb tap" data-n="2"><span class="en">Join the team</span><span class="ar">انضم إلى الفريق</span></div>
+    <div class="pb ghost"><span class="en">Continue anonymously</span><span class="ar">المتابعة دون اسم</span></div>
+    <p class="mut"><span class="en">A first name or nickname is enough. No account or password needed.</span><span class="ar">يكفي الاسم الأول أو اسم مستعار. لا حاجة لحساب أو كلمة مرور.</span></p>
+  </div></div></div>
+</article>
+
+<article class="step">
+  <div class="copy">
+    <h3><span class="num">2</span><span class="en">Get to know your screen</span><span class="ar">تعرّف على شاشتك</span></h3>
+    <p><span class="en">Your phone follows the presenter. When the presenter moves to the next stage, your screen changes by itself. You never need to refresh.</span><span class="ar">هاتفك يتبع مقدم الورشة. عندما ينتقل إلى المرحلة التالية تتغير شاشتك تلقائياً، ولا تحتاج إلى تحديث الصفحة.</span></p>
+    <div class="cols">
+      <div class="mini"><strong class="en">Your task</strong><strong class="ar">مهمتك</strong><span class="en">What to do right now: the question and the box to answer it.</span><span class="ar">ما المطلوب منك الآن: السؤال ومكان الإجابة.</span></div>
+      <div class="mini"><strong class="en">Team ideas</strong><strong class="ar">أفكار الفريق</strong><span class="en">Everyone’s approved ideas. Read, react and comment here.</span><span class="ar">كل الأفكار المعتمدة. اقرأ وتفاعل وعلّق هنا.</span></div>
+      <div class="mini"><strong class="en">Team rooms</strong><strong class="ar">غرف الفرق</strong><span class="en">Appears when the presenter uses teams. See Part 2.</span><span class="ar">تظهر عندما يستخدم المقدم الفرق. انظر الجزء 2.</span></div>
+      <div class="mini"><strong class="en">Files</strong><strong class="ar">الملفات</strong><span class="en">Inside a team room: share photos of sketches and PDFs.</span><span class="ar">داخل غرفة الفريق: شارك صور الرسومات وملفات PDF.</span></div>
+    </div>
+    <div class="tip"><b>🟢</b><span class="en"><b>Live</b> at the top means you are connected. <b>Reconnecting…</b> means the Wi-Fi dropped for a moment. Your work is safe; it reconnects by itself.</span><span class="ar">كلمة <b>مباشر</b> في الأعلى تعني أنك متصل. <b>إعادة الاتصال…</b> تعني انقطاع الشبكة لحظة. عملك محفوظ، وسيعود الاتصال تلقائياً.</span></div>
+  </div>
+  <div class="phone" aria-hidden="true"><div class="scr"><div class="notch"></div><div class="ap">
+    <div class="ap-top"><span><em>AI</em> COLLAB LAB</span><span class="live tap" data-n="1"><span class="en">Live</span><span class="ar">مباشر</span></span></div>
+    <div class="stages"><i class="d"></i><i class="d"></i><i></i><i></i><i></i></div>
+    <p class="mut"><span class="en">Step 2 of 5 · Share ideas</span><span class="ar">الخطوة 2 من 5 · شارك الأفكار</span></p>
+    <div class="tabs tap" data-n="2"><span class="on"><span class="en">Your task</span><span class="ar">مهمتك</span></span><span><span class="en">Team ideas</span><span class="ar">أفكار الفريق</span> 12</span><span><span class="en">Team rooms</span><span class="ar">غرف الفرق</span></span></div>
+    <div class="card"><span class="k en">The challenge</span><span class="k ar">التحدي</span><span class="t"><span class="en">How might we help students reach health support faster?</span><span class="ar">كيف نساعد الطلاب على الوصول إلى الدعم الصحي بسرعة أكبر؟</span></span></div>
+    <div class="card"><span class="t"><span class="en">Think freely. What useful idea could address our challenge?</span><span class="ar">فكّر بحرية. ما الفكرة المفيدة التي تعالج تحدينا؟</span></span><div class="fld big"><span class="en">Your contribution</span><span class="ar">مشاركتك</span></div></div>
+    <p class="mut"><span class="en">Connected as Sara</span><span class="ar">متصل باسم Sara</span></p>
+  </div></div></div>
+</article>
+
+<article class="step">
+  <div class="copy">
+    <h3><span class="num">3</span><span class="en">Share your idea</span><span class="ar">شارك فكرتك</span></h3>
+    <p><span class="en">Each stage asks one question: the problem, an idea, a solution, an improvement. Answer it in the box.</span><span class="ar">كل مرحلة تطرح سؤالاً واحداً: المشكلة، فكرة، حل، تحسين. أجب عنه في المربع.</span></p>
+    <ol class="do">
+      <li><span class="en">Open <span class="btn-ref">Your task</span>. Add a short title if you like.</span><span class="ar">افتح <span class="btn-ref">مهمتك</span>. أضف عنواناً قصيراً إن أردت.</span></li>
+      <li><span class="en">Write your answer. Stuck? Tap a <b>sentence starter</b> and it is added to your text.</span><span class="ar">اكتب إجابتك. لا تعرف كيف تبدأ؟ اضغط على <b>بداية جملة</b> وستُضاف إلى نصك.</span></li>
+      <li><span class="en">Watch the <b>quality bar</b>: it grows when your idea is clear, names who it helps, explains why or how, and gives a concrete detail.</span><span class="ar">راقب <b>مؤشر الجودة</b>: يزداد عندما تكون فكرتك واضحة، وتذكر من تساعد، وتشرح لماذا أو كيف، وتعطي تفصيلاً محدداً.</span></li>
+      <li><span class="en">Tap <span class="btn-ref">Submit idea</span> (or Submit solution / Submit improvement).</span><span class="ar">اضغط <span class="btn-ref">أرسل الفكرة</span> (أو أرسل الحل / أرسل التحسين).</span></li>
+    </ol>
+    <div class="tip"><b>⏳</b><span class="en">If your idea shows <b>Awaiting approval</b>, the presenter checks it first. Only you and the presenter see it until then. You can still change it with <span class="btn-ref">Edit my idea</span>.</span><span class="ar">إذا ظهرت فكرتك بعبارة <b>بانتظار الموافقة</b> فهذا يعني أن المقدم يراجعها أولاً، ولا يراها حتى ذلك الحين إلا أنت والمقدم. يمكنك تعديلها من <span class="btn-ref">تعديل فكرتي</span>.</span></div>
+    <div class="tip warn"><b>🔒</b><span class="en">Do not write personal or sensitive information (phone numbers, health records, other people’s names). Your unsent draft stays on your phone even if the stage changes.</span><span class="ar">لا تكتب معلومات شخصية أو حساسة (أرقام هواتف، سجلات صحية، أسماء أشخاص آخرين). تبقى مسودتك غير المرسلة على هاتفك حتى لو تغيّرت المرحلة.</span></div>
+  </div>
+  <div class="phone" aria-hidden="true"><div class="scr"><div class="notch"></div><div class="ap">
+    <div class="ap-top"><span><em>AI</em> COLLAB LAB</span><span class="live"><span class="en">Live</span><span class="ar">مباشر</span></span></div>
+    <span class="chip"><span class="en">Idea</span><span class="ar">فكرة</span></span>
+    <h4 style="font-size:15px"><span class="en">What useful idea could address our challenge?</span><span class="ar">ما الفكرة المفيدة التي تعالج تحدينا؟</span></h4>
+    <div class="fld filled"><span class="en">Clinic queue on your phone</span><span class="ar">طابور العيادة على هاتفك</span></div>
+    <div class="fld big filled tap" data-n="1"><span class="en">Students waiting at the clinic could join the queue from their phone, so they can keep studying until it is their turn…</span><span class="ar">يمكن للطلاب المنتظرين في العيادة الانضمام إلى الطابور من هواتفهم، ليواصلوا الدراسة حتى يحين دورهم…</span></div>
+    <div class="starters"><span class="en">This helps … because …</span><span class="ar">هذا يساعد … لأن …</span><span class="en">For example …</span><span class="ar">مثلاً …</span></div>
+    <div class="meter"><i></i></div>
+    <p class="mut"><span class="en">Clear ✓ · Names who ✓ · Why/how ✓ · Detail …</span><span class="ar">واضحة ✓ · تذكر من ✓ · لماذا/كيف ✓ · تفصيل …</span></p>
+    <div class="pb tap" data-n="2">➤ <span class="en">Submit idea</span><span class="ar">أرسل الفكرة</span></div>
+  </div></div></div>
+</article>
+
+<article class="step">
+  <div class="copy">
+    <h3><span class="num">4</span><span class="en">Comment and react on ideas</span><span class="ar">علّق وتفاعل مع الأفكار</span></h3>
+    <p><span class="en">Good projects come from building on each other’s ideas. Comments are where that happens.</span><span class="ar">المشاريع الجيدة تأتي من البناء على أفكار بعضنا. والتعليقات هي المكان الذي يحدث فيه ذلك.</span></p>
+    <ol class="do">
+      <li><span class="en">Open the <span class="btn-ref">Team ideas</span> tab (or tap <span class="btn-ref">Explore team ideas &amp; comments</span> after you submit).</span><span class="ar">افتح تبويب <span class="btn-ref">أفكار الفريق</span> (أو اضغط <span class="btn-ref">تصفح أفكار الفريق وتعليقاته</span> بعد الإرسال).</span></li>
+      <li><span class="en">Tap an idea to open it. Under <b>DISCUSS THIS IDEA</b> you see its comments.</span><span class="ar">اضغط على فكرة لفتحها. تحت <b>ناقش هذه الفكرة</b> ترى تعليقاتها.</span></li>
+      <li><span class="en">Type in <b>Your comment</b> and tap <span class="btn-ref">Add a comment</span>.</span><span class="ar">اكتب في <b>تعليقك</b> ثم اضغط <span class="btn-ref">أضف تعليقاً</span>.</span></li>
+      <li><span class="en">No time to write? Tap a reaction: 👍 Agree, 💡 Great idea, ❓ Question, 🔥 Exciting. Tap it again to take it back.</span><span class="ar">لا وقت للكتابة؟ اضغط تفاعلاً: 👍 أوافق، 💡 فكرة رائعة، ❓ سؤال، 🔥 مثيرة. اضغط مرة أخرى لإلغائه.</span></li>
+    </ol>
+    <div class="tip"><b>✍️</b><span class="en">A useful comment does one thing: adds something, improves the idea, points out a weakness kindly, or suggests an alternative. Keep it respectful.</span><span class="ar">التعليق المفيد يفعل شيئاً واحداً: يضيف، أو يحسّن الفكرة، أو يشير إلى نقطة ضعف بلطف، أو يقترح بديلاً. حافظ على الاحترام.</span></div>
+  </div>
+  <div class="phone" aria-hidden="true"><div class="scr"><div class="notch"></div><div class="ap">
+    <div class="tabs"><span><span class="en">Your task</span><span class="ar">مهمتك</span></span><span class="on tap" data-n="1"><span class="en">Team ideas</span><span class="ar">أفكار الفريق</span> 12</span></div>
+    <div class="card">
+      <span class="chip"><span class="en">Idea</span><span class="ar">فكرة</span></span>
+      <span class="t"><span class="en">Clinic queue on your phone</span><span class="ar">طابور العيادة على هاتفك</span></span>
+      <span class="mut" style="font-size:11px"><span class="en">Join the queue from anywhere on campus.</span><span class="ar">انضم إلى الطابور من أي مكان في الحرم.</span></span>
+      <div class="reacts tap" data-n="4"><span class="me">👍 5</span><span>💡 3</span><span>❓ 1</span><span>🔥 2</span></div>
+      <span class="k en">Discuss this idea · 2 comments</span><span class="k ar">ناقش هذه الفكرة · تعليقان</span>
+      <div class="cmt"><b>Omar</b> <span class="en">Add a reminder 5 minutes before your turn.</span><span class="ar">أضيفوا تذكيراً قبل الدور بخمس دقائق.</span></div>
+      <div class="cmt"><b>Lina</b> <span class="en">What about students without data?</span><span class="ar">وماذا عن الطلاب بلا باقة إنترنت؟</span></div>
+      <div class="fld filled tap" data-n="2"><span class="en">A QR screen at the clinic door could help…</span><span class="ar">شاشة QR عند باب العيادة قد تساعد…</span></div>
+      <div class="pb sm tap" data-n="3"><span class="en">Add a comment</span><span class="ar">أضف تعليقاً</span></div>
+    </div>
+  </div></div></div>
+</article>
+
+<article class="step">
+  <div class="copy">
+    <h3><span class="num">5</span><span class="en">Vote for the best ideas</span><span class="ar">صوّت لأفضل الأفكار</span></h3>
+    <p><span class="en">When the presenter opens voting, a short list of finalist ideas appears on your phone.</span><span class="ar">عندما يفتح المقدم التصويت، تظهر قائمة قصيرة بالأفكار المرشحة على هاتفك.</span></p>
+    <ol class="do">
+      <li><span class="en">Read each finalist. Think about value for users, how realistic it is, and whether it is responsible.</span><span class="ar">اقرأ كل فكرة مرشحة. فكّر في قيمتها للمستخدمين، ومدى واقعيتها، وهل هي مسؤولة.</span></li>
+      <li><span class="en">Tap <span class="btn-ref">Vote for this idea</span>. You see <b>Vote saved ✓</b>.</span><span class="ar">اضغط <span class="btn-ref">صوّت لهذه الفكرة</span>. ستظهر <b>تم حفظ الصوت ✓</b>.</span></li>
+      <li><span class="en">The counter shows how many votes you have used. One vote per idea.</span><span class="ar">يعرض العدّاد عدد الأصوات التي استخدمتها. صوت واحد لكل فكرة.</span></li>
+    </ol>
+  </div>
+  <div class="phone" aria-hidden="true"><div class="scr"><div class="notch"></div><div class="ap">
+    <h4 style="font-size:16px"><span class="en">Which solution creates the most value?</span><span class="ar">أي حل يحقق أكبر قيمة؟</span></h4>
+    <p class="mut"><span class="en">1 of 3 votes used</span><span class="ar">استخدمت 1 من 3 أصوات</span></p>
+    <div class="card"><span class="chip"><span class="en">Finalist</span><span class="ar">مرشحة</span></span><span class="t"><span class="en">Clinic queue on your phone</span><span class="ar">طابور العيادة على هاتفك</span></span><div class="pb sm sec">✓ <span class="en">Your vote</span><span class="ar">صوتك</span></div></div>
+    <div class="card"><span class="chip"><span class="en">Finalist</span><span class="ar">مرشحة</span></span><span class="t"><span class="en">Peer wellbeing buddies</span><span class="ar">رفاق الدعم النفسي</span></span><div class="pb sm tap" data-n="1"><span class="en">Vote for this idea</span><span class="ar">صوّت لهذه الفكرة</span></div></div>
+    <div class="card"><span class="chip"><span class="en">Finalist</span><span class="ar">مرشحة</span></span><span class="t"><span class="en">Symptom check kiosk</span><span class="ar">كشك فحص الأعراض</span></span><div class="pb sm"><span class="en">Vote for this idea</span><span class="ar">صوّت لهذه الفكرة</span></div></div>
+  </div></div></div>
+</article>
+
+<!-- ================= PART 2 ================= -->
+<div class="part" id="part-2">
+  <span class="role r-room"><span class="en">Team members</span><span class="ar">أعضاء الفرق</span></span>
+  <h2><span class="en">Part 2 · Team rooms</span><span class="ar">الجزء 2 · غرف الفرق</span></h2>
+  <p class="en">Teams develop their own project in their own room. A room works like a small workshop: it has its own steps, ideas, comments, vote and project brief.</p>
+  <p class="ar">يطوّر كل فريق مشروعه في غرفته الخاصة. الغرفة تعمل كورشة صغيرة: لها خطواتها وأفكارها وتعليقاتها وتصويتها وملخص مشروعها.</p>
+</div>
+
+<article class="step">
+  <div class="copy">
+    <h3><span class="num">6</span><span class="en">Join a team room</span><span class="ar">انضم إلى غرفة فريق</span></h3>
+    <ol class="do">
+      <li><span class="en">Open the <span class="btn-ref">Team rooms</span> tab. Each team is drawn as a room with its people inside.</span><span class="ar">افتح تبويب <span class="btn-ref">غرف الفرق</span>. كل فريق مرسوم كغرفة وبداخلها أعضاؤه.</span></li>
+      <li><span class="en">Pick your team and tap <span class="btn-ref">Join this team</span>.</span><span class="ar">اختر فريقك واضغط <span class="btn-ref">انضم لهذا الفريق</span>.</span></li>
+      <li><span class="en">Or scan your team’s own QR code or invite link. It takes you straight into the room, even if you have not joined the workshop yet.</span><span class="ar">أو امسح رمز QR الخاص بفريقك أو افتح رابط الدعوة. سيأخذك مباشرة إلى الغرفة حتى لو لم تنضم إلى الورشة بعد.</span></li>
+      <li><span class="en">Next time, tap <span class="btn-ref">Open my room</span> on the main screen to go back in.</span><span class="ar">في المرة القادمة اضغط <span class="btn-ref">افتح غرفتي</span> في الشاشة الرئيسية للعودة.</span></li>
+    </ol>
+    <div class="cols">
+      <div class="mini"><strong class="en">🔒 Joins by invitation</strong><strong class="ar">🔒 ينضم بالدعوة</strong><span class="en">Ask a team member for the invite link. Without it you can only visit.</span><span class="ar">اطلب رابط الدعوة من أحد أعضاء الفريق. بدونه يمكنك الزيارة فقط.</span></div>
+      <div class="mini"><strong class="en">One team at a time</strong><strong class="ar">فريق واحد في كل مرة</strong><span class="en">Joining another team makes you a visitor in the old one. Your ideas stay there.</span><span class="ar">الانضمام لفريق آخر يجعلك زائراً في فريقك السابق، وتبقى أفكارك هناك.</span></div>
+    </div>
+  </div>
+  <div class="phone" aria-hidden="true"><div class="scr"><div class="notch"></div><div class="ap">
+    <div class="tabs"><span><span class="en">Your task</span><span class="ar">مهمتك</span></span><span class="on tap" data-n="1"><span class="en">Team rooms</span><span class="ar">غرف الفرق</span> 4</span></div>
+    <div class="card"><div class="roof" style="background:#c8baff"></div>
+      <div class="row"><span class="t grow">🦅 Team Falcon</span><span class="light"><span class="en">Active now</span><span class="ar">نشطة الآن</span></span></div>
+      <span class="mut" style="font-size:11px"><span class="en">Clinic queue app</span><span class="ar">تطبيق طابور العيادة</span></span>
+      <div class="seats"><span class="seat crown">👑 Omar</span><span class="seat lit">●</span><span class="seat lit">●</span><span class="seat">●</span><span class="seat empty"></span></div>
+      <div class="row"><span class="pb sm tap grow" data-n="2"><span class="en">Join this team</span><span class="ar">انضم لهذا الفريق</span></span><span class="pb sm sec">👁 <span class="en">Visit</span><span class="ar">زيارة</span></span></div>
+    </div>
+    <div class="card"><div class="roof" style="background:#9ddcdd"></div>
+      <div class="row"><span class="t grow">🌿 Green Campus</span><span class="light q"><span class="en">Quiet</span><span class="ar">هادئة</span></span></div>
+      <div class="seats"><span class="seat crown">👑 Lina</span><span class="seat">●</span><span class="seat empty"></span><span class="seat empty"></span></div>
+      <span class="mut" style="font-size:11px">🔒 <span class="en">Joins by invitation</span><span class="ar">ينضم بالدعوة</span></span>
+    </div>
+  </div></div></div>
+</article>
+
+<article class="step">
+  <div class="copy">
+    <h3><span class="num">7</span><span class="en">Start a room for your team</span><span class="ar">أنشئ غرفة لفريقك</span></h3>
+    <p><span class="en">Have your own project idea? If the presenter allows it, you can open a new room. The person who creates the room becomes its leader.</span><span class="ar">لديك فكرة مشروع خاصة؟ إذا سمح المقدم بذلك يمكنك فتح غرفة جديدة. ومن ينشئ الغرفة يصبح قائدها.</span></p>
+    <ol class="do">
+      <li><span class="en">In <span class="btn-ref">Team rooms</span>, scroll to <b>Start a room for your team</b>.</span><span class="ar">في <span class="btn-ref">غرف الفرق</span> انزل إلى <b>أنشئ غرفة لفريقك</b>.</span></li>
+      <li><span class="en">Give it a name (e.g. Team Falcon) and, if you like, your project idea.</span><span class="ar">اكتب اسماً (مثل فريق الصقر) وفكرة مشروعك إن أردت.</span></li>
+      <li><span class="en">Choose a team emoji and colour. They appear on every screen, including the projector.</span><span class="ar">اختر رمزاً تعبيرياً ولوناً للفريق. يظهران في كل الشاشات بما فيها شاشة العرض.</span></li>
+      <li><span class="en">Tap <span class="btn-ref">Create room</span>, then invite your teammates (step 12).</span><span class="ar">اضغط <span class="btn-ref">إنشاء الغرفة</span> ثم ادعُ زملاءك (الخطوة 12).</span></li>
+    </ol>
+    <div class="tip room"><b>ℹ️</b><span class="en">Don’t see this form? The presenter has created the rooms for you. Just join yours.</span><span class="ar">لا ترى هذا النموذج؟ يعني أن المقدم أنشأ الغرف مسبقاً. انضم إلى غرفتك فقط.</span></div>
+  </div>
+  <div class="phone" aria-hidden="true"><div class="scr"><div class="notch"></div><div class="ap">
+    <h4 style="font-size:16px"><span class="en">Start a room for your team</span><span class="ar">أنشئ غرفة لفريقك</span></h4>
+    <div class="fld filled tap" data-n="1">Team Falcon</div>
+    <div class="fld filled"><span class="en">Smart parking for campus</span><span class="ar">مواقف ذكية للحرم</span></div>
+    <span class="k en">Team identity</span><span class="k ar">هوية الفريق</span>
+    <div class="row tap" data-n="2" style="font-size:18px;gap:8px">🦅 🚀 🌿 💡 🧠 🎯</div>
+    <div class="row" style="gap:8px"><span class="seat" style="background:#c8baff"></span><span class="seat" style="background:#9ddcdd"></span><span class="seat" style="background:#ffcf8e"></span><span class="seat" style="background:#ff9f8a"></span><span class="seat" style="background:#d6ff73"></span></div>
+    <p class="mut"><span class="en">You will lead the room: you move it through the steps and can invite anyone with its link.</span><span class="ar">ستقود الغرفة: تنقلها بين الخطوات ويمكنك دعوة أي شخص برابطها.</span></p>
+    <div class="pb tap" data-n="3"><span class="en">Create room</span><span class="ar">إنشاء الغرفة</span></div>
+  </div></div></div>
+</article>
+
+<article class="step">
+  <div class="copy">
+    <h3><span class="num">8</span><span class="en">Visit other teams and give feedback</span><span class="ar">زر الفرق الأخرى وقدّم ملاحظاتك</span></h3>
+    <p><span class="en">You can visit any open room to see what another team is building. Visitors read and comment; only members add ideas and vote. Visiting never changes your own team.</span><span class="ar">يمكنك زيارة أي غرفة مفتوحة لترى ما يبنيه فريق آخر. الزوار يقرأون ويعلّقون، والأعضاء فقط يضيفون الأفكار ويصوّتون. الزيارة لا تغيّر فريقك.</span></p>
+    <ol class="do">
+      <li><span class="en">In <span class="btn-ref">Team rooms</span>, tap <span class="btn-ref">Visit</span> on another team’s room.</span><span class="ar">في <span class="btn-ref">غرف الفرق</span> اضغط <span class="btn-ref">زيارة</span> على غرفة فريق آخر.</span></li>
+      <li><span class="en">Read their ideas and leave one helpful comment (step 4).</span><span class="ar">اقرأ أفكارهم واترك تعليقاً مفيداً (الخطوة 4).</span></li>
+      <li><span class="en">Tap <span class="btn-ref">Back to the main workshop</span> or <span class="btn-ref">Open my room</span> to return.</span><span class="ar">اضغط <span class="btn-ref">العودة إلى الورشة الرئيسية</span> أو <span class="btn-ref">افتح غرفتي</span> للعودة.</span></li>
+    </ol>
+    <div class="tip room"><b>🎯</b><span class="en"><b>Feedback mission:</b> the presenter may ask everyone to comment in a few other teams. A ring on your screen shows your progress. Tap <span class="btn-ref">Find a team</span> to pick the next one. Confetti means you are done.</span><span class="ar"><b>مهمة التغذية الراجعة:</b> قد يطلب المقدم من الجميع التعليق في عدة فرق أخرى. تُظهر دائرة على شاشتك تقدّمك. اضغط <span class="btn-ref">ابحث عن فريق</span> لاختيار الفريق التالي. الاحتفال بالقصاصات الملونة يعني أنك أنهيت المهمة.</span></div>
+    <div class="tip"><b>🔒</b><span class="en">A room marked <b>Private</b> keeps its discussion to its own team (or teams it invited). You can still see it on the map, but not inside it.</span><span class="ar">الغرفة المعلّمة بـ<b>خاصة</b> تحتفظ بنقاشها لفريقها (أو للفرق التي دعتها). تراها على الخريطة لكن لا ترى ما بداخلها.</span></div>
+  </div>
+  <div class="phone" aria-hidden="true"><div class="scr"><div class="notch"></div><div class="ap">
+    <div class="card" style="grid-template-columns:auto 1fr;align-items:center;gap:10px">
+      <div class="ring"><b>2/3</b></div>
+      <div style="display:grid;gap:4px"><span class="t"><span class="en">Feedback mission</span><span class="ar">مهمة التغذية الراجعة</span></span><span class="mut" style="font-size:10.5px"><span class="en">Your comments help other teams improve their projects.</span><span class="ar">تعليقاتك تساعد الفرق الأخرى على تحسين مشاريعها.</span></span><span class="pb sm tap" data-n="1" style="width:max-content"><span class="en">Find a team</span><span class="ar">ابحث عن فريق</span> →</span></div>
+    </div>
+    <div class="card"><div class="roof" style="background:#9ddcdd"></div>
+      <span class="k en">Team room · visiting</span><span class="k ar">غرفة فريق · زيارة</span>
+      <span class="t">🌿 Green Campus</span>
+      <span class="mut" style="font-size:11px">👁 <span class="en">You are visiting: read the ideas and leave comments to help this team. Members add ideas and vote.</span><span class="ar">أنت تزور: اقرأ الأفكار واترك تعليقات تساعد هذا الفريق. الأعضاء يضيفون الأفكار ويصوّتون.</span></span>
+    </div>
+    <div class="card"><span class="t"><span class="en">Solar bench chargers</span><span class="ar">مقاعد شحن شمسية</span></span>
+      <div class="fld filled tap" data-n="2"><span class="en">Could you show how much energy one bench makes?</span><span class="ar">هل يمكنكم توضيح كمية الطاقة التي ينتجها المقعد الواحد؟</span></div>
+      <div class="pb sm"><span class="en">Add a comment</span><span class="ar">أضف تعليقاً</span></div>
+    </div>
+  </div></div></div>
+</article>
+
+<article class="step">
+  <div class="copy">
+    <h3><span class="num">9</span><span class="en">Inside your room: ask for help and share files</span><span class="ar">داخل غرفتك: اطلب المساعدة وشارك الملفات</span></h3>
+    <div class="cols">
+      <div class="mini"><strong>✋ <span class="en">Raise your hand</span><span class="ar">ارفع يدك</span></strong><span class="en">Tap <span class="btn-ref">We need the presenter</span>. Your room flashes on the presenter’s screen. Tap <span class="btn-ref">Lower hand</span> once you have help.</span><span class="ar">اضغط <span class="btn-ref">نحتاج مقدم الورشة</span>. ستومض غرفتكم على شاشة المقدم. اضغط <span class="btn-ref">إنزال اليد</span> بعد حصولكم على المساعدة.</span></div>
+      <div class="mini"><strong>📎 <span class="en">Share a file</span><span class="ar">شارك ملفاً</span></strong><span class="en">Open <span class="btn-ref">Files</span> → <span class="btn-ref">Share a file</span>. Photos of sketches, screenshots or PDFs, up to 3 MB.</span><span class="ar">افتح <span class="btn-ref">الملفات</span> ← <span class="btn-ref">شارك ملفاً</span>. صور الرسومات أو لقطات الشاشة أو ملفات PDF، حتى 3 ميغابايت.</span></div>
+      <div class="mini"><strong>📣 <span class="en">Messages</span><span class="ar">الرسائل</span></strong><span class="en">A blue <b>From the presenter</b> banner shows messages for every room, like “5 minutes left”.</span><span class="ar">يظهر شريط أزرق <b>من مقدم الورشة</b> برسائل لكل الغرف، مثل «بقيت 5 دقائق».</span></div>
+    </div>
+  </div>
+  <div class="phone" aria-hidden="true"><div class="scr"><div class="notch"></div><div class="ap">
+    <div class="banner">📣 <b class="en">From the presenter:</b><b class="ar">من مقدم الورشة:</b> <span class="en">5 minutes left — choose your best idea</span><span class="ar">بقيت 5 دقائق — اختاروا أفضل فكرة</span></div>
+    <span class="k en">Team room · Part of UTAS-123456</span><span class="k ar">غرفة فريق · جزء من UTAS-123456</span>
+    <span class="t" style="font:800 16px var(--display)">🦅 Team Falcon</span>
+    <div class="pb sec tap" data-n="1">✋ <span class="en">We need the presenter</span><span class="ar">نحتاج مقدم الورشة</span></div>
+    <div class="tabs"><span><span class="en">Your task</span><span class="ar">مهمتك</span></span><span><span class="en">Room ideas</span><span class="ar">أفكار الغرفة</span></span><span class="on tap" data-n="2"><span class="en">Files</span><span class="ar">الملفات</span> 3</span></div>
+    <div class="card"><div class="pb sm tap" data-n="3" style="width:max-content">📎 <span class="en">Share a file</span><span class="ar">شارك ملفاً</span></div>
+      <div class="row"><span class="seat" style="border-radius:6px;width:38px;height:30px">🖼️</span><span class="mut grow"><span class="en">app-sketch.jpg · Omar</span><span class="ar">رسم-التطبيق.jpg · Omar</span></span></div>
+      <div class="row"><span class="seat" style="border-radius:6px;width:38px;height:30px">📄</span><span class="mut grow"><span class="en">survey-results.pdf · Sara</span><span class="ar">نتائج-الاستبيان.pdf · Sara</span></span></div>
+    </div>
+  </div></div></div>
+</article>
+
+<!-- ================= PART 3 ================= -->
+<div class="part" id="part-3">
+  <span class="role r-lead"><span class="en">Room leaders</span><span class="ar">قادة الغرف</span></span>
+  <h2><span class="en">Part 3 · Lead your team</span><span class="ar">الجزء 3 · قُد فريقك</span></h2>
+  <p class="en">The leader runs the room the way the presenter runs the main workshop: moving through the steps, choosing which idea to develop, running the vote and preparing the project brief.</p>
+  <p class="ar">يدير القائد الغرفة كما يدير المقدم الورشة الرئيسية: ينتقل بين الخطوات، ويختار الفكرة التي يطوّرها الفريق، ويدير التصويت، ويجهّز ملخص المشروع.</p>
+</div>
+
+<article class="step">
+  <div class="copy">
+    <h3><span class="num">10</span><span class="en">How you become the leader</span><span class="ar">كيف تصبح القائد</span></h3>
+    <ol class="do">
+      <li><span class="en">The <b>first person to join</b> a room, or the person who <b>creates</b> it, is the leader. An empty crown seat says “The first member to join leads the team”.</span><span class="ar"><b>أول من ينضم</b> إلى الغرفة، أو من <b>ينشئها</b>، هو القائد. والمقعد الفارغ ذو التاج يقول «أول عضو ينضم يقود الفريق».</span></li>
+      <li><span class="en">The current leader (or the presenter) can hand over the role with <span class="btn-ref">Make lead</span> next to a member’s name.</span><span class="ar">يمكن للقائد الحالي (أو المقدم) تسليم الدور عبر <span class="btn-ref">اجعله القائد</span> بجانب اسم العضو.</span></li>
+      <li><span class="en">You see a 👑 <b>Room lead</b> badge and two buttons: <span class="btn-ref">Lead the room</span> and <span class="btn-ref">Manage team</span>.</span><span class="ar">ترى شارة 👑 <b>قائد الغرفة</b> وزرّين: <span class="btn-ref">قيادة الغرفة</span> و<span class="btn-ref">إدارة الفريق</span>.</span></li>
+    </ol>
+    <div class="tip lead"><b>👑</b><span class="en">Leaving your team? Hand over the lead first. The app asks you to, so the team is never without a leader.</span><span class="ar">ستغادر فريقك؟ سلّم القيادة أولاً. سيطلب التطبيق ذلك حتى لا يبقى الفريق بلا قائد.</span></div>
+  </div>
+  <div class="phone" aria-hidden="true"><div class="scr"><div class="notch"></div><div class="ap">
+    <span class="k en">Your team room</span><span class="k ar">غرفة فريقك</span>
+    <span class="t" style="font:800 17px var(--display)">🦅 Team Falcon</span>
+    <span class="chip lead">👑 <span class="en">Room lead</span><span class="ar">قائد الغرفة</span></span>
+    <div class="card">
+      <span class="k en">Team leader</span><span class="k ar">قائد الفريق</span>
+      <div class="seats"><span class="seat crown">👑 Sara (<span class="en">you</span><span class="ar">أنت</span>)</span><span class="seat lit">●</span><span class="seat lit">●</span><span class="seat">●</span></div>
+      <span class="mut" style="font-size:10.5px"><span class="en">lit = has posted · faded = has not posted yet</span><span class="ar">مضيء = شارك · باهت = لم يشارك بعد</span></span>
+    </div>
+    <p class="mut"><span class="en">As the room lead you move your team through the steps, choose the idea to develop, run the vote and prepare your project brief.</span><span class="ar">بصفتك قائد الغرفة تنقل فريقك بين الخطوات، وتختار الفكرة التي ستطوَّر، وتدير التصويت، وتجهّز ملخص المشروع.</span></p>
+    <div class="pb tap" data-n="1">▶ <span class="en">Lead the room</span><span class="ar">قيادة الغرفة</span></div>
+    <div class="pb sec tap" data-n="2">⚙ <span class="en">Manage team</span><span class="ar">إدارة الفريق</span></div>
+  </div></div></div>
+</article>
+
+<article class="step">
+  <div class="copy">
+    <h3><span class="num">11</span><span class="en">Guide your team through the steps</span><span class="ar">وجّه فريقك عبر الخطوات</span></h3>
+    <p><span class="en">Tap <span class="btn-ref">Lead the room</span>. Your phone becomes a guided console for your room only. Each step tells you what to say and what to do.</span><span class="ar">اضغط <span class="btn-ref">قيادة الغرفة</span>. يتحول هاتفك إلى لوحة توجيه لغرفتك فقط. كل خطوة تخبرك بما تقوله وما تفعله.</span></p>
+    <ol class="do">
+      <li><span class="en">Tap <span class="btn-ref">Next: …</span> to move your team to the next step. Their phones follow you.</span><span class="ar">اضغط <span class="btn-ref">التالي: …</span> لنقل فريقك إلى الخطوة التالية. هواتفهم تتبعك.</span></li>
+      <li><span class="en">If ideas wait for approval, tap <span class="btn-ref">Approve</span> so the team can see them.</span><span class="ar">إذا كانت هناك أفكار بانتظار الموافقة، اضغط <span class="btn-ref">موافقة</span> ليراها الفريق.</span></li>
+      <li><span class="en">At Solutions and Improve, tap <span class="btn-ref">Spotlight</span> on one idea so everyone works on the same thing.</span><span class="ar">في مرحلتي الحلول والتحسين اضغط <span class="btn-ref">تسليط الضوء</span> على فكرة واحدة ليعمل الجميع عليها.</span></li>
+      <li><span class="en">To vote: <span class="btn-ref">Shortlist</span> the best ideas, then <span class="btn-ref">Start voting</span>, then <span class="btn-ref">Close voting</span>.</span><span class="ar">للتصويت: أضف أفضل الأفكار إلى <span class="btn-ref">القائمة المختصرة</span> ثم <span class="btn-ref">ابدأ التصويت</span> ثم <span class="btn-ref">أغلق التصويت</span>.</span></li>
+      <li><span class="en">Open the <span class="btn-ref">Product builder</span>, pick the winning ideas and save your team’s project brief. It is shown in the Team showcase.</span><span class="ar">افتح <span class="btn-ref">بناء المنتج</span> واختر الأفكار الفائزة واحفظ ملخص مشروع فريقك. سيُعرض في عرض مشاريع الفرق.</span></li>
+      <li><span class="en">Tap <span class="btn-ref">Back to my room</span> to return to your normal phone view.</span><span class="ar">اضغط <span class="btn-ref">العودة إلى غرفتي</span> للرجوع إلى شاشة هاتفك العادية.</span></li>
+    </ol>
+    <div class="tip lead"><b>🧭</b><span class="en">Leaders guide; they do not decide alone. Ask quieter teammates for their view before you spotlight or close a vote. The faded seats show who has not posted yet.</span><span class="ar">القائد يوجّه ولا يقرر وحده. اسأل زملاءك الأهدأ عن رأيهم قبل تسليط الضوء أو إغلاق التصويت. المقاعد الباهتة تُظهر من لم يشارك بعد.</span></div>
+  </div>
+  <div class="phone" aria-hidden="true"><div class="scr"><div class="notch"></div><div class="ap">
+    <div class="row"><span class="mut grow">← <span class="en">Back to my room</span><span class="ar">العودة إلى غرفتي</span></span><span class="live"><span class="en">Live</span><span class="ar">مباشر</span></span></div>
+    <span class="t" style="font:800 15px var(--display)">🦅 Team Falcon</span>
+    <div class="stages"><i class="d"></i><i class="d"></i><i class="d"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="card"><span class="k en">Step 3 · Solutions</span><span class="k ar">الخطوة 3 · الحلول</span><span class="mut" style="font-size:11px"><span class="en">Ask the room: how could we solve this problem?</span><span class="ar">اسأل الفريق: كيف يمكننا حل هذه المشكلة؟</span></span></div>
+    <div class="card"><span class="chip pend"><span class="en">Awaiting approval</span><span class="ar">بانتظار الموافقة</span></span><span class="t"><span class="en">Notify by SMS too</span><span class="ar">إشعار برسالة نصية أيضاً</span></span><div class="row"><span class="pb sm tap" data-n="1"><span class="en">Approve</span><span class="ar">موافقة</span></span><span class="pb sm sec">★ <span class="en">Spotlight</span><span class="ar">تسليط الضوء</span></span></div></div>
+    <div class="card"><span class="t"><span class="en">Clinic queue on your phone</span><span class="ar">طابور العيادة على هاتفك</span></span><div class="row"><span class="pb sm sec tap" data-n="2">★ <span class="en">Spotlight</span><span class="ar">تسليط الضوء</span></span><span class="pb sm ghost"><span class="en">Shortlist</span><span class="ar">القائمة المختصرة</span></span></div></div>
+    <div class="row"><span class="pb ghost grow"><span class="en">Back</span><span class="ar">رجوع</span></span><span class="pb grow tap" data-n="3"><span class="en">Next: Improve</span><span class="ar">التالي: التحسين</span> →</span></div>
+  </div></div></div>
+</article>
+
+<article class="step">
+  <div class="copy">
+    <h3><span class="num">12</span><span class="en">Manage your team</span><span class="ar">أدِر فريقك</span></h3>
+    <p><span class="en">Tap <span class="btn-ref">Manage team</span>. Everything about your room is in one place.</span><span class="ar">اضغط <span class="btn-ref">إدارة الفريق</span>. كل ما يخص غرفتك في مكان واحد.</span></p>
+    <div class="cols">
+      <div class="mini"><strong class="en">Invite people</strong><strong class="ar">دعوة الأعضاء</strong><span class="en">Show the room’s QR code, or tap <span class="btn-ref">Copy invite link</span> and send it in your team chat.</span><span class="ar">اعرض رمز QR الخاص بالغرفة، أو اضغط <span class="btn-ref">نسخ رابط الدعوة</span> وأرسله في محادثة فريقك.</span></div>
+      <div class="mini"><strong class="en">Who can join</strong><strong class="ar">من يمكنه الانضمام</strong><span class="en"><b>Anyone can join</b>, or <b>By invitation only</b> (only people with your link). <span class="btn-ref">Reset invite link</span> stops old links.</span><span class="ar"><b>يمكن لأي شخص الانضمام</b>، أو <b>بالدعوة فقط</b> (لمن يملك الرابط). <span class="btn-ref">إعادة تعيين رابط الدعوة</span> يوقف الروابط القديمة.</span></div>
+      <div class="mini"><strong class="en">Who can see your discussion</strong><strong class="ar">من يرى نقاشكم</strong><span class="en"><b>Open to all teams</b>, <b>Selected teams</b> you tick, or <b>Private</b> (only your team and the presenter).</span><span class="ar"><b>مفتوحة لكل الفرق</b>، أو <b>فرق مختارة</b> تحددها، أو <b>خاصة</b> (فريقك والمقدم فقط).</span></div>
+      <div class="mini"><strong class="en">Room controls</strong><strong class="ar">التحكم في الغرفة</strong><span class="en">Turn off <b>Room is active</b> to pause. Turn off <b>Accept new ideas and comments</b> when it is time to decide.</span><span class="ar">أطفئ <b>الغرفة نشطة</b> للإيقاف المؤقت. وأطفئ <b>قبول أفكار وتعليقات جديدة</b> عندما يحين وقت القرار.</span></div>
+      <div class="mini"><strong class="en">Team members</strong><strong class="ar">أعضاء الفريق</strong><span class="en"><span class="btn-ref">Make lead</span> hands over the role. <span class="btn-ref">Remove</span> turns a member into a visitor; their ideas stay.</span><span class="ar"><span class="btn-ref">اجعله القائد</span> يسلّم الدور. <span class="btn-ref">إزالة</span> تحوّل العضو إلى زائر وتبقى أفكاره.</span></div>
+      <div class="mini"><strong class="en">Team identity</strong><strong class="ar">هوية الفريق</strong><span class="en">Change your team’s emoji and colour.</span><span class="ar">غيّر الرمز التعبيري ولون فريقك.</span></div>
+    </div>
+  </div>
+  <div class="phone" aria-hidden="true"><div class="scr"><div class="notch"></div><div class="ap">
+    <h4 style="font-size:16px"><span class="en">Manage team</span><span class="ar">إدارة الفريق</span></h4>
+    <div class="card" style="text-align:center"><div class="qr"></div><span class="mut" style="font-size:10.5px"><span class="en">Scan to join this room</span><span class="ar">امسح للانضمام إلى هذه الغرفة</span></span><span class="pb sm tap" data-n="1"><span class="en">Copy invite link</span><span class="ar">نسخ رابط الدعوة</span></span></div>
+    <span class="k en">Who can join this team?</span><span class="k ar">من يمكنه الانضمام لهذا الفريق؟</span>
+    <div class="seg tap" data-n="2"><span class="on"><span class="en">Anyone can join</span><span class="ar">أي شخص</span></span><span><span class="en">By invitation only</span><span class="ar">بالدعوة فقط</span></span></div>
+    <span class="k en">Who can see our discussion?</span><span class="k ar">من يرى نقاشنا؟</span>
+    <div class="seg"><span class="on"><span class="en">All teams</span><span class="ar">كل الفرق</span></span><span><span class="en">Selected</span><span class="ar">مختارة</span></span><span><span class="en">Private</span><span class="ar">خاصة</span></span></div>
+    <div class="row"><span class="grow" style="font-size:11.5px"><span class="en">Accept new ideas and comments</span><span class="ar">قبول أفكار وتعليقات جديدة</span></span><span class="sw"></span></div>
+    <span class="k en">Team members</span><span class="k ar">أعضاء الفريق</span>
+    <div class="row" style="font-size:11.5px"><span class="grow">Omar</span><span class="pb sm ghost tap" data-n="3"><span class="en">Make lead</span><span class="ar">اجعله القائد</span></span><span class="pb sm ghost"><span class="en">Remove</span><span class="ar">إزالة</span></span></div>
+  </div></div></div>
+</article>
+
+<!-- ================= PART 4 ================= -->
+<div class="part" id="part-4">
+  <span class="role r-all"><span class="en">Everyone</span><span class="ar">الجميع</span></span>
+  <h2><span class="en">Part 4 · Showcase and finish</span><span class="ar">الجزء 4 · العرض والختام</span></h2>
+</div>
+
+<article class="step">
+  <div class="copy">
+    <h3><span class="num">13</span><span class="en">Vote for the best team project</span><span class="ar">صوّت لأفضل مشروع فريق</span></h3>
+    <p><span class="en">Each team’s project brief is shown on the big screen, one team at a time. Listen, then vote on your phone.</span><span class="ar">يُعرض ملخص مشروع كل فريق على الشاشة الكبيرة، فريقاً تلو الآخر. استمع ثم صوّت من هاتفك.</span></p>
+    <ol class="do">
+      <li><span class="en">Go to the main workshop (tap <span class="btn-ref">Back to the main workshop</span> if you are in a room).</span><span class="ar">اذهب إلى الورشة الرئيسية (اضغط <span class="btn-ref">العودة إلى الورشة الرئيسية</span> إن كنت داخل غرفة).</span></li>
+      <li><span class="en">Under <b>Vote for the best team project</b>, tap <span class="btn-ref">Vote for this project</span> on the one you think is best.</span><span class="ar">تحت <b>صوّت لأفضل مشروع فريق</b> اضغط <span class="btn-ref">صوّت لهذا المشروع</span> على المشروع الذي تراه الأفضل.</span></li>
+      <li><span class="en">You have one vote and can change it until voting closes. You cannot vote for your own team.</span><span class="ar">لديك صوت واحد ويمكنك تغييره حتى يُغلق التصويت. لا يمكنك التصويت لفريقك.</span></li>
+    </ol>
+  </div>
+  <div class="phone" aria-hidden="true"><div class="scr"><div class="notch"></div><div class="ap">
+    <h4 style="font-size:16px"><span class="en">Vote for the best team project</span><span class="ar">صوّت لأفضل مشروع فريق</span></h4>
+    <p class="mut"><span class="en">One vote. You can change it until voting closes.</span><span class="ar">صوت واحد. يمكنك تغييره حتى يُغلق التصويت.</span></p>
+    <div class="card"><div class="roof" style="background:#c8baff"></div><span class="t">🦅 Team Falcon</span><span class="mut" style="font-size:11px"><span class="en">Your team — vote for another</span><span class="ar">فريقك — صوّت لفريق آخر</span></span></div>
+    <div class="card"><div class="roof" style="background:#9ddcdd"></div><span class="t">🌿 Green Campus</span><span class="mut" style="font-size:11px"><span class="en">Solar bench chargers</span><span class="ar">مقاعد شحن شمسية</span></span><span class="pb sm tap" data-n="1"><span class="en">Vote for this project</span><span class="ar">صوّت لهذا المشروع</span></span></div>
+    <div class="card"><div class="roof" style="background:#ffcf8e"></div><span class="t">🚀 Team Orbit</span><span class="mut" style="font-size:11px"><span class="en">Study-room finder</span><span class="ar">مكتشف غرف الدراسة</span></span><span class="pb sm"><span class="en">Vote for this project</span><span class="ar">صوّت لهذا المشروع</span></span></div>
+  </div></div></div>
+</article>
+
+<article class="step">
+  <div class="copy">
+    <h3><span class="num">14</span><span class="en">Reflect and finish</span><span class="ar">تأمّل واختم</span></h3>
+    <p><span class="en">At the end you are asked: <b>Which skill will be most important in your future career?</b> Tap one. You can change your choice. Then the big screen shows what the whole room created together.</span><span class="ar">في النهاية يُطرح عليك سؤال: <b>ما المهارة الأهم في مسيرتك المهنية المستقبلية؟</b> اضغط واحدة، ويمكنك تغيير اختيارك. ثم تعرض الشاشة الكبيرة ما أنجزه الجميع معاً.</span></p>
+    <div class="tip"><b>🤝</b><span class="en">Along the way you also sort tasks into <b>Human</b>, <b>AI</b> or <b>Together</b>. The idea to remember: AI does not replace thinking; it amplifies good thinking.</span><span class="ar">خلال الورشة ستصنّف المهام أيضاً إلى <b>الإنسان</b> أو <b>الذكاء الاصطناعي</b> أو <b>معاً</b>. الفكرة التي نتذكرها: الذكاء الاصطناعي لا يحل محل التفكير، بل يضاعف التفكير الجيد.</span></div>
+  </div>
+  <div class="phone" aria-hidden="true"><div class="scr"><div class="notch"></div><div class="ap">
+    <h4 style="font-size:15px"><span class="en">Which skill will be most important in your future career?</span><span class="ar">ما المهارة الأهم في مسيرتك المهنية المستقبلية؟</span></h4>
+    <div class="pb ghost">🧠 <span class="en">Critical thinking</span><span class="ar">التفكير النقدي</span></div>
+    <div class="pb tap" data-n="1">🤝 <span class="en">Collaboration</span><span class="ar">التعاون</span></div>
+    <div class="pb ghost">💡 <span class="en">Creativity</span><span class="ar">الإبداع</span></div>
+    <div class="pb ghost">🤖 <span class="en">Working with AI</span><span class="ar">العمل مع الذكاء الاصطناعي</span></div>
+    <p class="mut"><span class="en">Your reflection is saved. You can change your choice.</span><span class="ar">تم حفظ تأملك. يمكنك تغيير اختيارك.</span></p>
+    <div class="card" style="text-align:center"><span class="t"><span class="en">We created this together.</span><span class="ar">صنعنا هذا معاً.</span></span><span class="mut" style="font-size:11px"><span class="en">48 teammates · 112 ideas · 37 improvements</span><span class="ar">48 زميلاً · 112 فكرة · 37 تحسيناً</span></span></div>
+  </div></div></div>
+</article>
+
+<!-- ================= FAQ ================= -->
+<div class="part" id="help">
+  <h2><span class="en">If something goes wrong</span><span class="ar">إذا حدثت مشكلة</span></h2>
+</div>
+<div class="faq">
+  <details><summary><span class="en">“Workshop not found”</span><span class="ar">«لم يتم العثور على الورشة»</span></summary><p class="en">Check the code on the big screen letter by letter, including the dash (UTAS-123456). Or scan the QR code instead.</p><p class="ar">تحقق من الرمز على الشاشة الكبيرة حرفاً حرفاً بما في ذلك الشرطة (UTAS-123456)، أو امسح رمز QR بدلاً من ذلك.</p></details>
+  <details><summary><span class="en">I can’t type anything / the box is gone</span><span class="ar">لا أستطيع الكتابة / اختفى مربع الكتابة</span></summary><p class="en">The presenter (or your room lead) may have paused, closed submissions, or not opened this step yet. Your work is saved. Wait for the next task, or read and comment in Team ideas meanwhile.</p><p class="ar">ربما أوقف المقدم (أو قائد غرفتك) الورشة مؤقتاً، أو أغلق المشاركات، أو لم يفتح هذه الخطوة بعد. عملك محفوظ. انتظر المهمة التالية، أو اقرأ وعلّق في أفكار الفريق خلال ذلك.</p></details>
+  <details><summary><span class="en">My idea doesn’t appear for others</span><span class="ar">فكرتي لا تظهر للآخرين</span></summary><p class="en">It is waiting for approval. Once the presenter or room lead approves it, everyone sees it.</p><p class="ar">إنها بانتظار الموافقة. بعد أن يوافق عليها المقدم أو قائد الغرفة سيراها الجميع.</p></details>
+  <details><summary><span class="en">I can comment in a room but can’t add ideas or vote</span><span class="ar">أستطيع التعليق في غرفة لكن لا أستطيع إضافة أفكار أو التصويت</span></summary><p class="en">You are a visitor there. Tap <b>Join this team instead</b> if it is really your team (you leave your current team).</p><p class="ar">أنت زائر في تلك الغرفة. اضغط <b>انضم لهذا الفريق بدلاً من ذلك</b> إذا كانت فعلاً فريقك (ستغادر فريقك الحالي).</p></details>
+  <details><summary><span class="en">“This team joins by invitation”</span><span class="ar">«ينضم الأعضاء لهذا الفريق بالدعوة»</span></summary><p class="en">Ask the team leader for the invite link or QR code. If their link stopped working, they may have reset it; ask for the new one.</p><p class="ar">اطلب رابط الدعوة أو رمز QR من قائد الفريق. إذا توقف الرابط عن العمل فربما أُعيد تعيينه؛ اطلب الرابط الجديد.</p></details>
+  <details><summary><span class="en">I closed the page / my battery died</span><span class="ar">أغلقت الصفحة / نفدت بطارية هاتفي</span></summary><p class="en">Open the same browser and scan the QR code again. You return as the same person with your ideas. On a different phone you join as a new person, but your earlier ideas stay in the workshop.</p><p class="ar">افتح المتصفح نفسه وامسح رمز QR مرة أخرى، وستعود بالهوية نفسها مع أفكارك. إذا استخدمت هاتفاً آخر ستنضم كشخص جديد، لكن أفكارك السابقة تبقى في الورشة.</p></details>
+  <details><summary><span class="en">The page reloaded by itself</span><span class="ar">أُعيد تحميل الصفحة تلقائياً</span></summary><p class="en">A new version of the app was released. It reloads only when you are not typing, and nothing is lost.</p><p class="ar">صدرت نسخة جديدة من التطبيق. لا يُعاد التحميل أثناء الكتابة، ولا يضيع شيء.</p></details>
+  <details><summary><span class="en">Some ideas are in another language</span><span class="ar">بعض الأفكار بلغة أخرى</span></summary><p class="en">If translation is on, ideas are shown in your language automatically; tap <b>Show original</b> to see the author’s words. Write in whichever language you are comfortable with.</p><p class="ar">إذا كانت الترجمة مفعّلة تظهر الأفكار بلغتك تلقائياً؛ اضغط <b>عرض الأصل</b> لرؤية كلمات الكاتب. اكتب باللغة التي تناسبك.</p></details>
+</div>
+
+<p class="foot"><span class="en">AI Collab Lab · UTAS · Think · Share · Improve · Vote · Build</span><span class="ar">AI Collab Lab · جامعة التقنية والعلوم التطبيقية · فكّر · شارك · حسّن · صوّت · ابنِ</span></p>
+</main>
+
+<script>
+(function(){
+  var root=document.documentElement, en=document.getElementById('b-en'), ar=document.getElementById('b-ar');
+  function set(l){root.lang=l;root.dir=l==='ar'?'rtl':'ltr';en.setAttribute('aria-pressed',l==='en');ar.setAttribute('aria-pressed',l==='ar');}
+  // Follow the language the person chose in the app; #ar or #en in the link overrides it.
+  var start='en';
+  try{var s=localStorage.getItem('ai-collab-student-lang')||localStorage.getItem('ai-collab-lang');if(s==='ar')start='ar'}catch(e){}
+  if(location.hash==='#ar')start='ar'; else if(location.hash==='#en')start='en';
+  set(start);
+  en.addEventListener('click',function(){set('en')});
+  ar.addEventListener('click',function(){set('ar')});
+})();
+</script>
+</body>
+</html>

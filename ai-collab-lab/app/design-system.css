@@ -765,6 +765,9 @@ body:has(.bulk-bar) .workshop-help-button { bottom: 92px; }
 .new-here { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 0 18px; padding: 10px 12px; border-radius: 12px; font-size: 14px; color: var(--soft-text); background: color-mix(in srgb, var(--purple) 9%, var(--panel)); border: 1px solid color-mix(in srgb, var(--purple) 30%, var(--line)); }
 .new-here > svg { color: var(--purple); flex-shrink: 0; }
 .new-here a { color: var(--accent); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.guide-link { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.guide-link svg { flex-shrink: 0; }
+form .guide-link { margin-top: 2px; justify-self: start; align-self: flex-start; }
 .new-here .icon-action { margin-inline-start: auto; width: 28px; height: 28px; }
 @media (max-width: 1000px) { .about-steps { grid-template-columns: 1fr 1fr; } .about-guide { grid-template-columns: 1fr; } }
 @media (max-width: 640px) { .about-steps { grid-template-columns: 1fr; } .about-oneline { flex-direction: column; padding: 22px; } .about-oneline p { font-size: 18px; } .intro-cta .btn-lg { width: 100%; } }

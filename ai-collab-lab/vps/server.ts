@@ -98,6 +98,8 @@ const server = createServer(async (request, response) => {
     if (request.method !== 'GET' && request.method !== 'HEAD') { response.writeHead(405); response.end('Method not allowed'); return; }
     const local = path.slice(base.length);
     if (path.startsWith(base + '/') && ['/', '/join', '/join/', '/presenter', '/presenter/', '/project', '/project/', '/about', '/about/'].includes(local)) { sendFile(response, resolve(root, 'index.html'), request.method === 'HEAD'); return; }
+    // The illustrated participant guide is a plain static page (public/guide.html).
+    if (local === '/guide' || local === '/guide.html') { sendFile(response, resolve(root, 'guide.html'), request.method === 'HEAD'); return; }
     if (path.startsWith(base + '/assets/') || path === base + '/favicon.svg') {
       const filename = resolve(root, '.' + decodeURIComponent(local));
       if (filename.startsWith(root.replace(/[\\/]$/, '') + sep) && existsSync(filename) && statSync(filename).isFile()) { sendFile(response, filename, request.method === 'HEAD'); return; }
