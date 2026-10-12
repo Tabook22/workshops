@@ -2,6 +2,16 @@
 
 A live UTAS workshop platform: Think · Share · Improve · Vote · Build.
 
+## Team participation and leadership
+
+- Participants without a team start on **Team rooms**. Search by team name, project, or code; filter **All teams / Can join / Can visit**. New visitors default to readable Cards while existing view preferences are kept.
+- **Join** makes you a team member; **Visit** keeps your current team and allows feedback where permitted. Participant cards prioritize useful counters rather than every zero statistic. Room creation is an optional expandable section; a blank project focus inherits the common workshop challenge.
+- Every member can open **Team & leader** to see the roster and choose a leader. Each member has one private, changeable ballot, including voting for themselves. More than half of all current members must agree; ties retain the existing lead. Majority confirmation is immediate and starts a fresh round. Visitors cannot vote or see election data.
+- Ballots reset when membership changes or the lead is handed over directly. Voting pauses with the room and closes when the workshop ends. Leadership ballots are separate from idea and showcase votes and do not consume idea-vote budgets.
+- **Leave this team** preserves your contributions and files and makes you a visitor. If a leader leaves, moves, or is removed by the presenter, the earliest remaining member takes over automatically. The presenter and current lead retain direct handover controls.
+- Migration **0006_talented_xavin** adds the ballot table and repairs legacy leaderless/duplicate-leader rooms without changing their ideas or files. Apply it together with the updated server; the VPS migration loader handles it on startup.
+- Verify with `WORKSHOP_TEST_ORIGIN=http://127.0.0.1:3817/workshops node scripts/verify-leadership.mjs` (set the environment variable using your shell's syntax). This verifier accepts localhost only and uses disposable workshops.
+
 ## Run a workshop
 
 1. Open **Presenter login → Create workshop**. The healthcare challenge is preconfigured; choose a different challenge or edit any field.

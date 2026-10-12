@@ -1147,3 +1147,45 @@ button.person-icon:focus-visible { box-shadow: 0 0 0 2px var(--panel), 0 0 0 4px
 .hand-ribbon span:last-child { color: var(--muted); font-size: 12px; }
 .map-room .hand-ribbon { margin: 0 -14px; }
 :root[data-theme="dark"] .hand-ribbon { color: #fde68a; }
+
+/* ---------- Participant room discovery & shared leadership ---------- */
+.room-discovery { display: grid; gap: 12px; margin-block: 20px; padding: 18px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); }
+.room-search { display: flex; gap: 10px; align-items: center; color: var(--muted); }
+.room-search input { min-width: 0; width: 100%; min-height: 44px; }
+.room-filter-row { display: flex; justify-content: space-between; flex-wrap: wrap; align-items: center; gap: 12px; }
+.room-filter-row .tabs.segmented { margin: 0; flex-wrap: wrap; }
+.room-discovery .inline-help { margin: 0; }
+.room-create-disclosure { margin-block: 24px; border: 1px dashed var(--line); border-radius: 16px; background: var(--surface-1); }
+.room-create-disclosure summary { display: flex; align-items: center; gap: 10px; padding: 18px; min-height: 56px; cursor: pointer; font-weight: 700; }
+.room-create-disclosure summary .muted { margin-inline-start: auto; font-size: 12px; font-weight: 400; }
+.room-create-disclosure .panel { margin: 0; border: 0; border-radius: 0 0 16px 16px; }
+.room-create-disclosure summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 16px; }
+.room-permissions { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--soft-text); padding: 12px; margin-block: 12px 0; border-radius: 10px; background: color-mix(in srgb, var(--accent-fill) 6%, var(--panel)); }
+.room-permissions svg, .team-role-guide svg { flex-shrink: 0; margin-top: 2px; color: var(--accent); }
+.team-leader-summary { display: flex; gap: 16px; align-items: flex-start; padding: 18px; border-radius: 16px; background: color-mix(in srgb, var(--accent-fill) 8%, var(--panel)); border: 1px solid color-mix(in srgb, var(--accent-fill) 25%, var(--line)); }
+.team-leader-summary h3 { margin-block: 5px; overflow-wrap: anywhere; }
+.team-leader-summary p { margin: 0; font-size: 14px; }
+.team-leader-icon { display: grid; place-items: center; width: 48px; height: 48px; flex-shrink: 0; background: var(--accent-fill); color: var(--on-accent); border-radius: 14px; }
+.team-role-guide, .leader-vote-section, .team-leave { margin-top: 24px; }
+.team-role-guide ul { list-style: none; display: grid; gap: 9px; margin-block: 12px; padding: 0; font-size: 14px; color: var(--soft-text); }
+.team-role-guide li { display: flex; gap: 8px; }
+.leader-vote-section { border-block: 1px solid var(--line); padding-block: 20px; }
+.leader-vote-section .section-heading { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: space-between; }
+.leader-vote-section h3 { display: flex; align-items: center; gap: 8px; margin: 0; }
+.leader-candidates { list-style: none; padding: 0; margin-block: 16px; display: grid; gap: 8px; }
+.leader-candidates li { display: grid; grid-template-columns: minmax(0,1fr) auto auto; gap: 12px; align-items: center; border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--panel); }
+.leader-candidate-name { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; overflow-wrap: anywhere; min-width: 0; }
+.leader-vote-count { font-size: 12px; font-variant-numeric: tabular-nums; color: var(--muted); }
+.leader-candidates .btn { min-height: 44px; }
+.team-leave .actions { flex-wrap: wrap; }
+@media (max-width: 600px) {
+ .room-discovery { padding: 14px; }
+ .room-filter-row { align-items: stretch; }
+ .room-filter-row .tabs.segmented button { padding-inline: 10px; min-height: 44px; }
+ .team-leader-summary { padding: 14px; gap: 12px; }
+ .leader-candidates li { grid-template-columns: minmax(0,1fr) auto; gap: 8px; }
+ .leader-vote-count { grid-column: 1; grid-row: 2; }
+ .leader-candidates .btn { grid-column: 2; grid-row: 1 / 3; }
+ .room-banner .actions { gap: 8px; }
+ .room-banner .actions .btn { min-height: 44px; }
+}

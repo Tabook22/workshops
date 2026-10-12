@@ -14,3 +14,5 @@ export const uploads=sqliteTable('uploads',{id:text('id').primaryKey(),code:text
 export const uploadChunks=sqliteTable('upload_chunks',{id:text('id').notNull(),idx:integer('idx').notNull(),code:text('code').notNull(),participant:text('participant').notNull(),data:blob('data').notNull(),created:integer('created').notNull()},t=>[primaryKey({columns:[t.id,t.idx]})]);
 /** Quick reactions (👍 💡 ❓ 🔥) on ideas and comments: one of each per person. */
 export const reactions=sqliteTable('reactions',{code:text('code').notNull(),idea:text('idea').notNull(),participant:text('participant').notNull(),emoji:text('emoji').notNull(),created:integer('created').notNull()},t=>[primaryKey({columns:[t.code,t.idea,t.participant,t.emoji]}),index('idx_reactions_code').on(t.code)]);
+/** One changeable, private leadership ballot per room member. Separate from idea votes. */
+export const leadershipVotes=sqliteTable('leadership_votes',{code:text('code').notNull(),participant:text('participant').notNull(),candidate:text('candidate').notNull()},t=>[primaryKey({columns:[t.code,t.participant]}),index('idx_leadership_votes_candidate').on(t.code,t.candidate)]);

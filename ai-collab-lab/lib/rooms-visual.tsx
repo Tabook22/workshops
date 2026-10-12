@@ -41,9 +41,9 @@ export function ViewSwitch({view,onChange,lang,list=true}:{view:RoomView;onChang
  return <div className="tabs segmented view-switch" role="group" aria-label={t('Rooms view','عرض الغرف')}>{options.map(([v,en,ar,Icon])=><button key={v} type="button" className={view===v?'active':''} aria-pressed={view===v} onClick={()=>onChange(v)}><Icon size={14}/>{t(en,ar)}</button>)}</div>}
 
 /** Status chips for one room: who is there and what has happened. */
-export function RoomStats({room,lang,large=false}:{room:RoomSummary;lang:Language;large?:boolean}){const t=translator(lang);
+export function RoomStats({room,lang,large=false,compact=false}:{room:RoomSummary;lang:Language;large?:boolean;compact?:boolean}){const t=translator(lang);
  const items:[typeof Users,number,string,string,string][]=[[Users,room.members,'members','أعضاء','Members in this team'],[Eye,room.guests,'visitors','زوار','Visitors from other teams'],[Lightbulb,room.ideas,'contributions','مشاركات','Ideas, solutions and improvements'],[MessageSquare,room.comments,'messages','رسائل','Comments in the discussion'],[Vote,room.ideaVotes,'votes','أصوات','Votes on ideas in this room'],[Paperclip,room.uploads,'files','ملفات','Files shared in this room'],[Sparkles,room.reactions,'reactions','تفاعلات','Quick reactions on ideas and comments'],[MessagesSquare,room.feedback,'feedback','آراء الفرق','Comments from visiting teams']];
- return <div className={'room-stats'+(large?' large':'')}>{items.map(([Icon,n,en,ar,title])=><span key={en} title={title}><Icon size={large?18:14}/><strong>{n}</strong>{t(n===1?en.replace(/s$/,''):en,ar)}</span>)}{room.pending>0&&<span className="pending" title={t('Waiting for approval','بانتظار الموافقة')}><Hourglass size={large?18:14}/><strong>{room.pending}</strong>{t('pending','قيد المراجعة')}</span>}</div>}
+ return <div className={'room-stats'+(large?' large':'')}>{items.filter(([,n,en])=>!compact||en==='contributions'||en==='messages'||n>0&&en!=='members').map(([Icon,n,en,ar,title])=><span key={en} title={title}><Icon size={large?18:14}/><strong>{n}</strong>{t(n===1?en.replace(/s$/,''):en,ar)}</span>)}{room.pending>0&&<span className="pending" title={t('Waiting for approval','بانتظار الموافقة')}><Hourglass size={large?18:14}/><strong>{room.pending}</strong>{t('pending','قيد المراجعة')}</span>}</div>}
 
 /** The nine steps as a small progress track. */
 export function StageTrack({stage,lang}:{stage:number;lang:Language}){return <span className="stage-track" title={`${stage+1}. ${stageName(stage,lang)}`} aria-label={`${stage+1} / 9 · ${stageName(stage,lang)}`}>{stages.map((s,i)=><i key={s} className={i<stage?'done':i===stage?'now':''}/>)}</span>}
@@ -91,7 +91,7 @@ export function PeopleSeats({room,lang,large=false}:{room:RoomSummary;lang:Langu
  </div>}
 
 /** A team room drawn as a room: coloured roof, status light, its people, the latest message, counters and progress. */
-export function RoomCard({room,lang,mine=false,handle,dragging=false,team,children}:{room:RoomSummary;lang:Language;mine?:boolean;handle?:ReactNode;dragging?:boolean;team?:string|null;children?:ReactNode}){const t=translator(lang);const s=roomState(room);
+export function RoomCard({room,lang,mine=false,handle,dragging=false,team,children,compact=false}:{room:RoomSummary;lang:Language;mine?:boolean;handle?:ReactNode;dragging?:boolean;team?:string|null;children?:ReactNode;compact?:boolean}){const t=translator(lang);const s=roomState(room);
  return <article data-room={room.code} className={'room-card s-'+s+(room.hand?' hand-raised':'')+(mine?' mine':'')+(dragging?' dragging':'')} style={{'--room-hue':roomHue(room)} as React.CSSProperties}>
   <div className="room-card-roof">{handle}<span className="map-room-no" dir="ltr">{roomNumber(room.code)}</span>{room.emoji&&<span className="room-emoji" aria-hidden="true">{room.emoji}</span>}<h3 title={room.name}>{room.name}</h3><VisibilityBadge room={room} lang={lang} team={team}/><StatusLight room={room} lang={lang}/></div>
   <HandRibbon room={room} lang={lang}/>
@@ -99,7 +99,7 @@ export function RoomCard({room,lang,mine=false,handle,dragging=false,team,childr
    <p className="room-card-topic">{room.challenge}</p>
    <PeopleSeats room={room} lang={lang}/>{mine&&<span className="pill lime your-team">{t('Your team','فريقك')}</span>}
    <div className={'room-card-discussion'+(room.latest?'':' none')}>{room.canVisit?<MessageSquare size={15}/>:<Lock size={15}/>}{!room.canVisit?<span>{t('The discussion is private to this team.','النقاش خاص بهذا الفريق.')}</span>:room.latest?<span><strong>{room.latest.nickname}</strong> “{room.latest.text}”</span>:<span>{t('No discussion yet','لا نقاش بعد')}</span>}{room.recent>0&&<span className="heat" title={t('Posts in the last 10 minutes','مشاركات آخر 10 دقائق')}>+{room.recent}</span>}</div>
-   <RoomStats room={room} lang={lang}/>
+   <RoomStats room={room} lang={lang} compact={compact}/>
    <div className="room-card-progress"><StageTrack stage={room.stage} lang={lang}/><span>{room.stage+1}. {stageName(room.stage,lang)}</span><span><Clock size={12}/>{timeAgo(room.lastActivity,lang)}</span></div>
   </div>
   {children&&<div className="room-card-actions">{children}</div>}

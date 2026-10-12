@@ -1,13 +1,14 @@
 import { database, hash, cookie, setCookie } from '../../../db/server';
 import { defaults, skills, REACTIONS, ROOM_EMOJIS, ROOM_HUES, type Config, type Idea } from '../../../lib/workshop';
 import { reply, failure, clean, invalidate, snapshot, readCode, unavailable, presenterFor, teamOf, roomVisible, type Session } from '../../../lib/snapshot';
+import {repairLeader,clearLeadershipVotes,leadershipBallot} from '../../../lib/leadership';
 export const dynamic='force-dynamic';
 async function context(req:Request,code:string){const db=database();const session=await db.prepare('SELECT * FROM sessions WHERE code = ?').bind(code).first<Session>();if(!session)return null;const isPresenter=await presenterFor(req,session);const participant=cookie(req,'student_'+code);const me=participant?await db.prepare('SELECT id,nickname,role,member FROM participants WHERE id = ? AND code = ?').bind(participant,code).first<{id:string;nickname:string;role:string;member:string|null}>():null;return {db,session,config:JSON.parse(session.config) as Config,isPresenter,me};}
 const MAX_ROOMS=40;
 const rows=async<T>(db:D1Database,sql:string,...values:unknown[])=>(await db.batch([db.prepare(sql).bind(...values)]))[0].results as T[];
 const withCookies=(res:Response,cookies:string[])=>{for(const c of cookies)res.headers.append('Set-Cookie',c);return res;};
 /** Children first, because ideas and participants reference the session. */
-const removeSessions=(db:D1Database,codes:string[])=>codes.flatMap(c=>[db.prepare('DELETE FROM votes WHERE code=?').bind(c),db.prepare('DELETE FROM reflections WHERE code=?').bind(c),db.prepare('DELETE FROM ideas WHERE code=?').bind(c),db.prepare('DELETE FROM participants WHERE code=?').bind(c),db.prepare('DELETE FROM uploads WHERE code=?').bind(c),db.prepare('DELETE FROM reactions WHERE code=?').bind(c),db.prepare('DELETE FROM upload_chunks WHERE code=?').bind(c),db.prepare('DELETE FROM sessions WHERE code=?').bind(c)]);
+const removeSessions=(db:D1Database,codes:string[])=>codes.flatMap(c=>[db.prepare('DELETE FROM votes WHERE code=?').bind(c),db.prepare('DELETE FROM reflections WHERE code=?').bind(c),db.prepare('DELETE FROM ideas WHERE code=?').bind(c),db.prepare('DELETE FROM participants WHERE code=?').bind(c),db.prepare('DELETE FROM uploads WHERE code=?').bind(c),db.prepare('DELETE FROM reactions WHERE code=?').bind(c),db.prepare('DELETE FROM upload_chunks WHERE code=?').bind(c),clearLeadershipVotes(db,c),db.prepare('DELETE FROM sessions WHERE code=?').bind(c)]);
 /** Enter a team room. Members add ideas and vote; guests read and comment. Anyone with the room link may enter:
     their main-workshop identity is reused, or created from the nickname they give. The first member leads the room. */
 async function enterRoom(req:Request,db:D1Database,room:Session,roomConfig:Config,b:Record<string,unknown>,want:'member'|'guest'){
@@ -15,17 +16,23 @@ async function enterRoom(req:Request,db:D1Database,room:Session,roomConfig:Confi
  if(pc.ended||roomConfig.ended)return failure('This workshop has ended.');
  const cookies:string[]=[];const parentId=cookie(req,'student_'+parentCode);
  let base=parentId?await db.prepare('SELECT id,nickname FROM participants WHERE id=? AND code=?').bind(parentId,parentCode).first<{id:string;nickname:string}>():null;
- if(!base){let nickname=clean(b.nickname,40);if(!nickname&&!pc.anonymous)return failure('Please enter a nickname.');if(!nickname)nickname='Anonymous';base={id:crypto.randomUUID(),nickname};await db.prepare('INSERT INTO participants (id,code,nickname,created) VALUES (?,?,?,?)').bind(base.id,parentCode,nickname,Date.now()).run();cookies.push(setCookie(req,'student_'+parentCode,base.id));}
+ const newBase=!base;
+ if(!base){let nickname=clean(b.nickname,40);if(!nickname&&!pc.anonymous)return failure('Please enter a nickname.');if(!nickname)nickname='Anonymous';base={id:crypto.randomUUID(),nickname};}
  if(want==='guest'){if(pc.gallery===false)return failure('Visiting other rooms is turned off.',403);if(!roomVisible(roomConfig,room.code,await teamOf(db,parentCode,base.id),true))return failure('This team keeps its discussion private.',403);}
  const existing=await db.prepare('SELECT id,role FROM participants WHERE code=? AND member=?').bind(room.code,base.id).first<{id:string;role:string}>();
  const statements:D1PreparedStatement[]=[];const id=existing?.id||crypto.randomUUID();
  if(want==='member'&&roomConfig.joining==='invite'&&existing?.role!=='member'&&existing?.role!=='lead'&&clean(b.invite,40)!==roomConfig.inviteToken)return failure('This team joins by invitation. Ask the team for its invite link.',403);
+ if(newBase){statements.push(db.prepare('INSERT INTO participants (id,code,nickname,created) VALUES (?,?,?,?)').bind(base.id,parentCode,base.nickname,Date.now()));cookies.push(setCookie(req,'student_'+parentCode,base.id));}
  if(want==='member'){
+  const previous=await rows<{code:string}>(db,"SELECT code FROM participants WHERE member=? AND role!='guest' AND code!=? AND code IN (SELECT code FROM sessions WHERE parent=?)",base.id,room.code,parentCode);
   // One team per student: other memberships become guest visits, so the ideas posted there stay.
   statements.push(db.prepare("UPDATE participants SET role='guest' WHERE member=? AND role!='guest' AND code!=? AND code IN (SELECT code FROM sessions WHERE parent=?)").bind(base.id,room.code,parentCode));
   const lead=await db.prepare("SELECT id FROM participants WHERE code=? AND role='lead' AND id!=?").bind(room.code,id).first();const role=lead?'member':'lead';
   if(!existing)statements.push(db.prepare('INSERT INTO participants (id,code,nickname,created,member,role) VALUES (?,?,?,?,?,?)').bind(id,room.code,base.nickname,Date.now(),base.id,role));
   else if(existing.role==='guest')statements.push(db.prepare('UPDATE participants SET role=? WHERE id=?').bind(role,id));
+  for(const old of previous)statements.push(repairLeader(db,old.code),clearLeadershipVotes(db,old.code));
+  statements.push(repairLeader(db,room.code));
+  if(!existing||existing.role==='guest')statements.push(clearLeadershipVotes(db,room.code));
  } else if(!existing)statements.push(db.prepare("INSERT INTO participants (id,code,nickname,created,member,role) VALUES (?,?,?,?,?,'guest')").bind(id,room.code,base.nickname,Date.now(),base.id));
  if(statements.length)await db.batch(statements);
  cookies.push(setCookie(req,'student_'+room.code,id));
@@ -61,7 +68,20 @@ export async function POST(req:Request){let code='';try{const origin=req.headers
   const patch=b.patch as Record<string,unknown>||{};const list=await rows<Session>(db,'SELECT * FROM sessions WHERE parent=?',code);
   if(list.length)await db.batch(list.map(r=>{const next={...JSON.parse(r.config) as Config};if(Number.isInteger(patch.stage)&&Number(patch.stage)>=0&&Number(patch.stage)<=8){next.stage=Number(patch.stage);next.screen='stage';if(next.stage!==5)next.votingOpen=false;}for(const f of ['paused','submissionsOpen'] as const)if(typeof patch[f]==='boolean')next[f]=patch[f] as boolean;if(patch.timerEnd===null||typeof patch.timerEnd==='number')next.timerEnd=patch.timerEnd as number|null;if(typeof patch.screen==='string'&&['stage','qr','wall','voting'].includes(patch.screen))next.screen=patch.screen;next.revision=crypto.randomUUID();return db.prepare('UPDATE sessions SET config=? WHERE code=?').bind(JSON.stringify(next),r.code);}));
   return reply({ok:true,rooms:list.length});}
- if(action==='leaveRoom'){if(!me||!c.session.parent)return failure('Room not found.',404);await db.prepare("UPDATE participants SET role='guest' WHERE id=? AND code=?").bind(me.id,code).run();return reply({ok:true});}
+ if(action==='leaveRoom'){if(!me||!c.session.parent)return failure('Room not found.',404);if(me.role!=='guest')await db.batch([db.prepare("UPDATE participants SET role='guest' WHERE id=? AND code=?").bind(me.id,code),repairLeader(db,code),clearLeadershipVotes(db,code)]);return reply({ok:true});}
+ if(action==='leadershipVote'){
+  if(!c.session.parent)return failure('Room not found.',404);
+  if(!me||me.role==='guest')return failure('Only team members can elect a leader.',403);
+  const parent=await db.prepare('SELECT config FROM sessions WHERE code=?').bind(c.session.parent).first<{config:string}>();
+  if(config.ended||!parent||(JSON.parse(parent.config) as Config).ended)return failure('This workshop has ended.');
+  if(config.paused)return failure('The room is paused. Voting will resume with the room.');
+  if(b.candidate===null){await db.prepare('DELETE FROM leadership_votes WHERE code=? AND participant=?').bind(code,me.id).run();return reply({ok:true,elected:false});}
+  const candidate=clean(b.candidate,40);
+  if(!await db.prepare("SELECT id FROM participants WHERE code=? AND id=? AND role!='guest'").bind(code,candidate).first())return failure('Choose a current team member.');
+  const result=await db.batch(leadershipBallot(db,code,me.id,candidate));
+  if(!result[0].meta.changes)return failure('The room changed. Please retry.',409);
+  return reply({ok:true,elected:!!result[1].meta.changes});
+ }
  // A room lead runs their own room (stages, spotlight, moderation, voting, product) but cannot end or delete it.
  const lead=!!c.session.parent&&me?.role==='lead';
  if(action==='hand'){
@@ -82,8 +102,8 @@ export async function POST(req:Request){let code='';try{const origin=req.headers
   // The room lead (or the presenter) removes a member — they stay as a visitor, keeping their ideas — or hands over the lead.
   if(!c.session.parent)return failure('Room not found.',404);if(!isPresenter&&!lead)return failure('Only the room lead can manage members.',403);
   const target=await db.prepare('SELECT id,role FROM participants WHERE id=? AND code=?').bind(clean(b.participant,40),code).first<{id:string;role:string}>();if(!target)return failure('Member not found.',404);
-  if(b.op==='remove'){if(target.id===me?.id)return failure('Hand over the lead before leaving the team.');await db.prepare("UPDATE participants SET role='guest' WHERE id=?").bind(target.id).run();return reply({ok:true});}
-  if(b.op==='lead'){if(target.role==='guest')return failure('Only a member can lead the room.');await db.batch([db.prepare("UPDATE participants SET role='member' WHERE code=? AND role='lead'").bind(code),db.prepare("UPDATE participants SET role='lead' WHERE id=?").bind(target.id)]);return reply({ok:true});}
+  if(b.op==='remove'){if(target.id===me?.id)return failure('Hand over the lead before leaving the team.');await db.batch([db.prepare("UPDATE participants SET role='guest' WHERE id=?").bind(target.id),repairLeader(db,code),clearLeadershipVotes(db,code)]);return reply({ok:true});}
+  if(b.op==='lead'){if(target.role==='guest')return failure('Only a member can lead the room.');await db.batch([db.prepare("UPDATE participants SET role='member' WHERE code=? AND role='lead'").bind(code),db.prepare("UPDATE participants SET role='lead' WHERE id=?").bind(target.id),clearLeadershipVotes(db,code)]);return reply({ok:true});}
   return failure('Unknown member action.');}
  if(action==='file'){const f=await db.prepare("SELECT id,participant FROM uploads WHERE id=? AND code=? AND status!='deleted'").bind(clean(b.id,40),code).first<{id:string;participant:string}>();if(!f)return failure('File not found.',404);
   // Files: the uploader or a facilitator removes one (its bytes are dropped); facilitators approve pending ones.
@@ -144,5 +164,4 @@ if(!config.submissionsOpen)return failure('Submissions are closed.');const types
  return failure('Unknown action.');
  }catch(e){console.error('Workshop action failed',e);return failure('Unable to save right now. Keep your text and retry.',503);}finally{if(code)invalidate(code);}}
 function settings(b:Record<string,unknown>,partial=false){const out:Partial<Config>={};for(const field of ['name','challenge','question','description'] as const){if(typeof b[field]==='string'){const value=clean(b[field],field==='question'||field==='description'?1000:100);if(value||field==='description')out[field]=value;}}if(!partial){out.name=out.name||defaults.name;out.challenge=out.challenge||defaults.challenge;out.question=out.question||defaults.question;}for(const f of ['anonymous','moderated','liveResults','multiple','teamRooms','studentRooms','gallery'] as const)if(typeof b[f]==='boolean')out[f]=b[f] as boolean;if(['en','ar','both'].includes(String(b.language)))out.language=b.language as Config['language'];if(Number.isInteger(b.maxVotes)&&Number(b.maxVotes)>=1&&Number(b.maxVotes)<=10)out.maxVotes=Number(b.maxVotes);return out;}
-
 

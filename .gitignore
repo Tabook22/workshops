@@ -8,6 +8,8 @@ node_modules/
 
 # Local tool settings
 .claude/
+/.manus/
+/**/.work/
 
 # Local backup of the app's original nested git folder
 .git-history-backup/

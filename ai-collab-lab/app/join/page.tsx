@@ -1,5 +1,5 @@
 "use client";
-import {useState,useEffect,useRef} from 'react';
+import {useState,useEffect,useRef,lazy,Suspense} from 'react';
 import {Sparkles,Check,Users,Send,Pause,Lightbulb,ArrowRight,Vote,Wifi,WifiOff,DoorOpen,Eye,Crown,ArrowLeft,Lock} from 'lucide-react';
 import {lessonSteps,lessonIndex} from '../../lib/lesson';
 import StudentWall from '../../lib/student-wall';
@@ -13,7 +13,7 @@ import {NewHereBanner,GuideLink} from '../../lib/first-visit';
 import {Broadcast,StudentRooms,RoomBanner,MyRoomLink,ShowcaseVote} from '../../lib/team-rooms';
 import {RoomFiles} from '../../lib/rooms-visual';
 import {MissionBanner} from '../../lib/engage';
-import Console from '../../lib/console';
+const Console=lazy(()=>import('../../lib/console'));
 
 /** A student's own language choice (EN / العربية / both) wins over the workshop default and is remembered. */
 const STUDENT_LANG='ai-collab-student-lang';
@@ -55,10 +55,11 @@ export default function Join(){
 
  const me=data.me;
  // A room lead runs the room with the presenter's guided tools, inside the student page.
- if(leading&&data.isPresenter&&room)return <Console code={code} onExit={()=>setLeading(false)}/>;
+ if(leading&&data.isPresenter&&room)return <Suspense fallback={<main className="center-page" role="status"><span className="spinner"/>{tr('Loading room controls…','جارٍ تحميل أدوات الغرفة…')}</main>}><Console code={code} onExit={()=>setLeading(false)}/></Suspense>;
  const roomsTab=!room&&!!data.rooms&&(c.teamRooms||data.rooms.length>0);
  // With team rooms on, a student without a team starts on the Team rooms tab to pick or create one.
- const activeTab=tab==='auto'?(roomsTab&&!me.room?'rooms':'task'):tab;
+ const requestedTab=tab==='auto'?(roomsTab&&!me.room?'rooms':'task'):tab;
+ const activeTab=requestedTab==='rooms'&&!roomsTab||requestedTab==='files'&&!room?'task':requestedTab;
  const insertStarter=(starter:string)=>{setText(v=>!v.trim()?starter:v.replace(/\s*$/,'')+'\n'+starter);requestAnimationFrame(()=>{const el=textArea.current;if(el){el.focus();el.setSelectionRange(el.value.length,el.value.length)}})};
  const submit=()=>{const id=submissionId.current;void run({action:'submit',id,title,text:stage===4?kind+': '+text:text},()=>{submissionId.current=uid();setText('');setTitle('');try{sessionStorage.removeItem(draftKey)}catch{}setCelebrate(n=>n+1);setConfirmation(c.moderated?(ar?'تم إرسال مشاركتك لمراجعة مقدم الورشة.':'Your contribution is awaiting presenter approval.'):(ar?'مشاركتك أصبحت جزءاً من مشروعنا الجماعي.':'Your contribution is now part of our collective project.'))})};
  const intro=stage===1?tr('Great products begin with a problem. What do students need help with?','تبدأ المنتجات الرائعة بمشكلة. ما الذي يحتاج الطلاب إلى المساعدة فيه؟'):stage===2?tr('Think freely. What useful idea could address our challenge?','فكر بحرية. ما الفكرة المفيدة التي يمكن أن تعالج تحدينا؟'):stage===3?tr('How could we solve this problem?','كيف يمكننا حل هذه المشكلة؟'):stage===4?tr('Don’t create a new idea. Build on this one.','لا تنشئ فكرة جديدة. بل طور هذه الفكرة.'):tr('What final feature would make our product more useful?','ما الميزة الأخيرة التي ستجعل منتجنا أكثر فائدة؟');
@@ -73,7 +74,7 @@ export default function Join(){
   {room&&<RoomBanner data={data} lang={lang} onLead={()=>setLeading(true)} refresh={refresh}/>}
   <Broadcast text={room?room.broadcast:c.broadcast} lang={lang}/>
   {(me.role!=='guest'||!room)&&<MissionBanner data={data} lang={lang} onFind={room?undefined:()=>setTab('rooms')}/>}
-  <nav className="student-tabs" aria-label={ar?'مساحة الورشة':'Workshop workspace'}><button className={activeTab==='task'?'active':''} aria-pressed={activeTab==='task'} onClick={()=>setTab('task')}>{guest?tr('About this room','عن هذه الغرفة'):tr('Your task','مهمتك')}</button><button className={activeTab==='wall'?'active':''} aria-pressed={activeTab==='wall'} onClick={()=>setTab('wall')}>{room?tr('Room ideas','أفكار الغرفة'):tr('Team ideas','أفكار الفريق')} <span className="pill">{teamCount}</span></button>{room&&<button className={activeTab==='files'?'active':''} aria-pressed={activeTab==='files'} onClick={()=>setTab('files')}>{tr('Files','الملفات')} <span className="pill">{data.uploads?.length||0}</span></button>}{roomsTab&&<button className={activeTab==='rooms'?'active':''} aria-pressed={activeTab==='rooms'} onClick={()=>setTab('rooms')}>{tr('Team rooms','غرف الفرق')} <span className="pill">{data.rooms!.length}</span></button>}</nav>
+  <nav className="student-tabs" aria-label={ar?'مساحة الورشة':'Workshop workspace'}><button className={activeTab==='task'?'active':''} aria-pressed={activeTab==='task'} onClick={()=>setTab('task')}>{guest?tr('About this room','عن هذه الغرفة'):tr('Your task','مهمتك')}</button><button className={activeTab==='wall'?'active':''} aria-pressed={activeTab==='wall'} onClick={()=>setTab('wall')}>{room?tr('Room ideas','أفكار الغرفة'):tr('Workshop ideas','أفكار الورشة')} <span className="pill">{teamCount}</span></button>{room&&<button className={activeTab==='files'?'active':''} aria-pressed={activeTab==='files'} onClick={()=>setTab('files')}>{tr('Files','الملفات')} <span className="pill">{data.uploads?.length||0}</span></button>}{roomsTab&&<button className={activeTab==='rooms'?'active':''} aria-pressed={activeTab==='rooms'} onClick={()=>setTab('rooms')}>{tr('Team rooms','غرف الفرق')} <span className="pill">{data.rooms!.length}</span></button>}</nav>
   <Timer end={c.timerEnd}/>
   {data.locked?<div className="waiting locked-room"><div className="waiting-icon"><Lock size={30}/></div><h1>{tr('This room is private','هذه الغرفة خاصة')}</h1><p>{tr('This team has chosen to keep its discussion to itself or to invited teams only. You can still see it on the map.','اختار هذا الفريق أن يبقي نقاشه لنفسه أو للفرق المدعوة فقط. ويمكنك رؤيته على الخريطة.')}</p><a className="btn primary full-width" href={'?code='+room!.code}><ArrowLeft size={17}/>{tr('Back to the main workshop','العودة إلى الورشة الرئيسية')}</a></div>:activeTab==='files'&&room?<RoomFiles data={data} lang={lang} refresh={refresh} canUpload={!guest&&!c.ended} manage={data.isPresenter}/>:activeTab==='rooms'&&roomsTab?<StudentRooms data={data} lang={lang}/>:activeTab==='wall'?<StudentWall data={data} lang={lang} refresh={refresh}/>:guest&&!c.ended?<div className="waiting"><div className="waiting-icon"><Eye size={30}/></div><h1>{c.challenge}</h1><p>{c.question}</p><p>{tr(`This team is at step: ${prompts[stage]}`,`هذا الفريق في مرحلة: ${promptsAr[stage]}`)}</p><button className="btn primary full-width" onClick={()=>setTab('wall')}>{tr('Read their ideas & comment','اقرأ أفكارهم وعلّق')} <ArrowRight size={18}/></button></div>:<>
   {c.ended?<div className="waiting"><div className="waiting-icon"><Sparkles size={30}/></div><h1>{tr('We created this together.','لقد ابتكرنا هذا معاً.')}</h1><p>{tr('Thank you for thinking, sharing and building with your team.','شكراً لتفكيرك ومشاركتك وبنائك مع فريقك.')}</p><h2>{c.challenge}</h2><div className="ended-stats"><span><strong>{data.stats.participants}</strong>{tr('teammates','زملاء')}</span><span><strong>{data.stats.ideas}</strong>{tr('ideas','أفكار')}</span><span><strong>{data.stats.improvements}</strong>{tr('improvements','تحسينات')}</span></div><p>{tr('This is the future of work.','هذا هو مستقبل العمل.')}</p></div>
