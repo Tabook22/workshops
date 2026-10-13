@@ -121,3 +121,20 @@ This MVP is intended for supervised workshops. Keep presenter keys private and a
 The Site must permit anonymous public visitors for QR joining without accounts. Hosting access and persistent resources are managed through Sites; production database migrations apply during publishing. Source and lockfile are included for ongoing maintenance.
 
 Presenter idea wall: choose Cards, Bubbles, or List above the live wall. Each workshop's display choice is remembered on this browser. Bubbles retain zoom, dragging and customization; clicking one opens presenter moderation controls. The presenter layout does not change students' views.
+
+### Complete English–Arabic content display
+
+Interface language switching now requests translations for visible workshop questions, challenge/name/description, ideas and comments (including the viewer’s own pending content), presenter notes/broadcasts, room names and project summaries, product-canvas values, and saved build prompts. The public join directory and presenter dashboard also request display translations. Custom application/home-page text can fall back to automatic translation when a language version is missing.
+
+Displayed counts, step numbers, relative times and timers use Arabic digits in Arabic and western digits in English. Workshop join codes, URLs, email addresses, identities, file names, technical identifiers, editable source values and API payloads are not rewritten. Original authored content remains available for editing, and stored workshop data is unchanged. Editable drafts stay in their original language to avoid overwriting the author’s wording.
+
+**A working translation service is required for dynamic content.** In presenter application Settings → Translation, choose a supported provider, enter its configuration privately, test it and save it. The application does not silently send content to an unconfigured provider. When translation is disabled or unavailable, the participant page explicitly explains this, displays originals temporarily, and retries. Cached translations make repeat switches immediate; uncached translations require a provider round trip.
+
+Additional localhost verification:
+
+```bash
+node scripts/verify-localization.mjs
+WORKSHOP_TEST_ORIGIN=http://127.0.0.1:3823/workshops TRANSLATION_EXPECT_ENABLED=1 node scripts/verify-translation-coverage.mjs
+```
+
+The coverage verifier is localhost-only. Use an isolated test database and a mock LibreTranslate-compatible provider; never run synthetic-data tests against production. The original `verify-translation.mjs` provider/settings verifier is preserved.

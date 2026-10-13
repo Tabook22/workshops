@@ -8,6 +8,7 @@
  * - Server messages stay English in the API; `translateError` shows them in Arabic.
  */
 import {useSyncExternalStore} from 'react';
+import {localizeNumbers} from './localization';
 
 export type UiLang = 'en' | 'ar';
 const KEY = 'ai-collab-lang';
@@ -46,15 +47,19 @@ function subscribe(listener: () => void) {
 }
 /** Current interface language, for code outside React rendering (e.g. request helpers). */
 export function getUiLang(): UiLang { init(); return current; }
+/** Format read-only counts and digits. Never use this for an input value or API payload. */
+export function displayNumber(value: string | number | null | undefined, lang: string = getUiLang()): string { return localizeNumbers(value ?? 0,lang); }
 export function useUiLang(): UiLang {
   return useSyncExternalStore(subscribe, () => { init(); return current; }, () => 'en');
 }
 /** Pick the English or Arabic text. */
-export const tx = (lang: string, en: string, ar: string) => (lang === 'ar' ? ar : en);
+export const tx = (lang: string, en: string, ar: string) => localizeNumbers(lang === 'ar' ? ar : en,lang);
 
 const errors: Record<string, string> = {
   'Workshop not found. Check the session code.': 'لم يتم العثور على الورشة. تحقق من رمز الجلسة.',
   'Workshop not found.': 'لم يتم العثور على الورشة.',
+  'Only main workshops can appear on the join page.':'يمكن إظهار الورش الرئيسية فقط في صفحة الانضمام.',
+  'Translation is temporarily unavailable.':'الترجمة غير متاحة مؤقتاً.',
   'Room not found.': 'لم يتم العثور على الغرفة.',
   'Join this team to ask for help.': 'انضم إلى هذا الفريق لطلب المساعدة.',
   'The room changed. Please retry.': 'تغيّرت الغرفة. يرجى المحاولة مجدداً.',
@@ -159,5 +164,5 @@ const errors: Record<string, string> = {
 /** Arabic for known messages; unknown messages are shown unchanged. */
 export function translateError(message: string, lang: string) {
   if (lang !== 'ar' || !message) return message;
-  return errors[message] || errors[message.trim()] || message;
+  return localizeNumbers(errors[message] || errors[message.trim()] || message,lang);
 }

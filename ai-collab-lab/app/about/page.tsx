@@ -1,8 +1,9 @@
 "use client";
+import {displayNumber} from '../../lib/i18n';
 import {appUrl} from '../../lib/urls';
 import {Command, Tag, CalendarDays, CalendarCheck, Building2, UserRound, Mail, Globe, ArrowUpRight, Megaphone, Briefcase, Bot, Languages, Rocket, Smartphone, Presentation, Lightbulb, Quote} from 'lucide-react';
 import {BrandText, ThemeSwitch, UiLanguageSwitch} from '../../lib/client';
-import {useAppInfo} from '../../lib/app-info-client';
+import {useLocalizedAppInfo} from '../../lib/localized-app';
 import {defaultAppInfo} from '../../lib/app-info';
 import {intro} from '../../lib/intro';
 import {useUiLang, tx} from '../../lib/i18n';
@@ -10,13 +11,13 @@ import {useUiLang, tx} from '../../lib/i18n';
 const whyIcons = [Megaphone, Briefcase, Bot, Languages, Rocket];
 
 export default function About() {
-  const info = useAppInfo(), lang = useUiLang(), ar = lang === 'ar';
+  const info = useLocalizedAppInfo(), lang = useUiLang(), ar = lang === 'ar';
   const t = (en: string, arabic: string) => tx(lang, en, arabic);
   // The introduction mentions the app by its default name; show the name the admin chose instead.
   const name = t(info.name, info.nameAr || info.name);
   const fill = (text: string) => text.split(defaultAppInfo.name).join(info.name).split(defaultAppInfo.nameAr).join(info.nameAr || info.name);
   const p = (pair: readonly [string, string]) => fill(t(pair[0], pair[1]));
-  const date = (d: string) => { if (!d) return ''; const v = new Date(d + 'T00:00:00'); return Number.isNaN(v.getTime()) ? d : v.toLocaleDateString(ar ? 'ar-OM-u-nu-latn' : 'en-GB', {day: 'numeric', month: 'long', year: 'numeric'}); };
+  const date = (d: string) => { if (!d) return ''; const v = new Date(d + 'T00:00:00'); return Number.isNaN(v.getTime()) ? d : v.toLocaleDateString(ar ? 'ar-OM-u-nu-arab' : 'en-GB', {day: 'numeric', month: 'long', year: 'numeric'}); };
   const facts: [typeof Tag, string, React.ReactNode][] = [
     [Tag, t('Version', 'الإصدار'), <span dir="ltr" key="v">{info.version}</span>],
     [CalendarCheck, t('Current release', 'تاريخ الإصدار الحالي'), date(info.updatedOn)],
@@ -43,7 +44,7 @@ export default function About() {
 
     <section id="why"><h2 className="about-section-title">{p(intro.whyTitle)}</h2><div className="about-features">{intro.why.map(([head, body], i) => { const Icon = whyIcons[i]; return <div key={i} className="about-feature"><Icon size={22} /><h3>{p(head)}</h3><p>{p(body)}</p></div>; })}</div></section>
 
-    <section id="steps"><h2 className="about-section-title">{p(intro.stepsTitle)}</h2><ol className="about-steps">{intro.steps.map(([head, body], i) => <li key={i}><span className="about-step-num">{i + 1}</span><div><strong>{p(head)}</strong><p>{p(body)}</p></div></li>)}</ol></section>
+    <section id="steps"><h2 className="about-section-title">{p(intro.stepsTitle)}</h2><ol className="about-steps">{intro.steps.map(([head, body], i) => <li key={i}><span className="about-step-num">{displayNumber(i + 1,lang)}</span><div><strong>{p(head)}</strong><p>{p(body)}</p></div></li>)}</ol></section>
 
     <section id="guide"><h2 className="about-section-title">{p(intro.useTitle)}</h2><div className="about-guide">
       <article className="about-card"><h3><Smartphone size={20} />{p(intro.student.title)}</h3><ol>{intro.student.steps.map((s, i) => <li key={i}>{p(s)}</li>)}</ol><p className="about-tip"><Lightbulb size={16} />{p(intro.student.tip)}</p></article>

@@ -5,6 +5,7 @@ import {ArrowRight,Copy,QrCode,RefreshCw} from 'lucide-react';
 import {T,copyText} from './client';
 import {appUrl} from './urls';
 import type {Language} from './workshop';
+import {useContentTranslation} from './translate-client';
 
 export type JoinableWorkshop={code:string;name:string;challenge:string;language:Language};
 const subscribeOrigin=()=>()=>{};
@@ -12,14 +13,16 @@ const readOrigin=()=>window.location.origin;
 const serverOrigin=()=>'';
 /** The QR and button must always point to the same participant URL, never presenter controls. */
 export function WorkshopJoinCard({workshop,lang,copy=false}:{workshop:JoinableWorkshop;lang:Language;copy?:boolean}){
+ const content=useContentTranslation({code:workshop.code},[workshop.name,workshop.challenge],lang);
+ const name=content.tr(workshop.name),challenge=content.tr(workshop.challenge);
  const origin=useSyncExternalStore(subscribeOrigin,readOrigin,serverOrigin);
  const [message,setMessage]=useState('');
  const href=appUrl('/join?code=')+encodeURIComponent(workshop.code);
  const url=origin+href;
  const tr=(en:string,ar:string)=><T en={en} ar={ar} lang={lang}/>;
  return <article className="workshop-join-card" dir={lang==='ar'?'rtl':'ltr'}>
-  <div className="workshop-join-qr">{origin?<QRCodeSVG value={url} size={176} level="M" marginSize={4} bgColor="#fff" fgColor="#101216" title={lang==='ar'?`امسح للانضمام إلى ${workshop.name}`:`Scan to join ${workshop.name}`}/>:<span className="spinner"/>}</div>
-  <div className="workshop-join-info"><span className="pill lime"><QrCode size={14}/>{tr('Scan or click to join','امسح أو اضغط للانضمام')}</span><h3 dir="auto">{workshop.name}</h3>{workshop.challenge!==workshop.name&&<p dir="auto">{workshop.challenge}</p>}<span className="workshop-join-code" dir="ltr">{workshop.code}</span><a className="btn primary" href={href} aria-label={lang==='ar'?`انضم إلى ${workshop.name}`:`Join ${workshop.name}`}>{tr('Join workshop','انضم إلى الورشة')}<ArrowRight size={17}/></a>{copy&&<button type="button" className="btn secondary" onClick={()=>void copyText(url).then(ok=>setMessage(ok?(lang==='ar'?'تم نسخ رابط الانضمام':'Join link copied'):(lang==='ar'?'تعذّر النسخ. حدد الرابط وانسخه أدناه.':'Could not copy. Select the link below.')))} disabled={!origin}><Copy size={16}/>{tr('Copy join link','نسخ رابط الانضمام')}</button>}<small>{tr('No workshop code to type. A nickname may be requested.','لا حاجة لكتابة رمز الورشة. قد يُطلب اسم مستعار.')}</small>{copy&&<a className="workshop-share-url" href={href} dir="ltr">{url}</a>}{message&&<small role="status">{message}</small>}</div>
+  <div className="workshop-join-qr">{origin?<QRCodeSVG value={url} size={176} level="M" marginSize={4} bgColor="#fff" fgColor="#101216" title={lang==='ar'?`امسح للانضمام إلى ${name}`:`Scan to join ${name}`}/>:<span className="spinner"/>}</div>
+  <div className="workshop-join-info"><span className="pill lime"><QrCode size={14}/>{tr('Scan or click to join','امسح أو اضغط للانضمام')}</span><h3 dir="auto">{name}</h3>{workshop.challenge!==workshop.name&&<p dir="auto">{challenge}</p>}<span className="workshop-join-code" dir="ltr">{workshop.code}</span><a className="btn primary" href={href} aria-label={lang==='ar'?`انضم إلى ${name}`:`Join ${name}`}>{tr('Join workshop','انضم إلى الورشة')}<ArrowRight size={17}/></a>{copy&&<button type="button" className="btn secondary" onClick={()=>void copyText(url).then(ok=>setMessage(ok?(lang==='ar'?'تم نسخ رابط الانضمام':'Join link copied'):(lang==='ar'?'تعذّر النسخ. حدد الرابط وانسخه أدناه.':'Could not copy. Select the link below.')))} disabled={!origin}><Copy size={16}/>{tr('Copy join link','نسخ رابط الانضمام')}</button>}<small>{tr('No workshop code to type. A nickname may be requested.','لا حاجة لكتابة رمز الورشة. قد يُطلب اسم مستعار.')}</small>{copy&&<a className="workshop-share-url" href={href} dir="ltr">{url}</a>}{message&&<small role="status">{message}</small>}</div>
  </article>;
 }
 
@@ -28,6 +31,7 @@ export function WorkshopDirectory({lang}:{lang:Language}){
  const [workshops,setWorkshops]=useState<JoinableWorkshop[]|null>(null);
  const [error,setError]=useState(false);
  const [attempt,setAttempt]=useState(0);
+ const content=useContentTranslation({directory:true},(workshops||[]).flatMap(w=>[w.name,w.challenge]),lang);
  const tr=(en:string,ar:string)=><T en={en} ar={ar} lang={lang}/>;
  useEffect(()=>{
   const controller=new AbortController();

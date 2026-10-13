@@ -1,3 +1,4 @@
+import {displayNumber} from '../lib/i18n';
 import {useEffect, useMemo, useRef, useState} from 'react';
 import {Plus, Users, Lightbulb, ArrowUpRight, Search, LayoutGrid, List, GripVertical, Pencil, Trash2, Download, Power, RotateCcw, CheckSquare, Square, X, ArrowUpDown, Settings2, DoorOpen, QrCode} from 'lucide-react';
 import {Modal, action, download, useToast} from '../lib/client';
@@ -6,6 +7,7 @@ import {tx, type UiLang} from '../lib/i18n';
 import {appUrl} from '../lib/urls';
 import {WorkshopRooms} from '../lib/team-rooms';
 import {WorkshopJoinCard} from '../lib/workshop-entry';
+import {useContentTranslation} from '../lib/translate-client';
 
 export type Session = {code: string; name: string; challenge?: string; question?: string; description?: string; language?: Language; stage?: number; ended: boolean; showOnJoinPage?: boolean; created?: number; participants?: number; ideas?: number; rooms?: number};
 type View = 'cards' | 'list';
@@ -40,6 +42,8 @@ const sorters: Record<Exclude<Sort, 'custom'>, (a: Session, b: Session) => numbe
 
 export default function WorkshopDashboard({sessions, lang, onCreate, onSettings, reload}: {sessions: Session[]; lang: UiLang; onCreate: () => void; onSettings?: () => void; reload: () => Promise<void>}) {
   const t = (en: string, ar: string) => tx(lang, en, ar);
+  const content=useContentTranslation({account:true},sessions.flatMap(s=>[s.name,s.challenge||'',s.question||'',s.description||'']),lang);
+  const display=(text:string)=>content.tr(text);
   const [prefs, setPrefs] = useState<Prefs>(readPrefs);
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<string[]>([]);
@@ -131,11 +135,11 @@ export default function WorkshopDashboard({sessions, lang, onCreate, onSettings,
   }
   const toggle = (code: string) => setSelected(sel => sel.includes(code) ? sel.filter(c => c !== code) : [...sel, code]);
   const stageLabel = (s: Session) => typeof s.stage === 'number' ? (lang === 'ar' ? stageArabic[s.stage] : stages[s.stage]) : '';
-  const date = (s: Session) => s.created ? new Date(s.created).toLocaleDateString(lang === 'ar' ? 'ar-OM-u-nu-latn' : 'en-GB', {day: 'numeric', month: 'short', year: 'numeric'}) : '';
+  const date = (s: Session) => s.created ? new Date(s.created).toLocaleDateString(lang === 'ar' ? 'ar-OM-u-nu-arab' : 'en-GB', {day: 'numeric', month: 'short', year: 'numeric'}) : '';
 
   const sortOptions: [Sort, string, string][] = [['custom', 'My order (drag)', 'ترتيبي (بالسحب)'], ['newest', 'Newest first', 'الأحدث أولاً'], ['oldest', 'Oldest first', 'الأقدم أولاً'], ['name', 'Name A–Z', 'الاسم أبجدياً'], ['participants', 'Most participants', 'الأكثر مشاركين'], ['ideas', 'Most ideas', 'الأكثر أفكاراً'], ['status', 'Active first', 'النشطة أولاً']];
 
-  const handle = (s: Session) => <button type="button" className="drag-handle" aria-label={t(`Reorder ${s.challenge || s.name}. Drag, or use the arrow keys.`, `إعادة ترتيب ${s.challenge || s.name}. اسحب أو استخدم مفاتيح الأسهم.`)} title={t('Drag to reorder', 'اسحب لإعادة الترتيب')} onPointerDown={e => onHandleDown(e, s.code)} onPointerMove={onHandleMove} onPointerUp={onHandleUp} onPointerCancel={onHandleUp} onKeyDown={e => onHandleKey(e, s.code)}><GripVertical size={18} /></button>;
+  const handle = (s: Session) => <button type="button" className="drag-handle" aria-label={t(`Reorder ${display(s.challenge || s.name)}. Drag, or use the arrow keys.`, `إعادة ترتيب ${display(s.challenge || s.name)}. اسحب أو استخدم مفاتيح الأسهم.`)} title={t('Drag to reorder', 'اسحب لإعادة الترتيب')} onPointerDown={e => onHandleDown(e, s.code)} onPointerMove={onHandleMove} onPointerUp={onHandleUp} onPointerCancel={onHandleUp} onKeyDown={e => onHandleKey(e, s.code)}><GripVertical size={18} /></button>;
   const check = (s: Session) => <button type="button" role="checkbox" aria-checked={selected.includes(s.code)} className={'select-box' + (selected.includes(s.code) ? ' on' : '')} aria-label={t('Select ', 'تحديد ') + (s.challenge || s.name)} onClick={() => toggle(s.code)}>{selected.includes(s.code) ? <CheckSquare size={18} /> : <Square size={18} />}</button>;
   const actions = (s: Session) => <div className="session-actions">
     <button type="button" className="icon-action" title={t('QR code & join link', 'رمز QR ورابط الانضمام')} aria-label={t('Share ', 'مشاركة ') + s.name} onClick={() => setSharing(s)}><QrCode size={16}/></button>
@@ -153,7 +157,7 @@ export default function WorkshopDashboard({sessions, lang, onCreate, onSettings,
 
     <div className="dashboard-toolbar">
       <label className="wall-search dashboard-search"><Search size={18} /><input aria-label={t('Search workshops', 'ابحث في الورش')} placeholder={t('Search by name, challenge or code…', 'ابحث بالاسم أو التحدي أو الرمز…')} value={query} onChange={e => setQuery(e.target.value)} /></label>
-      <div className="seg" role="group" aria-label={t('Show', 'عرض')}>{(['all', 'active', 'ended'] as Filter[]).map(f => <button key={f} aria-pressed={prefs.filter === f} className={prefs.filter === f ? 'active' : ''} onClick={() => update({filter: f})}>{f === 'all' ? t('All', 'الكل') : f === 'active' ? t('Active', 'النشطة') : t('Ended', 'المنتهية')}<span className="seg-count">{counts[f]}</span></button>)}</div>
+      <div className="seg" role="group" aria-label={t('Show', 'عرض')}>{(['all', 'active', 'ended'] as Filter[]).map(f => <button key={f} aria-pressed={prefs.filter === f} className={prefs.filter === f ? 'active' : ''} onClick={() => update({filter: f})}>{f === 'all' ? t('All', 'الكل') : f === 'active' ? t('Active', 'النشطة') : t('Ended', 'المنتهية')}<span className="seg-count">{displayNumber(counts[f],lang)}</span></button>)}</div>
       <label className="sort-select"><ArrowUpDown size={16} /><span className="sr-only">{t('Sort by', 'الترتيب حسب')}</span><select aria-label={t('Sort by', 'الترتيب حسب')} value={prefs.sort} onChange={e => update({sort: e.target.value as Sort})}>{sortOptions.map(([v, en, ar]) => <option key={v} value={v}>{t(en, ar)}</option>)}</select></label>
       <div className="seg" role="group" aria-label={t('Layout', 'طريقة العرض')}><button aria-pressed={prefs.view === 'cards'} className={prefs.view === 'cards' ? 'active' : ''} onClick={() => update({view: 'cards'})} title={t('Cards', 'بطاقات')}><LayoutGrid size={16} /><span className="seg-label">{t('Cards', 'بطاقات')}</span></button><button aria-pressed={prefs.view === 'list'} className={prefs.view === 'list' ? 'active' : ''} onClick={() => update({view: 'list'})} title={t('List', 'قائمة')}><List size={16} /><span className="seg-label">{t('List', 'قائمة')}</span></button></div>
     </div>
@@ -169,18 +173,18 @@ export default function WorkshopDashboard({sessions, lang, onCreate, onSettings,
     : !visible.length ? <div className="empty"><span className="empty-icon"><Search size={26} /></span><h3>{t('No matching workshops', 'لا توجد ورش مطابقة')}</h3>{t('Try another search or show all workshops.', 'جرّب بحثاً آخر أو اعرض كل الورش.')}</div>
     : prefs.view === 'cards' ? <div className="session-grid">{visible.map(s => <article key={s.code} data-workshop={s.code} className={'session-card' + (selected.includes(s.code) ? ' selected' : '') + (dragging === s.code ? ' dragging' : '')}>
         <div className="session-card-top">{handle(s)}{check(s)}{status(s)}<span className="pill" dir="ltr">{s.code}</span></div>
-        <h3 dir="auto"><a className="session-link" href={href(s)}>{s.challenge || s.name}</a></h3>
-        <p className="muted" dir="auto">{s.name}{!s.ended && stageLabel(s) ? ` · ${stageLabel(s)}` : ''}</p>
+        <h3 dir="auto"><a className="session-link" href={href(s)}>{display(s.challenge || s.name)}</a></h3>
+        <p className="muted" dir="auto">{display(s.name)}{!s.ended && stageLabel(s) ? ` · ${stageLabel(s)}` : ''}</p>
         <div className="session-entry-actions"><a className="btn small primary" href={href(s)}><ArrowUpRight size={16}/>{t('Open workshop','فتح الورشة')}</a><button type="button" className="btn small secondary" onClick={()=>setSharing(s)}><QrCode size={16}/>{t('QR & join link','QR ورابط الانضمام')}</button>{s.showOnJoinPage&&<small className="muted">{s.ended?t('Hidden while ended','مخفية عند الانتهاء'):t('Shown on join page','تظهر في صفحة الانضمام')}</small>}</div>
-        <div className="session-card-foot"><span title={t('Participants', 'المشاركون')}><Users size={14} />{s.participants ?? 0}</span><span title={t('Ideas', 'الأفكار')}><Lightbulb size={14} />{s.ideas ?? 0}</span>{!!s.rooms&&<button type="button" className="rooms-count" title={t('Manage team rooms', 'إدارة غرف الفرق')} onClick={() => setRoomsFor(s)}><DoorOpen size={14} />{s.rooms}</button>}<span>{date(s)}</span>{actions(s)}</div>
+        <div className="session-card-foot"><span title={t('Participants', 'المشاركون')}><Users size={14} />{displayNumber(s.participants ?? 0,lang)}</span><span title={t('Ideas', 'الأفكار')}><Lightbulb size={14} />{displayNumber(s.ideas ?? 0,lang)}</span>{!!s.rooms&&<button type="button" className="rooms-count" title={t('Manage team rooms', 'إدارة غرف الفرق')} onClick={() => setRoomsFor(s)}><DoorOpen size={14} />{displayNumber(s.rooms,lang)}</button>}<span>{date(s)}</span>{actions(s)}</div>
       </article>)}</div>
     : <div className="session-list" role="table" aria-label={t('Workshops', 'الورش')}>
         <div className="session-row session-row-head" role="row"><span role="columnheader" /><span role="columnheader" /><span role="columnheader">{t('Workshop', 'الورشة')}</span><span role="columnheader">{t('Status', 'الحالة')}</span><span role="columnheader">{t('Code', 'الرمز')}</span><span role="columnheader" className="num">{t('People', 'المشاركون')}</span><span role="columnheader" className="num">{t('Ideas', 'الأفكار')}</span><span role="columnheader">{t('Created', 'التاريخ')}</span><span role="columnheader" /></div>
         {visible.map(s => <div key={s.code} role="row" data-workshop={s.code} className={'session-row' + (selected.includes(s.code) ? ' selected' : '') + (dragging === s.code ? ' dragging' : '')}>
           <span role="cell">{handle(s)}</span><span role="cell">{check(s)}</span>
-          <span role="cell" className="session-row-title"><a className="session-link" href={href(s)} dir="auto">{s.challenge || s.name}</a><small className="muted" dir="auto">{s.name}{!s.ended && stageLabel(s) ? ` · ${stageLabel(s)}` : ''}</small></span>
+          <span role="cell" className="session-row-title"><a className="session-link" href={href(s)} dir="auto">{display(s.challenge || s.name)}</a><small className="muted" dir="auto">{display(s.name)}{!s.ended && stageLabel(s) ? ` · ${stageLabel(s)}` : ''}</small></span>
           <span role="cell">{status(s)}</span><span role="cell"><span className="pill" dir="ltr">{s.code}</span></span>
-          <span role="cell" className="num"><Users size={14} />{s.participants ?? 0}</span><span role="cell" className="num"><Lightbulb size={14} />{s.ideas ?? 0}</span>
+          <span role="cell" className="num"><Users size={14} />{displayNumber(s.participants ?? 0,lang)}</span><span role="cell" className="num"><Lightbulb size={14} />{displayNumber(s.ideas ?? 0,lang)}</span>
           <span role="cell" className="muted">{date(s)}</span><span role="cell">{actions(s)}</span>
         </div>)}
       </div>}

@@ -1,4 +1,5 @@
 "use client";
+import {displayNumber} from './i18n';
 import {useEffect, useMemo, useState} from 'react';
 import {Lightbulb, Sparkles, Target, MessageSquareQuote, Clock, GraduationCap, Check, X, RotateCcw, Users, Bot, Handshake, Activity} from 'lucide-react';
 import type {Idea, Language} from './workshop';
@@ -65,7 +66,7 @@ export function HumanAiQuiz({lang}: {lang: Language}) {
   function choose(role: Role) { if (answer) return; setAnswer(role); if (role === item.answer) setScore(s => s + 1); }
   function next() { setAnswer(null); setIndex(i => i + 1); }
   return <section className="quiz" aria-label={lang === 'ar' ? 'من يقوم بالمهمة؟' : 'Who should do it?'}>
-    <div className="quiz-head"><span className="eyebrow">{lang === 'ar' ? 'نشاط · الوعي بالذكاء الاصطناعي' : 'ACTIVITY · AI LITERACY'}</span><span className="pill">{Math.min(index + 1, roleQuiz.length)}/{roleQuiz.length}</span></div>
+    <div className="quiz-head"><span className="eyebrow">{lang === 'ar' ? 'نشاط · الوعي بالذكاء الاصطناعي' : 'ACTIVITY · AI LITERACY'}</span><span className="pill">{displayNumber(Math.min(index + 1, roleQuiz.length),lang)}/{displayNumber(roleQuiz.length,lang)}</span></div>
     {done ? <div className="quiz-done"><h3>{lang === 'ar' ? `أحسنت! ${score} من ${roleQuiz.length}` : `Nice work! ${score} of ${roleQuiz.length}`}</h3><p>{lang === 'ar' ? 'القاعدة: الإنسان يحدد الهدف ويتحمل المسؤولية، والذكاء الاصطناعي يسرّع العمل، والإنسان يتحقق.' : 'The pattern: humans set direction and stay accountable, AI speeds up the work, humans verify.'}</p><button className="btn secondary small" onClick={() => { setIndex(0); setScore(0); setAnswer(null); }}><RotateCcw size={15} />{lang === 'ar' ? 'أعد المحاولة' : 'Play again'}</button></div> : <>
       <h3 className="quiz-task">{pick(lang, item.task)}</h3>
       <p className="muted">{lang === 'ar' ? 'من يجب أن يقوم بهذه المهمة؟' : 'Who should own this task?'}</p>
@@ -109,7 +110,7 @@ export function PromptChecklist({prompt, lang}: {prompt: string; lang: Language}
   const checks = useMemo(() => promptChecks(prompt), [prompt]);
   const score = checks.filter(c => c.ok).length;
   return <div className="prompt-check">
-    <div className="prompt-check-head"><strong>{lang === 'ar' ? 'جودة التعليمات' : 'Prompt quality'}</strong><span className={'pill ' + (score === checks.length ? 'lime' : '')}>{score}/{checks.length}</span></div>
+    <div className="prompt-check-head"><strong>{lang === 'ar' ? 'جودة التعليمات' : 'Prompt quality'}</strong><span className={'pill ' + (score === checks.length ? 'lime' : '')}>{displayNumber(score,lang)}/{displayNumber(checks.length,lang)}</span></div>
     <p className="inline-help">{lang === 'ar' ? 'التعليمات الجيدة لأداة الذكاء الاصطناعي تحتوي على هذه العناصر. احذف أحدها وستلاحظ الفرق في النتيجة.' : 'Strong prompts for AI tools contain these ingredients. Remove one and the result usually gets worse.'}</p>
     <ul>{checks.map(c => <li key={c.key} className={c.ok ? 'ok' : ''}>{c.ok ? <Check size={14} /> : <X size={14} />}{pick(lang, c.label)}</li>)}</ul>
   </div>;

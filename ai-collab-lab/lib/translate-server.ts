@@ -8,6 +8,8 @@
  */
 import Anthropic from '@anthropic-ai/sdk';
 import { database, hash } from '../db/server';
+import {detectLang,needsTranslation} from './localization';
+export {detectLang};
 
 export type Provider = 'off' | 'deepl' | 'google' | 'libretranslate' | 'claude';
 export type Target = 'en' | 'ar';
@@ -35,35 +37,30 @@ export function mergeTranslationConfig(current: TranslationConfig, input: Record
 }
 
 /** Mostly Arabic letters → 'ar'; mostly Latin letters → 'en'; otherwise 'other' (numbers, emoji, codes). */
-export function detectLang(text: string): Target | 'other' {
-  const ar = (text.match(/[؀-ۿݐ-ݿﭐ-﷿ﹰ-﻿]/g) || []).length;
-  const en = (text.match(/[A-Za-z]/g) || []).length;
-  if (ar + en < 2) return 'other';
-  return ar >= en ? 'ar' : 'en';
-}
+
 
 const SYSTEM = 'You translate short contributions from a live university innovation workshop. Translate each input string into the requested language, faithfully and naturally, keeping the meaning, tone, names, numbers, emoji and line breaks. Keep technical terms commonly used in that language. If a string is already in the target language, return it unchanged. Return exactly one translation per input, in the same order. Respond directly without preamble.';
 
 async function callProvider(cfg: TranslationConfig, texts: string[], target: Target): Promise<string[]> {
   if (cfg.provider === 'deepl') {
     const host = cfg.apiKey.endsWith(':fx') ? 'https://api-free.deepl.com' : 'https://api.deepl.com';
-    const r = await fetch(host + '/v2/translate', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'DeepL-Auth-Key ' + cfg.apiKey }, body: JSON.stringify({ text: texts, target_lang: target === 'ar' ? 'AR' : 'EN-GB' }) });
+    const r = await fetch(host + '/v2/translate', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'DeepL-Auth-Key ' + cfg.apiKey }, signal:AbortSignal.timeout(20000), body: JSON.stringify({ text: texts, target_lang: target === 'ar' ? 'AR' : 'EN-GB' }) });
     if (!r.ok) throw new Error('DeepL ' + r.status);
     return ((await r.json()) as { translations: { text: string }[] }).translations.map(t => t.text);
   }
   if (cfg.provider === 'google') {
-    const r = await fetch('https://translation.googleapis.com/language/translate/v2?key=' + encodeURIComponent(cfg.apiKey), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ q: texts, target, format: 'text' }) });
+    const r = await fetch('https://translation.googleapis.com/language/translate/v2?key=' + encodeURIComponent(cfg.apiKey), { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal:AbortSignal.timeout(20000), body: JSON.stringify({ q: texts, target, format: 'text' }) });
     if (!r.ok) throw new Error('Google ' + r.status);
     return ((await r.json()) as { data: { translations: { translatedText: string }[] } }).data.translations.map(t => t.translatedText);
   }
   if (cfg.provider === 'libretranslate') {
-    const r = await fetch(cfg.endpoint + '/translate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ q: texts, source: 'auto', target, format: 'text', ...(cfg.apiKey ? { api_key: cfg.apiKey } : {}) }) });
+    const r = await fetch(cfg.endpoint + '/translate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal:AbortSignal.timeout(20000), body: JSON.stringify({ q: texts, source: 'auto', target, format: 'text', ...(cfg.apiKey ? { api_key: cfg.apiKey } : {}) }) });
     if (!r.ok) throw new Error('LibreTranslate ' + r.status);
     const out = ((await r.json()) as { translatedText: string | string[] }).translatedText;
     return Array.isArray(out) ? out : [out];
   }
   if (cfg.provider === 'claude') {
-    const client = new Anthropic({ apiKey: cfg.apiKey, maxRetries: 2, timeout: 60_000 });
+    const client = new Anthropic({ apiKey: cfg.apiKey, maxRetries: 0, timeout: 20000 });
     const response = await client.beta.messages.create({
       model: cfg.model || 'claude-opus-5-5',
       max_tokens: 16000,
@@ -106,7 +103,7 @@ export async function translateTexts(code: string, texts: string[], target: Targ
   const cfg = await readTranslationConfig();
   if (cfg.provider === 'off') return {};
   const db = database();
-  const wanted = [...new Set(texts)].filter(t => detectLang(t) !== target && detectLang(t) !== 'other');
+  const wanted = [...new Set(texts)].filter(t => needsTranslation(t,target));
   const keys = await Promise.all(wanted.map(t => hash(target + '\n' + t)));
   const result: Record<string, string> = {};
   const misses: { text: string; key: string }[] = [];
@@ -125,8 +122,8 @@ export async function translateTexts(code: string, texts: string[], target: Targ
     pending.push((async () => {
       try {
         const out = await callProvider(cfg, items.map(i => i.text), target);
-        if (out.length !== items.length) throw new Error('Translation count mismatch');
-        await db.batch(items.map((item, n) => db.prepare('INSERT OR REPLACE INTO translations(key,target,text,provider,created) VALUES(?,?,?,?,?)').bind(item.key, target, out[n].slice(0, 4000), cfg.provider, Date.now())));
+        if(out.length!==items.length||out.some(v=>typeof v!=='string'||!v.trim()))throw new Error('Translation count mismatch or empty result');
+        await db.batch(items.map((item, n) => db.prepare('INSERT OR REPLACE INTO translations(key,target,text,provider,created) VALUES(?,?,?,?,?)').bind(item.key, target, out[n].slice(0, 50000), cfg.provider, Date.now())));
         items.forEach((item, n) => item.resolve(out[n]));
       } catch (e) { console.error('Translation failed', (e as Error).message); items.forEach(item => item.resolve(null)); }
     })());
