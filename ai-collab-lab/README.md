@@ -2,6 +2,15 @@
 
 A live UTAS workshop platform: Think · Share · Improve · Vote · Build.
 
+## Workshop QR codes and direct entry
+
+- The public **Join** page lists only active main workshops explicitly marked **Show on join page**. Existing and new workshops are unlisted by default. Team rooms never appear in this directory.
+- Presenter dashboard: choose **QR & join link** on a workshop card (or the QR icon in List view). The sharing dialog displays a scannable QR, **Join workshop**, **Copy join link**, and the **Show on join page** switch. The same switch is available in Edit details and workshop Settings.
+- Public cards show the workshop name, challenge, QR code and direct **Join workshop** button. The QR and button point to the same participant URL: `/workshops/join?code=UTAS-…`. Scanning/clicking skips code entry, not the nickname or room-authorization requirements.
+- Ending a workshop hides it from the directory; reopening restores its previous listing preference. Unlisting removes discoverability but does not revoke previously shared links. No workshop is automatically opted in during deployment.
+- The public directory endpoint is `GET /api/workshop?directory=1`. It exposes only the code, name, challenge and language of listed active main workshops; no participant identities, content, admin keys, invite tokens, or team rooms. It is not cached and the page refreshes every 30 seconds and on returning to the tab.
+- Verify directory privacy and direct-link entry with `scripts/verify-workshop-entry.mjs` against a localhost test server using `WORKSHOP_TEST_ORIGIN`.
+
 ## Team participation and leadership
 
 - Participants without a team start on **Team rooms**. Search by team name, project, or code; filter **All teams / Can join / Can visit**. New visitors default to readable Cards while existing view preferences are kept.

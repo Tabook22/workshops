@@ -1189,3 +1189,35 @@ button.person-icon:focus-visible { box-shadow: 0 0 0 2px var(--panel), 0 0 0 4px
  .room-banner .actions { gap: 8px; }
  .room-banner .actions .btn { min-height: 44px; }
 }
+
+/* Opt-in workshop discovery and participant sharing. QR codes retain a white quiet zone. */
+.join-directory-page { max-width: 1040px; width: 100%; }
+.workshop-directory { width: 100%; margin: 12px 0 28px; }
+.workshop-directory h2,.join-code-heading h2 { font-size: 22px; margin: 0 0 8px; }
+.workshop-directory>div>p,.join-code-heading p { margin: 0 0 18px; }
+.workshop-directory-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,420px),1fr)); gap: 16px; }
+.workshop-join-card { display: flex; align-items: center; gap: 20px; padding: 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--panel); box-shadow: var(--shadow-sm); min-width: 0; }
+.workshop-join-qr { flex: 0 0 176px; display: grid; place-items: center; min-height: 176px; background: #fff; border-radius: 12px; overflow: hidden; color: #101216; }
+.workshop-join-info { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; min-width: 0; flex: 1; }
+.workshop-join-info h3 { font-size: 20px; margin: 0; overflow-wrap: anywhere; }
+.workshop-join-info p { margin: 0; color: var(--muted); font-size: 14px; overflow-wrap: anywhere; }
+.workshop-join-info .btn { width: 100%; }
+.workshop-join-info small { color: var(--muted); font-size: 12px; line-height: 1.5; }
+.workshop-join-code { font-size: 13px; font-weight: 700; letter-spacing: .04em; color: var(--muted); }
+.workshop-share-url { font-size: 12px; color: var(--accent); overflow-wrap: anywhere; word-break: break-all; }
+.directory-empty { display: flex; gap: 14px; align-items: flex-start; padding: 22px; }
+.directory-empty>svg { flex-shrink: 0; color: var(--accent); }
+.directory-empty p { font-size: 14px; margin: 8px 0 0; color: var(--muted); }
+.join-code-heading { width: 100%; max-width: 540px; }
+.join-directory-page>form { width: 100%; max-width: 540px; }
+.session-entry-actions { display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 0 4px; }
+.session-entry-actions small { width: 100%; }
+.modal .workshop-join-card { box-shadow: none; }
+@media(max-width:560px){
+ .workshop-join-card { flex-direction: column; align-items: stretch; padding: 20px; gap: 16px; }
+ .workshop-join-qr { align-self: center; flex-basis: auto; width: 176px; }
+ .workshop-join-info { align-items: stretch; }
+ .workshop-join-info>.pill,.workshop-join-code { align-self: flex-start; }
+ .join-directory-page { padding-inline: 18px; }
+ .join-directory-page .page-top { flex-wrap: wrap; gap: 14px; }
+}

@@ -1,12 +1,13 @@
 import {useEffect, useMemo, useRef, useState} from 'react';
-import {Plus, Users, Lightbulb, ArrowUpRight, Search, LayoutGrid, List, GripVertical, Pencil, Trash2, Download, Power, RotateCcw, CheckSquare, Square, X, ArrowUpDown, Settings2, DoorOpen} from 'lucide-react';
+import {Plus, Users, Lightbulb, ArrowUpRight, Search, LayoutGrid, List, GripVertical, Pencil, Trash2, Download, Power, RotateCcw, CheckSquare, Square, X, ArrowUpDown, Settings2, DoorOpen, QrCode} from 'lucide-react';
 import {Modal, action, download, useToast} from '../lib/client';
 import {stages, stageArabic, type Language} from '../lib/workshop';
 import {tx, type UiLang} from '../lib/i18n';
 import {appUrl} from '../lib/urls';
 import {WorkshopRooms} from '../lib/team-rooms';
+import {WorkshopJoinCard} from '../lib/workshop-entry';
 
-export type Session = {code: string; name: string; challenge?: string; question?: string; description?: string; language?: Language; stage?: number; ended: boolean; created?: number; participants?: number; ideas?: number; rooms?: number};
+export type Session = {code: string; name: string; challenge?: string; question?: string; description?: string; language?: Language; stage?: number; ended: boolean; showOnJoinPage?: boolean; created?: number; participants?: number; ideas?: number; rooms?: number};
 type View = 'cards' | 'list';
 type Sort = 'custom' | 'newest' | 'oldest' | 'name' | 'participants' | 'ideas' | 'status';
 type Filter = 'all' | 'active' | 'ended';
@@ -45,6 +46,7 @@ export default function WorkshopDashboard({sessions, lang, onCreate, onSettings,
   const [editing, setEditing] = useState<Session | null>(null);
   const [deleting, setDeleting] = useState<Session[] | null>(null);
   const [roomsFor, setRoomsFor] = useState<Session | null>(null);
+  const [sharing, setSharing] = useState<Session | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [dragging, setDragging] = useState<string | null>(null);
@@ -136,6 +138,7 @@ export default function WorkshopDashboard({sessions, lang, onCreate, onSettings,
   const handle = (s: Session) => <button type="button" className="drag-handle" aria-label={t(`Reorder ${s.challenge || s.name}. Drag, or use the arrow keys.`, `إعادة ترتيب ${s.challenge || s.name}. اسحب أو استخدم مفاتيح الأسهم.`)} title={t('Drag to reorder', 'اسحب لإعادة الترتيب')} onPointerDown={e => onHandleDown(e, s.code)} onPointerMove={onHandleMove} onPointerUp={onHandleUp} onPointerCancel={onHandleUp} onKeyDown={e => onHandleKey(e, s.code)}><GripVertical size={18} /></button>;
   const check = (s: Session) => <button type="button" role="checkbox" aria-checked={selected.includes(s.code)} className={'select-box' + (selected.includes(s.code) ? ' on' : '')} aria-label={t('Select ', 'تحديد ') + (s.challenge || s.name)} onClick={() => toggle(s.code)}>{selected.includes(s.code) ? <CheckSquare size={18} /> : <Square size={18} />}</button>;
   const actions = (s: Session) => <div className="session-actions">
+    <button type="button" className="icon-action" title={t('QR code & join link', 'رمز QR ورابط الانضمام')} aria-label={t('Share ', 'مشاركة ') + s.name} onClick={() => setSharing(s)}><QrCode size={16}/></button>
     <button type="button" className="icon-action" title={t('Edit details', 'تعديل التفاصيل')} aria-label={t('Edit ', 'تعديل ') + (s.challenge || s.name)} onClick={() => setEditing(s)} disabled={busy}><Pencil size={16} /></button>
     <button type="button" className="icon-action" title={t('Team rooms', 'غرف الفرق')} aria-label={t('Team rooms of ', 'غرف الفرق في ') + (s.challenge || s.name)} onClick={() => setRoomsFor(s)} disabled={busy}><DoorOpen size={16} /></button>
     <button type="button" className="icon-action" title={s.ended ? t('Reopen workshop', 'إعادة فتح الورشة') : t('End workshop', 'إنهاء الورشة')} aria-label={(s.ended ? t('Reopen ', 'إعادة فتح ') : t('End ', 'إنهاء ')) + (s.challenge || s.name)} onClick={() => void setEnded(s, !s.ended)} disabled={busy}>{s.ended ? <RotateCcw size={16} /> : <Power size={16} />}</button>
@@ -168,6 +171,7 @@ export default function WorkshopDashboard({sessions, lang, onCreate, onSettings,
         <div className="session-card-top">{handle(s)}{check(s)}{status(s)}<span className="pill" dir="ltr">{s.code}</span></div>
         <h3 dir="auto"><a className="session-link" href={href(s)}>{s.challenge || s.name}</a></h3>
         <p className="muted" dir="auto">{s.name}{!s.ended && stageLabel(s) ? ` · ${stageLabel(s)}` : ''}</p>
+        <div className="session-entry-actions"><a className="btn small primary" href={href(s)}><ArrowUpRight size={16}/>{t('Open workshop','فتح الورشة')}</a><button type="button" className="btn small secondary" onClick={()=>setSharing(s)}><QrCode size={16}/>{t('QR & join link','QR ورابط الانضمام')}</button>{s.showOnJoinPage&&<small className="muted">{s.ended?t('Hidden while ended','مخفية عند الانتهاء'):t('Shown on join page','تظهر في صفحة الانضمام')}</small>}</div>
         <div className="session-card-foot"><span title={t('Participants', 'المشاركون')}><Users size={14} />{s.participants ?? 0}</span><span title={t('Ideas', 'الأفكار')}><Lightbulb size={14} />{s.ideas ?? 0}</span>{!!s.rooms&&<button type="button" className="rooms-count" title={t('Manage team rooms', 'إدارة غرف الفرق')} onClick={() => setRoomsFor(s)}><DoorOpen size={14} />{s.rooms}</button>}<span>{date(s)}</span>{actions(s)}</div>
       </article>)}</div>
     : <div className="session-list" role="table" aria-label={t('Workshops', 'الورش')}>
@@ -183,6 +187,7 @@ export default function WorkshopDashboard({sessions, lang, onCreate, onSettings,
 
     {selected.length > 0 && <div className="bulk-bar" role="region" aria-label={t('Selected workshops', 'الورش المحددة')}><strong>{t(`${selected.length} selected`, `${selected.length} محددة`)}</strong><button className="btn small secondary" disabled={busy} onClick={() => void backup(sessions.filter(s => selected.includes(s.code)))}><Download size={15} />{t('Download backup', 'تنزيل نسخة احتياطية')}</button><button className="btn small secondary" disabled={busy} onClick={() => void run(() => Promise.all(sessions.filter(s => selected.includes(s.code) && !s.ended).map(s => action({action: 'control', code: s.code, patch: {ended: true}}))), t('Selected workshops ended', 'تم إنهاء الورش المحددة'))}><Power size={15} />{t('End', 'إنهاء')}</button><button className="btn small danger" disabled={busy} onClick={() => setDeleting(sessions.filter(s => selected.includes(s.code)))}><Trash2 size={15} />{t('Delete', 'حذف')}</button><button className="btn small ghost icon-btn" aria-label={t('Clear selection', 'إلغاء التحديد')} onClick={() => setSelected([])}><X size={16} /></button></div>}
 
+    {sharing && <Modal title={t('Invite participants','دعوة المشاركين')} onClose={()=>setSharing(null)}><WorkshopJoinCard workshop={{code:sharing.code,name:sharing.name,challenge:sharing.challenge||sharing.name,language:sharing.language||'en'}} lang={lang} copy/><label className="toggle-row" style={{marginTop:18}}><input type="checkbox" role="switch" checked={!!sharing.showOnJoinPage} disabled={busy} onChange={e=>{const shown=e.target.checked;void run(()=>action({action:'control',code:sharing.code,patch:{showOnJoinPage:shown}}),shown?t('Workshop shown on join page','تظهر الورشة في صفحة الانضمام'):t('Workshop hidden from join page','أُخفيت الورشة من صفحة الانضمام')).then(ok=>{if(ok)setSharing({...sharing,showOnJoinPage:shown})})}}/><span className="toggle-text"><strong>{t('Show on join page','إظهار في صفحة الانضمام')}</strong><small>{t('Anyone visiting the join page can see its name, QR code and join link. Ended workshops remain hidden.','يمكن لأي زائر لصفحة الانضمام رؤية الاسم ورمز QR ورابط الانضمام. تظل الورش المنتهية مخفية.')}</small></span></label>{sharing.ended&&<p className="inline-help">{t('This workshop has ended. Reopen it before inviting participants.','انتهت هذه الورشة. أعد فتحها قبل دعوة المشاركين.')}</p>}{error&&<p role="alert" className="error">{error}</p>}</Modal>}
     {editing && <EditWorkshop session={editing} lang={lang} busy={busy} onClose={() => setEditing(null)} onSave={patch => run(() => action({action: 'control', code: editing.code, patch}), t('Workshop details saved', 'تم حفظ تفاصيل الورشة')).then(ok => { if (ok) setEditing(null); })} />}
     {roomsFor && <Modal wide title={t('Team rooms', 'غرف الفرق') + ' · ' + (roomsFor.challenge || roomsFor.name)} onClose={() => { setRoomsFor(null); void reload(); }}><WorkshopRooms code={roomsFor.code} lang={lang} /></Modal>}
     {deleting && <DeleteWorkshops list={deleting} lang={lang} busy={busy} onClose={() => setDeleting(null)} onBackup={() => void backup(deleting)} onConfirm={async () => { const list = deleting; const ok = await run(async () => { for (const s of list) await action({action: 'deleteWorkshop', code: s.code, confirm: s.code}); }, list.length === 1 ? t('Workshop deleted', 'تم حذف الورشة') : t(`${list.length} workshops deleted`, `تم حذف ${list.length} ورش`)); if (ok) { setDeleting(null); setSelected(sel => sel.filter(c => !list.some(s => s.code === c))); } }} />}
@@ -192,7 +197,7 @@ export default function WorkshopDashboard({sessions, lang, onCreate, onSettings,
 
 function EditWorkshop({session, lang, busy, onClose, onSave}: {session: Session; lang: UiLang; busy: boolean; onClose: () => void; onSave: (patch: Record<string, unknown>) => void}) {
   const t = (en: string, ar: string) => tx(lang, en, ar);
-  const [form, setForm] = useState({name: session.name || '', challenge: session.challenge || '', question: session.question || '', description: session.description || '', language: session.language || 'en'});
+  const [form, setForm] = useState({name: session.name || '', challenge: session.challenge || '', question: session.question || '', description: session.description || '', language: session.language || 'en',showOnJoinPage:!!session.showOnJoinPage});
   const dir = form.language === 'ar' ? 'rtl' : 'auto';
   return <Modal title={t('Edit workshop details', 'تعديل تفاصيل الورشة')} onClose={onClose}>
     <form className="stack" onSubmit={e => { e.preventDefault(); onSave(form); }}>
@@ -202,6 +207,7 @@ function EditWorkshop({session, lang, busy, onClose, onSave}: {session: Session;
       <label>{t('Challenge question', 'سؤال التحدي')}<textarea dir={dir} required maxLength={1000} value={form.question} onChange={e => setForm({...form, question: e.target.value})} /></label>
       <label>{t('Description', 'الوصف')}<input dir={dir} maxLength={1000} value={form.description} onChange={e => setForm({...form, description: e.target.value})} /></label>
       <label>{t('Workshop language', 'لغة الورشة')}<select value={form.language} onChange={e => setForm({...form, language: e.target.value as Language})}><option value="en">English</option><option value="ar">العربية</option><option value="both">{t('Bilingual (English + Arabic)', 'ثنائي اللغة (العربية + الإنجليزية)')}</option></select></label>
+      <label className="toggle-row"><input type="checkbox" role="switch" checked={form.showOnJoinPage} onChange={e=>setForm({...form,showOnJoinPage:e.target.checked})}/><span className="toggle-text"><strong>{t('Show on join page','إظهار في صفحة الانضمام')}</strong><small>{t('Publicly share the workshop name, QR code and direct Join button. Ended workshops are hidden.','اعرض اسم الورشة ورمز QR وزر الانضمام للعامة. تُخفى الورش المنتهية.')}</small></span></label>
       <div className="actions"><button className="btn primary" disabled={busy}>{busy ? t('Saving…', 'جارٍ الحفظ…') : t('Save changes', 'حفظ التغييرات')}</button><button type="button" className="btn secondary" onClick={onClose}>{t('Cancel', 'إلغاء')}</button><a className="btn ghost" href={appUrl('/presenter?code=') + session.code}><ArrowUpRight size={16} />{t('Open workshop', 'فتح الورشة')}</a></div>
     </form>
   </Modal>;
