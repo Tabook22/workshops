@@ -101,7 +101,7 @@ function spend(code: string, chars: number, limit: number) {
 /** Translates texts (already validated as workshop content) into target; returns only those it could translate. */
 export async function translateTexts(code: string, texts: string[], target: Target): Promise<Record<string, string>> {
   const cfg = await readTranslationConfig();
-  if (cfg.provider === 'off') return {};
+  // Reviewed/cache translations remain readable even when machine translation is off.
   const db = database();
   const wanted = [...new Set(texts)].filter(t => needsTranslation(t,target));
   const keys = await Promise.all(wanted.map(t => hash(target + '\n' + t)));
@@ -113,6 +113,7 @@ export async function translateTexts(code: string, texts: string[], target: Targ
     const found = new Map(((rows.results || []) as { key: string; text: string }[]).map(r => [r.key, r.text]));
     slice.forEach((k, j) => { const text = wanted[i + j]; const hit = found.get(k); if (hit !== undefined) result[text] = hit; else misses.push({ text, key: k }); });
   }
+  if(cfg.provider==='off')return result;
   // Group misses into provider batches (≤25 texts, ≤8000 characters); join any batch already in flight.
   const pending: Promise<void>[] = [];
   let batch: { text: string; key: string; resolve: (v: string | null) => void }[] = [], size = 0;

@@ -19,9 +19,9 @@ export async function POST(req:Request){
   const target=body.target==='ar'||body.target==='en'?body.target as Target:null;if(!target)return failure('Invalid request.');
   const allowed=await allowedTexts(req,body);if(allowed instanceof Response)return allowed;
   const texts=[...new Set((Array.isArray(body.texts)?body.texts:[]).filter((t):t is string=>typeof t==='string'&&t.length<=25000&&allowed.has(t)))].slice(0,80);
-  const config=await readTranslationConfig();if(config.provider==='off')return reply({enabled:false,translations:{}});
+  const config=await readTranslationConfig();
   const code=body.app?'app':body.account?'account':body.directory?'directory':clean(body.code,20).toUpperCase();
   const translations=texts.length?await translateTexts(code,texts,target):{};
-  return reply({enabled:true,translations});
+  return reply({enabled:config.provider!=='off',translations});
  }catch(e){console.error('Translate request failed',(e as Error).message);return reply({enabled:true,translations:{},error:'Translation is temporarily unavailable.'},503)}
 }

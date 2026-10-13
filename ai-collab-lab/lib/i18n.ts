@@ -9,6 +9,7 @@
  */
 import {useSyncExternalStore} from 'react';
 import {localizeNumbers} from './localization';
+import {builtInTranslation} from './ui-translation';
 
 export type UiLang = 'en' | 'ar';
 const KEY = 'ai-collab-lang';
@@ -53,7 +54,7 @@ export function useUiLang(): UiLang {
   return useSyncExternalStore(subscribe, () => { init(); return current; }, () => 'en');
 }
 /** Pick the English or Arabic text. */
-export const tx = (lang: string, en: string, ar: string) => localizeNumbers(lang === 'ar' ? ar : en,lang);
+export const tx = (lang: string, en: string, ar: string) => localizeNumbers(lang === 'ar' ? (ar||builtInTranslation(en,'ar')||en) : (en||builtInTranslation(ar,'en')||ar),lang);
 
 const errors: Record<string, string> = {
   'Workshop not found. Check the session code.': 'لم يتم العثور على الورشة. تحقق من رمز الجلسة.',

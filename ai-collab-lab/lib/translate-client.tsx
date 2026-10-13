@@ -1,6 +1,7 @@
 "use client";
 import {useEffect,useSyncExternalStore} from 'react';
 import {Languages} from 'lucide-react';
+import {builtInTranslation} from './ui-translation';
 import {appUrl} from './urls';
 import type {Language,Snapshot} from './workshop';
 import {detectLang,needsTranslation,snapshotTexts,translatedSnapshot,localizeNumbers,type Target} from './localization';
@@ -28,8 +29,8 @@ async function fetchTexts(scope:Scope,target:Target,texts:string[]){
   const data=await res.json() as {enabled?:boolean;translations?:Record<string,string>;error?:string};
   if(!res.ok)throw new Error(data.error||'Translation unavailable');
   for(const [source,text] of Object.entries(data.translations||{}))if(texts.includes(source)&&typeof text==='string'&&text.trim())cache.set(key(target,source),text);
-  const incomplete=texts.some(t=>!cache.has(key(target,t)));
-  states.set(sk,{pending:false,enabled:data.enabled!==false,error:data.enabled===false?'disabled':incomplete||data.error?'unavailable':'',retryAt:incomplete||data.enabled===false?Date.now()+30000:0});
+  const incomplete=texts.some(t=>!cache.has(key(target,t))&&!builtInTranslation(t,target));
+  states.set(sk,{pending:false,enabled:data.enabled!==false,error:incomplete?(data.enabled===false?'disabled':'unavailable'):'',retryAt:incomplete||data.enabled===false?Date.now()+30000:0});
  }catch{states.set(sk,{pending:false,enabled:state?.enabled??null,error:'unavailable',retryAt:Date.now()+15000})}
  finally{clearTimeout(timeout);bump()}
 }
@@ -39,13 +40,13 @@ export function useContentTranslation(scope:Scope,texts:string[],lang:Language){
  const sk=JSON.stringify(scope),serialized=JSON.stringify([...new Set(texts.filter(Boolean))]);
  useEffect(()=>{
   if(!target)return;let stopped=false;
-  const request=()=>{if(stopped)return;const all=JSON.parse(serialized) as string[];const missing=all.filter(t=>needsTranslation(t,target)&&!cache.has(key(target,t)));if(missing.length)void fetchTexts(JSON.parse(sk),target,missing.slice(0,60))};
+  const request=()=>{if(stopped)return;const all=JSON.parse(serialized) as string[];const missing=all.filter(t=>needsTranslation(t,target)&&!cache.has(key(target,t))&&!builtInTranslation(t,target));if(missing.length)void fetchTexts(JSON.parse(sk),target,missing.slice(0,60))};
   const debounce=setTimeout(request,0),timer=setInterval(request,5000);return()=>{stopped=true;clearTimeout(debounce);clearInterval(timer)};
  },[sk,serialized,target,v]);
  const state=target?states.get(sk+':'+target):undefined;
- const missing=target?texts.some(t=>needsTranslation(t,target)&&!cache.has(key(target,t))):false;
- const tr=(text:string)=>!target||showOriginal?text:localizeNumbers(cache.get(key(target,text))||text,target);
- return{tr,pending:missing&&(!state||state.pending||!state.error),disabled:missing&&state?.enabled===false,error:missing?state?.error||'':'',translated:!!target&&texts.some(t=>cache.has(key(target,t))),retry:()=>{if(target){states.delete(sk+':'+target);bump()}}};
+ const missing=target?texts.some(t=>needsTranslation(t,target)&&!cache.has(key(target,t))&&!builtInTranslation(t,target)):false;
+ const tr=(text:string)=>!target||showOriginal?text:localizeNumbers(builtInTranslation(text,target)||cache.get(key(target,text))||text,target);
+ return{tr,pending:missing&&(!state||state.pending||!state.error),disabled:missing&&state?.enabled===false,error:missing?state?.error||'':'',translated:!!target&&texts.some(t=>cache.has(key(target,t))||!!builtInTranslation(t,target)),retry:()=>{if(target){states.delete(sk+':'+target);bump()}}};
 }
 export function useTranslatedSnapshot(data:Snapshot|null,lang:Language):Snapshot|null{
  const content=useContentTranslation({code:data?.code||''},data?snapshotTexts(data):[],lang);

@@ -1,0 +1,4326 @@
+[
+  [
+    " (if your server requires one)",
+    " (إن كان خادمك يتطلبه)"
+  ],
+  [
+    " ✓ selected for the product",
+    " ✓ مختارة للمنتج"
+  ],
+  [
+    "“Does the prototype solve our original problem? What would you test first?”",
+    "«هل يحل النموذج مشكلتنا الأصلية؟ ما أول شيء ستختبره؟»"
+  ],
+  [
+    "“If we could only build three features, which three — and why?”",
+    "«لو استطعنا بناء ثلاث ميزات فقط، فأيها — ولماذا؟»"
+  ],
+  [
+    "“Think of the last time this was difficult for you. What happened?”",
+    "«تذكّر آخر مرة كان فيها هذا صعباً عليك. ماذا حدث؟»"
+  ],
+  [
+    "“What could help?” Everyone suggests solutions — simple ideas are welcome.",
+    "«ما الذي قد يساعد؟» يقترح الجميع حلولاً — والأفكار البسيطة مرحّب بها."
+  ],
+  [
+    "“What is difficult for students?” Everyone shares real problems.",
+    "«ما الصعب على الطلاب؟» يشارك الجميع مشكلات حقيقية."
+  ],
+  [
+    "“What is one risk — and how would you reduce it?”",
+    "«ما أحد المخاطر — وكيف تقلله؟»"
+  ],
+  [
+    "“What would you build if it could not fail?”",
+    "«ماذا ستبني لو كان النجاح مضموناً؟»"
+  ],
+  [
+    "1. Choose your core features",
+    "1. اختر الميزات الأساسية"
+  ],
+  [
+    "1. Set up your workshop",
+    "1. إعداد الورشة"
+  ],
+  [
+    "10–20 min",
+    "10–20 دقيقة"
+  ],
+  [
+    "2. Invite the room",
+    "2. دعوة المشاركين"
+  ],
+  [
+    "2. Review your product canvas",
+    "2. راجع مخطط المنتج"
+  ],
+  [
+    "3–40 characters: letters, numbers, dot, dash, underscore or @.",
+    "من 3 إلى 40 حرفاً: حروف أو أرقام أو نقطة أو شرطة أو @."
+  ],
+  [
+    "3. Lead the nine stages",
+    "3. إدارة المراحل التسع"
+  ],
+  [
+    "3. Turn your ideas into a build prompt",
+    "3. حوّل أفكارك إلى تعليمات للبناء"
+  ],
+  [
+    "5–7 min",
+    "5–7 دقائق"
+  ],
+  [
+    "6–8 min",
+    "6–8 دقائق"
+  ],
+  [
+    "8–10 min",
+    "8–10 دقائق"
+  ],
+  [
+    "A concrete way to solve the selected problem.",
+    "طريقة ملموسة لحل المشكلة المختارة."
+  ],
+  [
+    "A feature that lets users …",
+    "ميزة تتيح للمستخدمين …"
+  ],
+  [
+    "A first name or nickname is enough. No account or password needed.",
+    "يكفي الاسم الأول أو اسم مستعار. لا حاجة لحساب أو كلمة مرور."
+  ],
+  [
+    "A good challenge question names who it is for and leaves room for many answers. Start with “How can we…”.",
+    "سؤال التحدي الجيد يحدد الفئة المستهدفة ويترك مجالاً لإجابات كثيرة. ابدأ بـ «كيف يمكننا…»."
+  ],
+  [
+    "A moment to think",
+    "لحظة للتفكير"
+  ],
+  [
+    "A new version of the app is ready.",
+    "نسخة جديدة من التطبيق جاهزة."
+  ],
+  [
+    "A number and a symbol",
+    "رقم ورمز"
+  ],
+  [
+    "A possible direction that could help.",
+    "اتجاه ممكن قد يساعد."
+  ],
+  [
+    "A practical, accessible solution shaped by student experience and collective judgment.",
+    "حل عملي وسهل الوصول، تشكّله تجربة الطلاب وحكمهم الجماعي."
+  ],
+  [
+    "A question or reaction to an idea.",
+    "سؤال أو تفاعل مع فكرة."
+  ],
+  [
+    "A real need or difficulty — not a solution yet.",
+    "حاجة أو صعوبة حقيقية — وليست حلاً بعد."
+  ],
+  [
+    "A removed member becomes a visitor and keeps the ideas they posted. Use “By invitation only” so they cannot rejoin by themselves.",
+    "يصبح العضو المُزال زائراً ويحتفظ بأفكاره. استخدم «بالدعوة فقط» حتى لا يعود بنفسه."
+  ],
+  [
+    "A short title (optional)",
+    "عنوان قصير (اختياري)"
+  ],
+  [
+    "A simple five-step journey",
+    "رحلة بسيطة من خمس خطوات"
+  ],
+  [
+    "A specific capability for our product.",
+    "قدرة محددة لمنتجنا."
+  ],
+  [
+    "A team room in",
+    "غرفة فريق ضمن"
+  ],
+  [
+    "A team with its own idea opens a room and invites anyone.",
+    "الفريق صاحب الفكرة يفتح غرفة ويدعو من يشاء."
+  ],
+  [
+    "A whole class turns a real problem into a product idea — together, with the help of AI.",
+    "يحوّل الصف كله مشكلة حقيقية إلى فكرة منتج — معاً، وبمساعدة الذكاء الاصطناعي."
+  ],
+  [
+    "About",
+    "عن التطبيق"
+  ],
+  [
+    "About page",
+    "صفحة «عن التطبيق»"
+  ],
+  [
+    "ABOUT THE APPLICATION",
+    "عن التطبيق"
+  ],
+  [
+    "About this application",
+    "عن هذا التطبيق"
+  ],
+  [
+    "About this room",
+    "عن هذه الغرفة"
+  ],
+  [
+    "Accept new ideas and comments",
+    "قبول أفكار وتعليقات جديدة"
+  ],
+  [
+    "Active",
+    "النشطة"
+  ],
+  [
+    "ACTIVE",
+    "نشطة"
+  ],
+  [
+    "Active now",
+    "نشطة الآن"
+  ],
+  [
+    "Activity",
+    "النشاط"
+  ],
+  [
+    "Add a comment",
+    "أضف تعليقاً"
+  ],
+  [
+    "Add another contribution",
+    "أضف مشاركة أخرى"
+  ],
+  [
+    "Add room",
+    "إضافة غرفة"
+  ],
+  [
+    "Add sample ideas",
+    "أضف أفكاراً تجريبية"
+  ],
+  [
+    "Admin account",
+    "حساب المسؤول"
+  ],
+  [
+    "ADMINISTRATION",
+    "الإدارة"
+  ],
+  [
+    "Administrator of this application",
+    "مسؤول هذا التطبيق"
+  ],
+  [
+    "Agree",
+    "أوافق"
+  ],
+  [
+    "AI",
+    "الذكاء الاصطناعي"
+  ],
+  [
+    "AI amplifies good thinking",
+    "الذكاء الاصطناعي يعزز التفكير الجيد"
+  ],
+  [
+    "AI amplifies good thinking.",
+    "الذكاء الاصطناعي يعزز التفكير الجيد."
+  ],
+  [
+    "AI can draft fast; humans edit for tone, accuracy and culture.",
+    "يصيغ الذكاء الاصطناعي بسرعة، ويحرر الإنسان النبرة والدقة والملاءمة الثقافية."
+  ],
+  [
+    "AI coding tools speed up building — people still test it and own the result.",
+    "تسرّع أدوات البرمجة بالذكاء الاصطناعي البناء — ويبقى الإنسان مسؤولاً عن الاختبار والنتيجة."
+  ],
+  [
+    "AI Collab Lab helps a whole class think together, share ideas fairly, and use AI wisely to turn a real problem into a real product.",
+    "يساعد مختبر التعاون بالذكاء الاصطناعي الصف كله على التفكير معاً، ومشاركة الأفكار بعدل، واستخدام الذكاء الاصطناعي بحكمة لتحويل مشكلة حقيقية إلى منتج حقيقي."
+  ],
+  [
+    "AI Collab Lab is a website where a whole class works together to turn a real problem into an idea for a new product, with the help of AI.",
+    "مختبر التعاون بالذكاء الاصطناعي موقع إلكتروني يعمل فيه الصف كله معاً لتحويل مشكلة حقيقية إلى فكرة لمنتج جديد، بمساعدة الذكاء الاصطناعي."
+  ],
+  [
+    "AI could help here by …",
+    "يمكن للذكاء الاصطناعي المساعدة هنا من خلال …"
+  ],
+  [
+    "AI development build prompt",
+    "تعليمات البناء بالذكاء الاصطناعي"
+  ],
+  [
+    "AI does not replace thinking.",
+    "الذكاء الاصطناعي لا يستبدل التفكير."
+  ],
+  [
+    "AI does not replace thinking. AI amplifies good thinking.",
+    "الذكاء الاصطناعي لا يستبدل التفكير. بل يعزز التفكير الجيد."
+  ],
+  [
+    "AI helps build a first version, and the class discusses it.",
+    "يساعد الذكاء الاصطناعي في بناء نسخة أولى، ويناقشها الصف."
+  ],
+  [
+    "AI is a powerful helper, but it does not replace human thinking. People choose the problem, AI helps organize and build, and people check that the result is correct and safe.",
+    "الذكاء الاصطناعي مساعد قوي، لكنه لا يحل محل تفكير الإنسان. الإنسان يختار المشكلة، والذكاء الاصطناعي يساعد في التنظيم والبناء، ثم يتحقق الإنسان من أن النتيجة صحيحة وآمنة."
+  ],
+  [
+    "AI is not the only skill.",
+    "الذكاء الاصطناعي ليس المهارة الوحيدة."
+  ],
+  [
+    "AI Literacy",
+    "الوعي بالذكاء الاصطناعي"
+  ],
+  [
+    "AI Role",
+    "دور الذكاء الاصطناعي"
+  ],
+  [
+    "AI summarises at scale; humans check for missing or unfair conclusions.",
+    "يلخص الذكاء الاصطناعي على نطاق واسع، ويتحقق الإنسان من الاستنتاجات الناقصة أو غير العادلة."
+  ],
+  [
+    "AI translates well, but a fluent speaker should check meaning and tone.",
+    "يترجم الذكاء الاصطناعي جيداً، لكن يجب أن يراجع متحدث متمكن المعنى والنبرة."
+  ],
+  [
+    "Aim for three core features. You can edit the brief afterwards.",
+    "اختر ثلاث ميزات أساسية ويمكنك تعديل الملخص لاحقاً."
+  ],
+  [
+    "All",
+    "الكل"
+  ],
+  [
+    "All room screens show",
+    "كل شاشات الغرف تعرض"
+  ],
+  [
+    "All rooms moved",
+    "تم نقل كل الغرف"
+  ],
+  [
+    "All rooms paused",
+    "تم إيقاف كل الغرف"
+  ],
+  [
+    "All rooms resumed",
+    "تم استئناف كل الغرف"
+  ],
+  [
+    "All teams report",
+    "تقرير كل الفرق"
+  ],
+  [
+    "already joined",
+    "انضموا بالفعل"
+  ],
+  [
+    "An app that helps students … by …",
+    "تطبيق يساعد الطلاب على … من خلال …"
+  ],
+  [
+    "Anonymous",
+    "مشارك دون اسم"
+  ],
+  [
+    "Anyone visiting the join page can see its name, QR code and join link. Ended workshops remain hidden.",
+    "يمكن لأي زائر لصفحة الانضمام رؤية الاسم ورمز QR ورابط الانضمام. تظل الورش المنتهية مخفية."
+  ],
+  [
+    "Anyone with this link or code can join your room, even if they are new to the workshop.",
+    "يمكن لأي شخص لديه هذا الرابط أو الرمز الانضمام إلى غرفتك، حتى لو كان جديداً على الورشة."
+  ],
+  [
+    "API key",
+    "مفتاح API"
+  ],
+  [
+    "Application & About",
+    "التطبيق وصفحة «عن التطبيق»"
+  ],
+  [
+    "Application details",
+    "تفاصيل التطبيق"
+  ],
+  [
+    "Apply",
+    "تطبيق"
+  ],
+  [
+    "Approve",
+    "موافقة"
+  ],
+  [
+    "ar",
+    "العربية"
+  ],
+  [
+    "Arabic and English speakers take part equally",
+    "يشارك متحدثو العربية والإنجليزية بالتساوي"
+  ],
+  [
+    "Ask every student to visit other teams and leave one helpful comment in each. Students see their progress; rooms show the feedback they received.",
+    "اطلب من كل طالب زيارة فرق أخرى وترك تعليق مفيد في كل منها. يرى الطلاب تقدمهم، وتعرض الغرف ما تلقته من تغذية راجعة."
+  ],
+  [
+    "Ask everyone for a possible solution. Discuss the ideas together; simple ideas are welcome.",
+    "اطلب حلاً ممكناً من كل مشارك وناقش الأفكار معاً."
+  ],
+  [
+    "Ask the audience",
+    "اسأل الجمهور"
+  ],
+  [
+    "Ask your presenter for a workshop link, QR code, or code. Workshops appear here only when the presenter chooses to share them.",
+    "اطلب من مقدم الورشة رابطاً أو رمز QR أو رمز الورشة. تظهر الورش هنا فقط عندما يختار المقدم مشاركتها."
+  ],
+  [
+    "Ask: who needs help, and what is difficult? Collect clear problems before thinking about solutions.",
+    "اسأل: من يحتاج المساعدة وما الصعوبة؟ اجمع المشكلات قبل التفكير في الحلول."
+  ],
+  [
+    "At least 10 characters",
+    "10 أحرف على الأقل"
+  ],
+  [
+    "At the end, create the project plan and copy the build instructions into an AI tool.",
+    "في النهاية أنشئ خطة المشروع وانسخ تعليمات البناء إلى أداة ذكاء اصطناعي."
+  ],
+  [
+    "Auto — follow this device’s setting",
+    "تلقائي — يتبع إعداد هذا الجهاز"
+  ],
+  [
+    "Auto theme (follow device)",
+    "مظهر تلقائي (يتبع الجهاز)"
+  ],
+  [
+    "Automatic translation",
+    "الترجمة التلقائية"
+  ],
+  [
+    "Automatic translation is on for everyone",
+    "الترجمة التلقائية مفعّلة للجميع"
+  ],
+  [
+    "Automatic translation turned off",
+    "تم إيقاف الترجمة التلقائية"
+  ],
+  [
+    "Awaiting approval",
+    "بانتظار الموافقة"
+  ],
+  [
+    "Awaiting presenter approval",
+    "بانتظار موافقة مقدم الورشة"
+  ],
+  [
+    "Back",
+    "السابق"
+  ],
+  [
+    "Back to exploring",
+    "العودة للاستكشاف"
+  ],
+  [
+    "Back to idea wall",
+    "العودة إلى جدار الأفكار"
+  ],
+  [
+    "Back to my room",
+    "العودة إلى غرفتي"
+  ],
+  [
+    "Back to the main workshop",
+    "العودة إلى الورشة الرئيسية"
+  ],
+  [
+    "Back to your workshops",
+    "العودة إلى ورشك"
+  ],
+  [
+    "Become a solution designer",
+    "كن مصمماً للحلول"
+  ],
+  [
+    "Bilingual (English + Arabic)",
+    "ثنائي اللغة (العربية + الإنجليزية)"
+  ],
+  [
+    "Branding, home page wording, About page, automatic translation and your administrator account.",
+    "الهوية ونصوص الصفحة الرئيسية وصفحة «عن التطبيق» والترجمة التلقائية وحساب المسؤول."
+  ],
+  [
+    "Build & present",
+    "ابنِ واعرض"
+  ],
+  [
+    "Build and present",
+    "ابنِ واعرض"
+  ],
+  [
+    "Build prompt refreshed from your canvas",
+    "تم تحديث تعليمات البناء من المخطط"
+  ],
+  [
+    "Building on ideas",
+    "تطوير الأفكار"
+  ],
+  [
+    "Builds on",
+    "تطوّر"
+  ],
+  [
+    "Builds on a teammate’s idea to make it stronger.",
+    "يطوّر فكرة زميل لجعلها أقوى."
+  ],
+  [
+    "Builds on an idea",
+    "تطوير لفكرة"
+  ],
+  [
+    "By the end, the class has a clear product plan and ready-made instructions that an AI tool can use to start building it.",
+    "في النهاية يكون لدى الصف خطة منتج واضحة وتعليمات جاهزة يمكن لأداة ذكاء اصطناعي استخدامها لبدء بنائه."
+  ],
+  [
+    "Cancel",
+    "إلغاء"
+  ],
+  [
+    "Canvas and build prompt generated",
+    "تم إنشاء المخطط وتعليمات البناء"
+  ],
+  [
+    "Cards",
+    "بطاقات"
+  ],
+  [
+    "Challenge name",
+    "اسم التحدي"
+  ],
+  [
+    "Challenge question",
+    "سؤال التحدي"
+  ],
+  [
+    "Challenge text is created in the workshop language you choose below. You can edit every field.",
+    "يُنشأ نص التحدي بلغة الورشة التي تختارها أدناه، ويمكنك تعديل كل حقل."
+  ],
+  [
+    "Changes appear immediately for the presenter, projector and students. Contributions and votes are not affected.",
+    "تظهر التغييرات فوراً لمقدم الورشة وشاشة العرض والطلاب، دون التأثير على المشاركات أو الأصوات."
+  ],
+  [
+    "Changes will be reviewed again before your teammates see them.",
+    "ستُراجع التعديلات مجدداً قبل ظهورها لزملائك."
+  ],
+  [
+    "Changing your details signs out every other device.",
+    "يؤدي تغيير بياناتك إلى تسجيل الخروج من جميع الأجهزة الأخرى."
+  ],
+  [
+    "Check the workshop code and your connection. Submissions or voting may be paused, closed, or limited by the current stage. A pending idea is awaiting approval. Ask the presenter if you are unsure. An ended session cannot accept new participation.",
+    "تحقق من رمز الورشة واتصالك. قد تكون المشاركة أو التصويت متوقفة أو مغلقة أو محدودة بالمرحلة الحالية. الفكرة المعلقة تنتظر الموافقة. اسأل مقدم الورشة عند الحاجة. الجلسة المنتهية لا تقبل مشاركات جديدة."
+  ],
+  [
+    "Choose",
+    "اختر"
+  ],
+  [
+    "Choose a challenge. Your students will do the rest.",
+    "اختر تحدياً، وسيتولى طلابك الباقي."
+  ],
+  [
+    "Choose a shared workshop below, or use the code from your presenter.",
+    "اختر ورشة مشتركة أدناه، أو استخدم الرمز الذي يقدمه مقدم الورشة."
+  ],
+  [
+    "Choose an idea",
+    "اختر فكرة"
+  ],
+  [
+    "Choose an idea to develop. Ask: what would make it useful, practical, and better? Group similar ideas if helpful.",
+    "اختر فكرة للتطوير واسأل كيف نجعلها مفيدة وعملية وأفضل."
+  ],
+  [
+    "Choose the core features from the presenter’s product builder.",
+    "اختر الميزات الأساسية من أداة بناء المنتج لدى مقدم الورشة."
+  ],
+  [
+    "Choose the current stage in Workshop journey. Students automatically see that stage. Use Presenter view for the room, Set timer to pace activities, and pause when you need everyone’s attention.",
+    "اختر المرحلة الحالية من رحلة الورشة، فتظهر تلقائياً للطلاب. استخدم عرض مقدم الورشة للشاشة والمؤقت لتنظيم الأنشطة، وأوقف المشاركة مؤقتاً عندما تحتاج انتباه الجميع."
+  ],
+  [
+    "Choose the ideas to include, then write a clear project brief: users, problem, core features, and how AI helps.",
+    "اختر أفكار المشروع ثم حدد المستخدمين والمشكلة والميزات ودور الذكاء الاصطناعي."
+  ],
+  [
+    "Choose what personal data the app is allowed to collect",
+    "اختيار البيانات الشخصية التي يُسمح للتطبيق بجمعها"
+  ],
+  [
+    "Choose your project ideas",
+    "اختر أفكار مشروعك"
+  ],
+  [
+    "Choose your team leader",
+    "اختر قائد فريقك"
+  ],
+  [
+    "Choose your workshop",
+    "اختر ورشتك"
+  ],
+  [
+    "class votes",
+    "صوت"
+  ],
+  [
+    "Class voting is open — vote on your phone",
+    "تصويت الصف مفتوح — صوّت من هاتفك"
+  ],
+  [
+    "Clear",
+    "مسح"
+  ],
+  [
+    "Clear enough to understand (8+ words)",
+    "واضحة بما يكفي (8 كلمات أو أكثر)"
+  ],
+  [
+    "Clear filters",
+    "مسح التصفية"
+  ],
+  [
+    "Clear selection",
+    "إلغاء التحديد"
+  ],
+  [
+    "Clear timer",
+    "مسح المؤقت"
+  ],
+  [
+    "Click “Create workshop” and choose a challenge — for example “Smart Campus” — or write your own.",
+    "اضغط «إنشاء ورشة» واختر تحدياً — مثل «الحرم الجامعي الذكي» — أو اكتب تحديك الخاص."
+  ],
+  [
+    "Click “Invite” to show the QR code on the projector.",
+    "اضغط «دعوة» لعرض رمز QR على شاشة العرض."
+  ],
+  [
+    "Click “Next” when the class is ready. Everyone’s phone updates by itself.",
+    "اضغط «التالي» عندما يكون الصف جاهزاً، وستتحدث هواتف الجميع تلقائياً."
+  ],
+  [
+    "Click an idea to show its connection dots; click it again to open presenter controls. Drag to arrange your map; the arrangement is saved on this device.",
+    "اضغط على فقاعة لفتح أدوات إدارة المشاركة. اسحب لترتيب الخريطة؛ يُحفظ الترتيب على هذا الجهاز."
+  ],
+  [
+    "Close",
+    "إغلاق"
+  ],
+  [
+    "Close class voting",
+    "إغلاق تصويت الصف"
+  ],
+  [
+    "Close dialog",
+    "إغلاق النافذة"
+  ],
+  [
+    "Close help",
+    "إغلاق المساعدة"
+  ],
+  [
+    "Close voting",
+    "إغلاق التصويت"
+  ],
+  [
+    "Code",
+    "الرمز"
+  ],
+  [
+    "Collaboration",
+    "التعاون"
+  ],
+  [
+    "Collective contributions",
+    "مشاركات جماعية"
+  ],
+  [
+    "Color",
+    "اللون"
+  ],
+  [
+    "Colour",
+    "لون"
+  ],
+  [
+    "Colour theme",
+    "مظهر الألوان"
+  ],
+  [
+    "Combine into",
+    "دمج في"
+  ],
+  [
+    "Combine two ideas. Flip the problem. Ask: what would make this 10× easier?",
+    "ادمج فكرتين. اقلب المشكلة. واسأل: ما الذي يجعل هذا أسهل بعشر مرات؟"
+  ],
+  [
+    "Comment",
+    "تعليق"
+  ],
+  [
+    "comments",
+    "تعليقات"
+  ],
+  [
+    "comments below",
+    "تعليقات أدناه"
+  ],
+  [
+    "Communication",
+    "التواصل"
+  ],
+  [
+    "Complete portable record for archiving or analysis.",
+    "سجل كامل قابل للنقل للأرشفة أو التحليل."
+  ],
+  [
+    "Connected as",
+    "متصل باسم"
+  ],
+  [
+    "Connecting to your workshop…",
+    "جارٍ الاتصال بالورشة…"
+  ],
+  [
+    "Connection lost. Retrying…",
+    "انقطع الاتصال. جارٍ إعادة المحاولة…"
+  ],
+  [
+    "Consider value for users, feasibility, and responsibility. One vote per idea.",
+    "فكّر في القيمة للمستخدمين وقابلية التنفيذ والمسؤولية. صوت واحد لكل فكرة."
+  ],
+  [
+    "Contact",
+    "التواصل"
+  ],
+  [
+    "Continue anonymously",
+    "المتابعة دون اسم"
+  ],
+  [
+    "Continue workshop",
+    "متابعة الورشة"
+  ],
+  [
+    "Contribution",
+    "المشاركة"
+  ],
+  [
+    "contributions",
+    "مشاركات"
+  ],
+  [
+    "Contributions",
+    "المشاركات"
+  ],
+  [
+    "Copied to clipboard",
+    "تم النسخ إلى الحافظة"
+  ],
+  [
+    "Copy build prompt",
+    "نسخ تعليمات البناء"
+  ],
+  [
+    "Copy invite link",
+    "نسخ رابط الدعوة"
+  ],
+  [
+    "Copy join link",
+    "نسخ رابط الانضمام"
+  ],
+  [
+    "Copy key",
+    "نسخ المفتاح"
+  ],
+  [
+    "Copy this into your AI coding tool to build the prototype. Review the safety and human oversight requirements with your students.",
+    "انسخ هذه التعليمات إلى أداة البرمجة بالذكاء الاصطناعي لبناء النموذج. راجع متطلبات السلامة والإشراف البشري مع الطلاب."
+  ],
+  [
+    "Copy your build prompt into your chosen AI coding tool. Build and test a prototype, show it to the room, and gather feedback.",
+    "انسخ تعليمات البناء إلى أداة البرمجة بالذكاء الاصطناعي وابنِ نموذجاً واختبره واعرضه واجمع الملاحظات."
+  ],
+  [
+    "Core features",
+    "الميزات الأساسية"
+  ],
+  [
+    "Create or open another workshop",
+    "إنشاء أو فتح ورشة أخرى"
+  ],
+  [
+    "Create project brief",
+    "إنشاء ملخص المشروع"
+  ],
+  [
+    "Create room",
+    "إنشاء الغرفة"
+  ],
+  [
+    "Create rooms",
+    "إنشاء الغرف"
+  ],
+  [
+    "Create rooms for your teams, or let students start their own.",
+    "أنشئ غرفاً لفرقك، أو اسمح للطلاب بإنشاء غرفهم."
+  ],
+  [
+    "Create teams",
+    "إنشاء الفرق"
+  ],
+  [
+    "Create workshop",
+    "إنشاء ورشة"
+  ],
+  [
+    "Create your first session — it takes under a minute.",
+    "أنشئ جلستك الأولى — يستغرق الأمر أقل من دقيقة."
+  ],
+  [
+    "Create your workshop",
+    "أنشئ ورشتك"
+  ],
+  [
+    "Created",
+    "التاريخ"
+  ],
+  [
+    "Creativity",
+    "الإبداع"
+  ],
+  [
+    "Critical Thinking",
+    "التفكير النقدي"
+  ],
+  [
+    "CURRENT LEADER",
+    "القائد الحالي"
+  ],
+  [
+    "Current release",
+    "تاريخ الإصدار الحالي"
+  ],
+  [
+    "Custom minutes",
+    "دقائق مخصصة"
+  ],
+  [
+    "Daily limit per workshop (characters)",
+    "الحد اليومي لكل ورشة (بالأحرف)"
+  ],
+  [
+    "Decide which problem matters most to our students",
+    "تحديد المشكلة الأهم لطلابنا"
+  ],
+  [
+    "Decision Making",
+    "اتخاذ القرار"
+  ],
+  [
+    "Decisions together",
+    "قرارات مشتركة"
+  ],
+  [
+    "Default branding restored",
+    "تمت استعادة الهوية الافتراضية"
+  ],
+  [
+    "Default: claude-opus-5-5 (highest quality). claude-haiku-5-5 is faster and costs less.",
+    "الافتراضي: claude-opus-5-5 (أعلى جودة). النموذج claude-haiku-5-5 أسرع وأقل تكلفة."
+  ],
+  [
+    "Define the problem",
+    "حدد المشكلة"
+  ],
+  [
+    "Define the problem → Share ideas → Develop a solution → Plan the project → Build and present. Follow the main instruction and Next button. Use Include in project to choose features, then Create project brief. Build the prototype in your chosen AI coding tool. More tools opens optional voting, moderation, timers, and detailed controls.",
+    "حدد المشكلة ← شارك الأفكار ← طور الحل ← خطط للمشروع ← ابنِ واعرض. اتبع التعليمات وزر التالي. اختر أفكار المشروع ثم أنشئ الملخص. ابنِ النموذج في أداة البرمجة. المزيد من الأدوات يفتح التصويت والإشراف والمؤقت."
+  ],
+  [
+    "Defines what “done” means",
+    "يحدد معنى «الإنجاز»"
+  ],
+  [
+    "Delete",
+    "حذف"
+  ],
+  [
+    "Delete ",
+    "حذف "
+  ],
+  [
+    "Delete contribution",
+    "حذف المشاركة"
+  ],
+  [
+    "Delete permanently",
+    "حذف نهائي"
+  ],
+  [
+    "Delete room",
+    "حذف الغرفة"
+  ],
+  [
+    "Delete this room and everything in it?",
+    "حذف هذه الغرفة وكل ما فيها؟"
+  ],
+  [
+    "Delete this workshop?",
+    "حذف هذه الورشة؟"
+  ],
+  [
+    "Delete workshop",
+    "حذف الورشة"
+  ],
+  [
+    "Deleting…",
+    "جارٍ الحذف…"
+  ],
+  [
+    "Describe the people who will use this project and what they need.",
+    "صف الأشخاص الذين سيستخدمون هذا المشروع وما يحتاجون إليه."
+  ],
+  [
+    "Describe who is struggling and why. Stay with the problem — solutions come later.",
+    "صف من يواجه صعوبة ولماذا. ركّز على المشكلة — الحلول تأتي لاحقاً."
+  ],
+  [
+    "Describes the users",
+    "يصف المستخدمين"
+  ],
+  [
+    "Description",
+    "الوصف"
+  ],
+  [
+    "Details",
+    "التفاصيل"
+  ],
+  [
+    "Details & activity",
+    "التفاصيل والنشاط"
+  ],
+  [
+    "Develop a solution",
+    "طور الحل"
+  ],
+  [
+    "Develop this idea",
+    "طور هذه الفكرة"
+  ],
+  [
+    "Developed by",
+    "تطوير"
+  ],
+  [
+    "Developing this idea ✓",
+    "نطور هذه الفكرة ✓"
+  ],
+  [
+    "Developing: ",
+    "نطور: "
+  ],
+  [
+    "Discard changes",
+    "تجاهل التغييرات"
+  ],
+  [
+    "Discover",
+    "اكتشف"
+  ],
+  [
+    "DISCUSS THIS IDEA",
+    "ناقش هذه الفكرة"
+  ],
+  [
+    "Dismiss",
+    "إغلاق"
+  ],
+  [
+    "Display ideas as",
+    "عرض الأفكار كـ"
+  ],
+  [
+    "Does it solve our problem? What works? What should we improve next?",
+    "هل يحل المشكلة؟ ما الذي يعمل وما الذي نحسنه لاحقاً؟"
+  ],
+  [
+    "Don’t create a new idea. Build on this one.",
+    "لا تنشئ فكرة جديدة. بل طور هذه الفكرة."
+  ],
+  [
+    "Don’t start over — build on the spotlighted idea. Constructive criticism is a skill.",
+    "لا تبدأ من جديد — طوّر الفكرة المعروضة. النقد البنّاء مهارة."
+  ],
+  [
+    "Download",
+    "تنزيل"
+  ],
+  [
+    "Download ",
+    "تنزيل "
+  ],
+  [
+    "Download a backup first (recommended)",
+    "نزّل نسخة احتياطية أولاً (موصى به)"
+  ],
+  [
+    "Download backup",
+    "تنزيل نسخة احتياطية"
+  ],
+  [
+    "Download backup (JSON)",
+    "تنزيل نسخة احتياطية (JSON)"
+  ],
+  [
+    "Download backup of ",
+    "تنزيل نسخة احتياطية من "
+  ],
+  [
+    "Download brief",
+    "تنزيل ملخص المنتج"
+  ],
+  [
+    "Download key",
+    "تنزيل المفتاح"
+  ],
+  [
+    "Download prompt",
+    "تنزيل التعليمات"
+  ],
+  [
+    "Download the workshop record, including contributions, votes, reflections, canvas and build prompt. Presenter credentials are excluded.",
+    "نزّل سجل الورشة شاملاً المشاركات والأصوات والتأملات والمخطط وتعليمات البناء. لا تُضمَّن بيانات دخول مقدم الورشة."
+  ],
+  [
+    "Drag empty space to move the canvas. Drag the group border to move its ideas together. Drop an idea onto another to group them; drag it outside the box to ungroup. Tap to open an idea. Use Alt + arrow keys to move a focused bubble. Your arrangement is saved on this device.",
+    "اسحب الفقاعات لترتيب خريطتك واضغط لفتح الفكرة. استخدم Alt مع الأسهم لتحريك الفقاعة المحددة. يُحفظ الترتيب على هذا الجهاز."
+  ],
+  [
+    "Drag the handle to arrange your workshops. Your order is saved on this device.",
+    "اسحب المقبض لترتيب ورشك. يُحفظ الترتيب على هذا الجهاز."
+  ],
+  [
+    "Drag to reorder",
+    "اسحب لإعادة الترتيب"
+  ],
+  [
+    "e.g. Smart parking for campus",
+    "مثل: مواقف ذكية للحرم الجامعي"
+  ],
+  [
+    "e.g. Team Falcon",
+    "مثل: فريق الصقر"
+  ],
+  [
+    "Each person picks their language. With translation turned on, ideas written in one language appear in the other, so no one is left out.",
+    "يختار كل شخص لغته. وعند تفعيل الترجمة تظهر الأفكار المكتوبة بلغة باللغة الأخرى، فلا يُستبعد أحد."
+  ],
+  [
+    "Each team presents its project brief on the projector. Then the whole class votes for the best project — never for their own team.",
+    "يعرض كل فريق ملخص مشروعه على الشاشة، ثم يصوّت الصف كله لأفضل مشروع — وليس لفريقه."
+  ],
+  [
+    "Each text is translated once and then reused for everyone, so a typical workshop uses 10,000–50,000 characters.",
+    "تُترجم كل عبارة مرة واحدة ثم يُعاد استخدامها للجميع، لذا تستهلك الورشة عادةً 10,000–50,000 حرف."
+  ],
+  [
+    "Edit",
+    "تعديل"
+  ],
+  [
+    "Edit ",
+    "تعديل "
+  ],
+  [
+    "Edit details",
+    "تعديل التفاصيل"
+  ],
+  [
+    "Edit my idea",
+    "تعديل فكرتي"
+  ],
+  [
+    "Edit room",
+    "تعديل الغرفة"
+  ],
+  [
+    "Edit workshop details",
+    "تعديل تفاصيل الورشة"
+  ],
+  [
+    "Edited",
+    "معدّل"
+  ],
+  [
+    "Employers look for people who can solve problems, work in a team, explain ideas, think critically and make good decisions. Students practise all of these in one session.",
+    "يبحث أصحاب العمل عمّن يستطيع حل المشكلات والعمل ضمن فريق وشرح الأفكار والتفكير النقدي واتخاذ قرارات جيدة. ويمارس الطلاب كل ذلك في جلسة واحدة."
+  ],
+  [
+    "EN",
+    "العربية"
+  ],
+  [
+    "End",
+    "إنهاء"
+  ],
+  [
+    "End ",
+    "إنهاء "
+  ],
+  [
+    "End & show final reveal",
+    "إنهاء وعرض الختام"
+  ],
+  [
+    "End mission",
+    "إنهاء المهمة"
+  ],
+  [
+    "End workshop",
+    "إنهاء الورشة"
+  ],
+  [
+    "Ended",
+    "المنتهية"
+  ],
+  [
+    "ENDED",
+    "انتهت"
+  ],
+  [
+    "English",
+    "الإنجليزية"
+  ],
+  [
+    "Enter a nickname if requested. No username or password is needed.",
+    "أدخل اسماً مستعاراً عند الطلب. لا تحتاج إلى اسم مستخدم أو كلمة مرور."
+  ],
+  [
+    "Evaluate · correct · decide",
+    "التقييم · التصحيح · القرار"
+  ],
+  [
+    "Evaluate suggestions, verify accuracy, make decisions, and supervise sensitive uses.",
+    "تقييم الاقتراحات، والتحقق من الدقة، واتخاذ القرارات، والإشراف على الاستخدامات الحساسة."
+  ],
+  [
+    "Every room screen updated",
+    "تم تحديث شاشات كل الغرف"
+  ],
+  [
+    "Every team can visit this room, read your ideas and comment.",
+    "يمكن لكل الفرق زيارة هذه الغرفة وقراءة أفكاركم والتعليق."
+  ],
+  [
+    "Every text on the home page returns to its original version, for everyone, straight away.",
+    "تعود كل نصوص الصفحة الرئيسية إلى نسختها الأصلية، للجميع، فوراً."
+  ],
+  [
+    "Every voice counts",
+    "كل صوت مهم"
+  ],
+  [
+    "Everyone gets a voice",
+    "لكل شخص صوت"
+  ],
+  [
+    "Everyone gets a voice — in English or Arabic.",
+    "لكل شخص صوت — بالعربية أو الإنجليزية."
+  ],
+  [
+    "Everyone has a part to play",
+    "لكل شخص دور مهم"
+  ],
+  [
+    "Everyone in this workshop sees approved ideas and comments. Pending contributions are visible only to their author and the presenter.",
+    "يرى أعضاء هذه الورشة الأفكار والتعليقات المعتمدة. المشاركات المعلقة تظهر لكاتبها ومقدم الورشة فقط."
+  ],
+  [
+    "Everything is saved.",
+    "تم حفظ كل شيء."
+  ],
+  [
+    "Excellent — ready to share",
+    "ممتازة — جاهزة للمشاركة"
+  ],
+  [
+    "Exciting",
+    "مثيرة"
+  ],
+  [
+    "Exit presenter view",
+    "الخروج من العرض"
+  ],
+  [
+    "Explains why or how",
+    "تشرح السبب أو الطريقة"
+  ],
+  [
+    "Explore at your own scale",
+    "استكشف بالحجم المناسب لك"
+  ],
+  [
+    "Explore team ideas & comments",
+    "تصفح أفكار الفريق وتعليقاته"
+  ],
+  [
+    "Export workshop",
+    "تصدير الورشة"
+  ],
+  [
+    "Fair",
+    "مقبولة"
+  ],
+  [
+    "Feature",
+    "ميزة"
+  ],
+  [
+    "Features",
+    "الميزات"
+  ],
+  [
+    "Feedback mission",
+    "مهمة التغذية الراجعة"
+  ],
+  [
+    "File",
+    "ملف"
+  ],
+  [
+    "File shared with the room ✓",
+    "تمت مشاركة الملف مع الغرفة ✓"
+  ],
+  [
+    "Files",
+    "الملفات"
+  ],
+  [
+    "Fill the form",
+    "املأ النموذج"
+  ],
+  [
+    "Filter rooms",
+    "تصفية الغرف"
+  ],
+  [
+    "Final features",
+    "الميزات النهائية"
+  ],
+  [
+    "Final reveal",
+    "العرض الختامي"
+  ],
+  [
+    "Finalist",
+    "ضمن القائمة المختصرة"
+  ],
+  [
+    "Finalists and votes",
+    "الأفكار المرشحة والأصوات"
+  ],
+  [
+    "Finalists are ordered by votes. Select the ideas you want to combine, then generate the canvas.",
+    "يتم ترتيب المرشحين حسب الأصوات. اختر الأفكار التي تريد دمجها ثم أنشئ المخطط."
+  ],
+  [
+    "Find a team",
+    "ابحث عن فريق"
+  ],
+  [
+    "Find a team or project…",
+    "ابحث عن فريق أو مشروع…"
+  ],
+  [
+    "Find a text",
+    "ابحث عن نص"
+  ],
+  [
+    "Find a text… (for example “students”)",
+    "ابحث عن نص… (مثلاً «الطلاب»)"
+  ],
+  [
+    "Find workshop",
+    "ابحث عن الورشة"
+  ],
+  [
+    "Fit map",
+    "ملاءمة الخريطة"
+  ],
+  [
+    "Follow the stage shown on your screen. Submit your idea when contributions are open; keep a copy of your text if the connection fails.",
+    "اتبع المرحلة الظاهرة على شاشتك. أرسل فكرتك عندما تكون المشاركة مفتوحة، واحتفظ بنسخة من النص إذا تعطل الاتصال."
+  ],
+  [
+    "Follow the steps on your screen. Each step tells you what to ask the class and roughly how long it takes.",
+    "اتبع الخطوات على شاشتك؛ فكل خطوة تخبرك بما تسأل الصف عنه والمدة التقريبية."
+  ],
+  [
+    "Follow the task on your phone. It changes automatically when the teacher moves to the next step.",
+    "اتبع المهمة على هاتفك؛ فهي تتغير تلقائياً عندما ينتقل المعلم إلى الخطوة التالية."
+  ],
+  [
+    "For example 2.0.0 or 2.1-beta.",
+    "مثل 2.0.0 أو 2.1-beta."
+  ],
+  [
+    "For students who …, add …",
+    "للطلاب الذين …، أضف …"
+  ],
+  [
+    "From the presenter",
+    "من مقدم الورشة"
+  ],
+  [
+    "Full data (JSON)",
+    "البيانات الكاملة (JSON)"
+  ],
+  [
+    "Fullscreen",
+    "ملء الشاشة"
+  ],
+  [
+    "Generate from selected ideas",
+    "إنشاء من الأفكار المختارة"
+  ],
+  [
+    "Generate many options before judging any of them.",
+    "توليد خيارات كثيرة قبل الحكم على أي منها."
+  ],
+  [
+    "Generate starter code for a prototype",
+    "توليد شيفرة أولية لنموذج تجريبي"
+  ],
+  [
+    "Generated from your team’s contributions using a local template. Review and edit every section.",
+    "تم إنشاؤه من مشاركات فريقك باستخدام قالب محلي. راجع كل قسم وعدّله."
+  ],
+  [
+    "Getting there",
+    "في الطريق"
+  ],
+  [
+    "Gives real context (student ideas)",
+    "يقدم سياقاً حقيقياً (أفكار الطلاب)"
+  ],
+  [
+    "Go to the team, then lower the hand.",
+    "اذهب إلى الفريق ثم أنزل اليد."
+  ],
+  [
+    "Good",
+    "جيدة"
+  ],
+  [
+    "Good start",
+    "بداية جيدة"
+  ],
+  [
+    "Got it",
+    "فهمت"
+  ],
+  [
+    "Got it, let’s start",
+    "فهمت، لنبدأ"
+  ],
+  [
+    "Great contribution!",
+    "مشاركة رائعة!"
+  ],
+  [
+    "Great idea",
+    "فكرة رائعة"
+  ],
+  [
+    "Great products begin with a problem.",
+    "تبدأ المنتجات الرائعة بمشكلة."
+  ],
+  [
+    "Great products begin with a problem. What do students need help with?",
+    "تبدأ المنتجات الرائعة بمشكلة. ما الذي يحتاج الطلاب إلى المساعدة فيه؟"
+  ],
+  [
+    "Group 60 ideas into themes",
+    "تجميع 60 فكرة في محاور"
+  ],
+  [
+    "Guide all rooms",
+    "توجيه كل الغرف"
+  ],
+  [
+    "Guide your team through the steps, choose an idea to develop, and prepare the brief. Open Team & leader to see member votes or hand over control in Manage team.",
+    "وجّه فريقك بين الخطوات واختر فكرة للتطوير وجهّز الملخص. افتح الفريق والقائد لرؤية تصويت الأعضاء، أو سلّم القيادة من إدارة الفريق."
+  ],
+  [
+    "Hand lowered",
+    "تم إنزال اليد"
+  ],
+  [
+    "Hand raised",
+    "اليد مرفوعة"
+  ],
+  [
+    "has contributed ✓",
+    "شارك ✓"
+  ],
+  [
+    "has not posted yet",
+    "لم يشارك بعد"
+  ],
+  [
+    "Have a workshop code?",
+    "لديك رمز ورشة؟"
+  ],
+  [
+    "Health decisions need qualified professionals. AI must not diagnose.",
+    "القرارات الصحية تحتاج إلى مختصين مؤهلين. لا يجوز للذكاء الاصطناعي التشخيص."
+  ],
+  [
+    "Hidden",
+    "مخفية"
+  ],
+  [
+    "Hidden while ended",
+    "مخفية عند الانتهاء"
+  ],
+  [
+    "Hide",
+    "إخفاء"
+  ],
+  [
+    "Hide idea wall",
+    "إخفاء جدار الأفكار"
+  ],
+  [
+    "Hide passwords",
+    "إخفاء كلمات المرور"
+  ],
+  [
+    "Hide results",
+    "إخفاء النتائج"
+  ],
+  [
+    "Highlight",
+    "تمييز"
+  ],
+  [
+    "Home page",
+    "الصفحة الرئيسية"
+  ],
+  [
+    "Home page saved — visible to everyone now",
+    "تم حفظ الصفحة الرئيسية — ظاهرة للجميع الآن"
+  ],
+  [
+    "How can we make this better?",
+    "كيف يمكننا تحسين هذه الفكرة؟"
+  ],
+  [
+    "How can we use technology and AI to create a useful healthcare assistant for university students?",
+    "كيف يمكننا استخدام التقنية والذكاء الاصطناعي لإنشاء مساعد صحي مفيد لطلاب الجامعة؟"
+  ],
+  [
+    "How can we use technology and AI to create a useful smart tutor to help students, and parents teach their students, at home, and also students understand their homeworks, and explain to them what they had studied in the school classes?",
+    "كيف يمكننا استخدام التقنية والذكاء الاصطناعي لإنشاء معلّم ذكي ومفيد يساعد الطلاب على فهم واجباتهم وما درسوه في المدرسة، ويساعد أولياء الأمور على تعليم أبنائهم في المنزل؟"
+  ],
+  [
+    "How could we solve this problem?",
+    "كيف يمكننا حل هذه المشكلة؟"
+  ],
+  [
+    "How does it work? Five simple steps",
+    "كيف يعمل؟ خمس خطوات بسيطة"
+  ],
+  [
+    "How does the workshop work? See the guide",
+    "كيف تعمل الورشة؟ اطّلع على الدليل"
+  ],
+  [
+    "How sign-in works",
+    "كيف يعمل تسجيل الدخول"
+  ],
+  [
+    "How team rooms work",
+    "كيف تعمل غرف الفرق"
+  ],
+  [
+    "How to use it",
+    "كيف تستخدمه"
+  ],
+  [
+    "How we improved them",
+    "كيف حسّنّاها"
+  ],
+  [
+    "Human",
+    "الإنسان"
+  ],
+  [
+    "Human + AI",
+    "الإنسان والذكاء الاصطناعي"
+  ],
+  [
+    "Human Role",
+    "دور الإنسان"
+  ],
+  [
+    "I’ve saved it",
+    "لقد حفظته"
+  ],
+  [
+    "Idea",
+    "فكرة"
+  ],
+  [
+    "Idea details",
+    "تفاصيل الفكرة"
+  ],
+  [
+    "Idea map",
+    "خريطة الأفكار"
+  ],
+  [
+    "IDEA SPOTLIGHT",
+    "الفكرة تحت الضوء"
+  ],
+  [
+    "Idea title",
+    "عنوان الفكرة"
+  ],
+  [
+    "Idea wall",
+    "جدار الأفكار"
+  ],
+  [
+    "ideas",
+    "أفكار"
+  ],
+  [
+    "Ideas",
+    "الأفكار"
+  ],
+  [
+    "ideas included",
+    "أفكار مضمّنة"
+  ],
+  [
+    "Ideas we shared",
+    "الأفكار التي شاركناها"
+  ],
+  [
+    "If something is unavailable",
+    "إذا لم تتوفر المشاركة"
+  ],
+  [
+    "If students jump to apps, ask: “What problem does that app solve?”",
+    "إذا قفز الطلاب إلى التطبيقات، اسأل: «ما المشكلة التي يحلها هذا التطبيق؟»"
+  ],
+  [
+    "If you are a student",
+    "إذا كنت طالباً"
+  ],
+  [
+    "If you are the teacher (presenter)",
+    "إذا كنت المعلم (مقدم الورشة)"
+  ],
+  [
+    "Improve",
+    "التحسين"
+  ],
+  [
+    "Improvement",
+    "تحسين"
+  ],
+  [
+    "improvements",
+    "تحسينات"
+  ],
+  [
+    "Improvements",
+    "التحسينات"
+  ],
+  [
+    "In a normal class, a few students do most of the talking. Here, every student can share their ideas from their phone — even shy ones, and even without giving their name.",
+    "في الصف المعتاد يتحدث عدد قليل من الطلاب أغلب الوقت. هنا يستطيع كل طالب مشاركة أفكاره من هاتفه — حتى الخجولون، وحتى دون ذكر أسمائهم."
+  ],
+  [
+    "In one sentence",
+    "باختصار"
+  ],
+  [
+    "Inaccurate AI output, privacy loss, accessibility barriers, and overreliance.",
+    "مخرجات غير دقيقة من الذكاء الاصطناعي، وفقدان الخصوصية، وعوائق الوصول، والاعتماد المفرط."
+  ],
+  [
+    "Include at least one idea first",
+    "أضف فكرة واحدة على الأقل أولاً"
+  ],
+  [
+    "Include in project",
+    "أضف إلى المشروع"
+  ],
+  [
+    "Included in project ✓",
+    "ضمن المشروع ✓"
+  ],
+  [
+    "Includes a concrete detail",
+    "تتضمن تفصيلاً ملموساً"
+  ],
+  [
+    "Includes safety & privacy",
+    "يتضمن السلامة والخصوصية"
+  ],
+  [
+    "Invite",
+    "دعوة"
+  ],
+  [
+    "Invite a teammate to start a leader vote. You lead until then.",
+    "ادعُ زميلاً لبدء التصويت. تقود الفريق حتى ذلك الحين."
+  ],
+  [
+    "Invite link",
+    "رابط الدعوة"
+  ],
+  [
+    "Invite link copied",
+    "تم نسخ رابط الدعوة"
+  ],
+  [
+    "Invite participants",
+    "دعوة المشاركين"
+  ],
+  [
+    "Invite people to this room",
+    "ادعُ آخرين إلى هذه الغرفة"
+  ],
+  [
+    "Invite students",
+    "دعوة الطلاب"
+  ],
+  [
+    "Invite the audience with the QR code. Contributions appear here instantly.",
+    "ادعُ الجمهور برمز QR. تظهر المشاركات هنا فوراً."
+  ],
+  [
+    "Invited your team",
+    "دعت فريقك"
+  ],
+  [
+    "Is it needed by the users we described? Can a human check what AI does?",
+    "هل يحتاجها المستخدمون الذين وصفناهم؟ هل يستطيع الإنسان مراجعة ما يفعله الذكاء الاصطناعي؟"
+  ],
+  [
+    "Is it realistic for a first prototype? What is the simplest version that works?",
+    "هل هي واقعية لنموذج أولي؟ ما أبسط نسخة تعمل؟"
+  ],
+  [
+    "It ends with something real",
+    "وينتهي بشيء حقيقي"
+  ],
+  [
+    "It is hard to … when …",
+    "من الصعب … عندما …"
+  ],
+  [
+    "It works by …",
+    "تعمل من خلال …"
+  ],
+  [
+    "It works. Sample: ",
+    "تعمل الخدمة. مثال: "
+  ],
+  [
+    "Join",
+    "انضم"
+  ],
+  [
+    "Join = build & vote. Visit = read & give feedback where allowed.",
+    "الانضمام = بناء وتصويت. الزيارة = قراءة وملاحظات حيث يُسمح."
+  ],
+  [
+    "Join a workshop",
+    "انضم إلى ورشة"
+  ],
+  [
+    "Join as a student",
+    "انضم كطالب"
+  ],
+  [
+    "Join one team to build together. Visit other teams to give feedback — visiting never moves you out of your own team.",
+    "انضم إلى فريق واحد للبناء معاً. زُر الفرق الأخرى لتقديم الملاحظات — الزيارة لا تنقلك من فريقك."
+  ],
+  [
+    "Join our innovation team",
+    "انضم إلى فريق الابتكار"
+  ],
+  [
+    "Join QR code",
+    "رمز الانضمام"
+  ],
+  [
+    "Join the innovation team",
+    "انضم إلى فريق الابتكار"
+  ],
+  [
+    "Join the team",
+    "انضم إلى الفريق"
+  ],
+  [
+    "Join the workshop, then open the Team rooms tab to find your team.",
+    "انضم إلى الورشة، ثم افتح تبويب غرف الفرق لتجد فريقك."
+  ],
+  [
+    "Join this team",
+    "انضم لهذا الفريق"
+  ],
+  [
+    "Join this team instead",
+    "انضم لهذا الفريق بدلاً من ذلك"
+  ],
+  [
+    "Join workshop",
+    "انضم إلى الورشة"
+  ],
+  [
+    "joined",
+    "انضموا"
+  ],
+  [
+    "Joined the team",
+    "انضموا إلى الفريق"
+  ],
+  [
+    "Joining",
+    "الانضمام"
+  ],
+  [
+    "Joining as a student? Enter here.",
+    "تنضم كطالب؟ ادخل من هنا."
+  ],
+  [
+    "Joining, voting and submissions will close. All contributions, the product canvas and the build prompt stay saved.",
+    "سيُغلق الانضمام والتصويت والمشاركات. تبقى جميع المشاركات ومخطط المنتج وتعليمات البناء محفوظة."
+  ],
+  [
+    "Joins by invitation",
+    "الانضمام بالدعوة"
+  ],
+  [
+    "Just getting started",
+    "بداية"
+  ],
+  [
+    "just now",
+    "الآن"
+  ],
+  [
+    "Just Testing",
+    "للتجربة فقط"
+  ],
+  [
+    "Just visit — read and comment",
+    "زيارة فقط — قراءة وتعليق"
+  ],
+  [
+    "Keep",
+    "إبقاء"
+  ],
+  [
+    "Keep it",
+    "الاحتفاظ بها"
+  ],
+  [
+    "Keep it respectful and avoid personal information.",
+    "احترم الآخرين وتجنب المعلومات الشخصية."
+  ],
+  [
+    "Keep them",
+    "الاحتفاظ بها"
+  ],
+  [
+    "Keeps a human in the loop",
+    "يُبقي الإنسان في الحلقة"
+  ],
+  [
+    "Keeps the team moving, guides discussion, and prepares the project brief.",
+    "ينظم عمل الفريق، ويوجه النقاش، ويجهز ملخص المشروع."
+  ],
+  [
+    "Keys are stored only on your server and are never shown to anyone.",
+    "تُحفظ المفاتيح على خادمك فقط ولا تُعرض لأحد."
+  ],
+  [
+    "Last activity",
+    "آخر نشاط"
+  ],
+  [
+    "Later",
+    "لاحقاً"
+  ],
+  [
+    "Layout",
+    "طريقة العرض"
+  ],
+  [
+    "Lead",
+    "القائد"
+  ],
+  [
+    "Lead the room",
+    "قيادة الغرفة"
+  ],
+  [
+    "Leader",
+    "القائد"
+  ],
+  [
+    "Leave a blank line between paragraphs.",
+    "اترك سطراً فارغاً بين الفقرات."
+  ],
+  [
+    "Leave fullscreen or close a dialog",
+    "الخروج من ملء الشاشة أو إغلاق النافذة"
+  ],
+  [
+    "Leave team",
+    "غادر الفريق"
+  ],
+  [
+    "Leave this team",
+    "غادر هذا الفريق"
+  ],
+  [
+    "Leave this team?",
+    "مغادرة هذا الفريق؟"
+  ],
+  [
+    "Leaving keeps your ideas and files here. You become a visitor. If you lead, the earliest remaining member takes over automatically.",
+    "تظل أفكارك وملفاتك هنا بعد المغادرة، وتصبح زائراً. إذا كنت القائد، يتولى أول عضو متبقٍ القيادة تلقائياً."
+  ],
+  [
+    "Let’s build",
+    "لنبدأ البناء"
+  ],
+  [
+    "Let’s build our product",
+    "لنبنِ منتجنا معاً"
+  ],
+  [
+    "LET’S CREATE SOMETHING TOGETHER",
+    "لنبتكر شيئاً معاً"
+  ],
+  [
+    "Let’s lead something great.",
+    "لنقُد شيئاً رائعاً."
+  ],
+  [
+    "Link copied ✓",
+    "تم نسخ الرابط ✓"
+  ],
+  [
+    "List",
+    "قائمة"
+  ],
+  [
+    "Lists core features",
+    "يسرد الميزات الأساسية"
+  ],
+  [
+    "lit = has posted",
+    "المضيء = شارك"
+  ],
+  [
+    "Live",
+    "مباشر"
+  ],
+  [
+    "LIVE",
+    "مباشر"
+  ],
+  [
+    "Live idea wall",
+    "جدار الأفكار المباشر"
+  ],
+  [
+    "Live voting",
+    "التصويت المباشر"
+  ],
+  [
+    "Live workshop controls",
+    "التحكم المباشر في الورشة"
+  ],
+  [
+    "Loading available workshops…",
+    "جارٍ تحميل الورش المتاحة…"
+  ],
+  [
+    "Loading presenter login…",
+    "جارٍ تحميل تسجيل الدخول…"
+  ],
+  [
+    "Loading room controls…",
+    "جارٍ تحميل أدوات الغرفة…"
+  ],
+  [
+    "Loading rooms…",
+    "جارٍ تحميل الغرف…"
+  ],
+  [
+    "Logo",
+    "الشعار"
+  ],
+  [
+    "Logo preview",
+    "معاينة الشعار"
+  ],
+  [
+    "Lower hand",
+    "إنزال اليد"
+  ],
+  [
+    "Machine translation can make mistakes — remind students to check meaning with the author.",
+    "قد تخطئ الترجمة الآلية — ذكّر الطلاب بالتحقق من المعنى مع صاحب الفكرة."
+  ],
+  [
+    "Main workshop",
+    "الورشة الرئيسية"
+  ],
+  [
+    "Make a decision with criteria: value, feasibility and responsibility.",
+    "اتخاذ قرار وفق معايير: القيمة وقابلية التنفيذ والمسؤولية."
+  ],
+  [
+    "Make lead",
+    "اجعله القائد"
+  ],
+  [
+    "Make this idea better",
+    "اجعل هذه الفكرة أفضل"
+  ],
+  [
+    "Manage team",
+    "إدارة الفريق"
+  ],
+  [
+    "Manage team rooms",
+    "إدارة غرف الفرق"
+  ],
+  [
+    "Many people forget to …",
+    "ينسى كثيرون أن …"
+  ],
+  [
+    "Markdown summary of problems, ideas, votes, canvas and reflections — ready to share with colleagues.",
+    "ملخص بصيغة Markdown للمشكلات والأفكار والأصوات والمخطط والتأملات — جاهز للمشاركة."
+  ],
+  [
+    "member",
+    "عضو"
+  ],
+  [
+    "Member",
+    "عضو"
+  ],
+  [
+    "members",
+    "أعضاء"
+  ],
+  [
+    "Members",
+    "الأعضاء"
+  ],
+  [
+    "Members share ideas, comment, vote, and upload files.",
+    "يشارك الأعضاء الأفكار والتعليقات والتصويت والملفات."
+  ],
+  [
+    "Merge",
+    "دمج"
+  ],
+  [
+    "Merge ideas",
+    "دمج الأفكار"
+  ],
+  [
+    "Message cleared",
+    "تم مسح الرسالة"
+  ],
+  [
+    "Message sent to every room",
+    "تم إرسال الرسالة إلى كل الغرف"
+  ],
+  [
+    "Message to every room, e.g. 5 minutes left — choose your best idea",
+    "رسالة لكل الغرف، مثل: بقيت 5 دقائق — اختاروا أفضل فكرة"
+  ],
+  [
+    "messages",
+    "رسائل"
+  ],
+  [
+    "Messages",
+    "الرسائل"
+  ],
+  [
+    "Minimize personal data, request informed consent, explain limitations, support Arabic and English, and require human review for consequential decisions.",
+    "تقليل البيانات الشخصية، وطلب موافقة مستنيرة، وتوضيح حدود النظام، ودعم العربية والإنجليزية، واشتراط المراجعة البشرية للقرارات المهمة."
+  ],
+  [
+    "Mission complete — thank you!",
+    "اكتملت المهمة — شكراً لك!"
+  ],
+  [
+    "Model",
+    "النموذج"
+  ],
+  [
+    "Moderation and visibility",
+    "الإشراف والعرض"
+  ],
+  [
+    "More about this platform",
+    "المزيد عن هذه المنصة"
+  ],
+  [
+    "More tools",
+    "المزيد من الأدوات"
+  ],
+  [
+    "Mouse wheel to zoom · Shift + wheel to scroll · pinch on touch screens",
+    "عجلة الماوس للتكبير · Shift مع العجلة للتمرير · استخدم إصبعين على شاشة اللمس"
+  ],
+  [
+    "Move",
+    "انتقال"
+  ],
+  [
+    "Move earlier",
+    "تحريك للأعلى"
+  ],
+  [
+    "Move every room to",
+    "انقل كل الغرف إلى"
+  ],
+  [
+    "Name & version",
+    "الاسم والإصدار"
+  ],
+  [
+    "Names who it is for",
+    "تحدد لمن هي"
+  ],
+  [
+    "Need a different team?",
+    "تحتاج إلى فريق آخر؟"
+  ],
+  [
+    "Needs help",
+    "تحتاج مساعدة"
+  ],
+  [
+    "New here? Learn how it works in one minute.",
+    "جديد هنا؟ تعرّف على طريقة الاستخدام في دقيقة."
+  ],
+  [
+    "New ideas and comments are closed. You can still explore your team’s work.",
+    "الأفكار والتعليقات الجديدة مغلقة. يمكنك استكشاف عمل فريقك."
+  ],
+  [
+    "Next",
+    "التالي"
+  ],
+  [
+    "Next / previous stage",
+    "المرحلة التالية / السابقة"
+  ],
+  [
+    "Next page",
+    "الصفحة التالية"
+  ],
+  [
+    "Next stage",
+    "المرحلة التالية"
+  ],
+  [
+    "Next team",
+    "الفريق التالي"
+  ],
+  [
+    "Next: ",
+    "التالي: "
+  ],
+  [
+    "No activity yet",
+    "لا نشاط بعد"
+  ],
+  [
+    "No comments yet. Start the conversation.",
+    "لا توجد تعليقات بعد. ابدأ النقاش."
+  ],
+  [
+    "No contributions match this filter.",
+    "لا توجد مشاركات مطابقة لهذا الفلتر."
+  ],
+  [
+    "No discussion yet",
+    "لا نقاش بعد"
+  ],
+  [
+    "No files shared in this room yet.",
+    "لم تُشارك ملفات في هذه الغرفة بعد."
+  ],
+  [
+    "No files yet. Share a photo of your sketch, a screenshot or a PDF with your team.",
+    "لا توجد ملفات بعد. شارك صورة لرسمتك أو لقطة شاشة أو ملف PDF مع فريقك."
+  ],
+  [
+    "No leader yet",
+    "لا يوجد قائد بعد"
+  ],
+  [
+    "No matching teams",
+    "لا توجد فرق مطابقة"
+  ],
+  [
+    "No matching workshops",
+    "لا توجد ورش مطابقة"
+  ],
+  [
+    "No public workshops right now",
+    "لا توجد ورش عامة حالياً"
+  ],
+  [
+    "No rooms match your search.",
+    "لا توجد غرف تطابق البحث."
+  ],
+  [
+    "No rooms yet",
+    "لا توجد غرف بعد"
+  ],
+  [
+    "No team is selected yet, so the room is private for now.",
+    "لم يُختر أي فريق بعد، لذا فالغرفة خاصة حالياً."
+  ],
+  [
+    "No team rooms yet",
+    "لا توجد غرف فرق بعد"
+  ],
+  [
+    "No team rooms yet.",
+    "لا توجد غرف فرق بعد."
+  ],
+  [
+    "No workshop code to type. A nickname may be requested.",
+    "لا حاجة لكتابة رمز الورشة. قد يُطلب اسم مستعار."
+  ],
+  [
+    "No workshops yet",
+    "لا توجد ورش بعد"
+  ],
+  [
+    "Nobody has joined yet.",
+    "لم ينضم أحد بعد."
+  ],
+  [
+    "Not started",
+    "لم تبدأ"
+  ],
+  [
+    "Nothing posted yet. Contributions and messages appear here live.",
+    "لم يُنشر شيء بعد. تظهر المشاركات والرسائل هنا مباشرة."
+  ],
+  [
+    "on",
+    "على"
+  ],
+  [
+    "On this page",
+    "في هذه الصفحة"
+  ],
+  [
+    "One Markdown report: this workshop, every team room’s ideas, votes and project brief, and the showcase results.",
+    "تقرير واحد بصيغة Markdown: هذه الورشة، وأفكار كل غرفة فريق وأصواتها وملخص مشروعها، ونتائج عرض المشاريع."
+  ],
+  [
+    "One risk is … so we could …",
+    "أحد المخاطر هو … لذلك يمكننا …"
+  ],
+  [
+    "One risk is privacy, so reminders should never show the type of appointment on the lock screen.",
+    "أحد المخاطر هو الخصوصية، لذا يجب ألا تُظهر التذكيرات نوع الموعد على شاشة القفل."
+  ],
+  [
+    "One vote. You can change it until voting closes. Choose another team’s project, not your own.",
+    "صوت واحد، ويمكنك تغييره حتى يُغلق التصويت. اختر مشروع فريق آخر، لا فريقك."
+  ],
+  [
+    "Only people with this link can join your team — share it with the people you choose.",
+    "فقط من لديهم هذا الرابط يمكنهم الانضمام إلى فريقك — شاركه مع من تختار."
+  ],
+  [
+    "Only you and the presenter see this",
+    "لا يرى هذا إلا أنت ومقدم الورشة"
+  ],
+  [
+    "Only your team and the presenter can see inside this room.",
+    "فقط فريقك ومقدم الورشة يمكنهم رؤية ما بداخل هذه الغرفة."
+  ],
+  [
+    "Open",
+    "افتح"
+  ],
+  [
+    "Open “Team ideas” to read your classmates’ ideas and add comments.",
+    "افتح «أفكار الفريق» لقراءة أفكار زملائك وإضافة تعليقات."
+  ],
+  [
+    "Open & guide",
+    "فتح وتوجيه"
+  ],
+  [
+    "Open a workshop display",
+    "افتح شاشة عرض الورشة"
+  ],
+  [
+    "Open an existing session with your presenter key, or start a fresh workshop.",
+    "افتح جلسة قائمة بمفتاح مقدم الورشة، أو ابدأ ورشة جديدة."
+  ],
+  [
+    "Open brief & build prompt",
+    "فتح الملخص وتعليمات البناء"
+  ],
+  [
+    "Open class voting",
+    "فتح تصويت الصف"
+  ],
+  [
+    "Open control center",
+    "افتح مركز التحكم"
+  ],
+  [
+    "Open idea & discuss",
+    "افتح الفكرة وناقشها"
+  ],
+  [
+    "Open my room",
+    "افتح غرفتي"
+  ],
+  [
+    "Open Presenter login and sign in with your presenter account. Choose Create workshop, set your challenge, question, language, moderation and vote limit, then start. You can reopen existing sessions from Your workshops.",
+    "افتح تسجيل دخول مقدم الورشة وادخل بحسابك. اختر إنشاء ورشة وحدد التحدي والسؤال واللغة والإشراف وحد الأصوات، ثم ابدأ. يمكنك فتح الجلسات السابقة من قائمة ورشك."
+  ],
+  [
+    "Open selected idea & discuss",
+    "افتح الفكرة المختارة وناقشها"
+  ],
+  [
+    "Open Team ideas to read other ideas, react with one tap, and add comments that build on them.",
+    "افتح أفكار الفريق لقراءة أفكار الآخرين، والتفاعل بلمسة واحدة، وإضافة تعليقات تبني عليها."
+  ],
+  [
+    "Open the guide",
+    "افتح الدليل"
+  ],
+  [
+    "Open the illustrated step-by-step guide",
+    "افتح الدليل المصوّر خطوة بخطوة"
+  ],
+  [
+    "Open this session with its private presenter key.",
+    "افتح هذه الجلسة بمفتاح مقدم الورشة الخاص بها."
+  ],
+  [
+    "Open to all teams",
+    "مفتوحة لكل الفرق"
+  ],
+  [
+    "Open workshop",
+    "فتح الورشة"
+  ],
+  [
+    "Opening room…",
+    "جارٍ فتح الغرفة…"
+  ],
+  [
+    "Opening workshop…",
+    "جارٍ فتح الورشة…"
+  ],
+  [
+    "Opening…",
+    "جارٍ الفتح…"
+  ],
+  [
+    "Optional",
+    "اختياري"
+  ],
+  [
+    "Order",
+    "الترتيب"
+  ],
+  [
+    "Order saved on this device",
+    "تم حفظ الترتيب على هذا الجهاز"
+  ],
+  [
+    "Organization",
+    "الجهة"
+  ],
+  [
+    "Organize · analyze · combine · suggest",
+    "التنظيم · التحليل · الدمج · الاقتراح"
+  ],
+  [
+    "Organize · analyze · combine · suggest · generate",
+    "التنظيم · التحليل · الدمج · الاقتراح · التوليد"
+  ],
+  [
+    "Organize ideas (optional)",
+    "تنظيم الأفكار (اختياري)"
+  ],
+  [
+    "Organize information, explain clearly, and suggest options. Keep uncertainty visible.",
+    "تنظيم المعلومات، والشرح بوضوح، واقتراح الخيارات، مع إظهار درجة عدم اليقين."
+  ],
+  [
+    "Original wording restored",
+    "تمت استعادة النص الأصلي"
+  ],
+  [
+    "Originals are never changed. Everyone can switch to “Show original”.",
+    "لا تتغير النصوص الأصلية أبداً، ويمكن للجميع اختيار «عرض الأصل»."
+  ],
+  [
+    "Other rooms",
+    "الغرف الأخرى"
+  ],
+  [
+    "Our contributions",
+    "مشاركاتنا"
+  ],
+  [
+    "Our ideas",
+    "أفكارنا"
+  ],
+  [
+    "Our product starts with the team’s best ideas",
+    "يبدأ منتجنا بأفضل أفكار الفريق"
+  ],
+  [
+    "Our product’s core features",
+    "الميزات الأساسية لمنتجنا"
+  ],
+  [
+    "Our team rooms",
+    "غرف فرقنا"
+  ],
+  [
+    "Our team’s future skills",
+    "مهارات فريقنا المستقبلية"
+  ],
+  [
+    "Our team’s ideas",
+    "أفكار فريقنا"
+  ],
+  [
+    "Our top ideas",
+    "أفكارنا الأفضل"
+  ],
+  [
+    "Part of",
+    "ضمن"
+  ],
+  [
+    "Participants",
+    "المشاركون"
+  ],
+  [
+    "Password",
+    "كلمة المرور"
+  ],
+  [
+    "Passwords are stored only as a salted scrypt hash, never in plain text.",
+    "تُخزَّن كلمات المرور كبصمة scrypt مملّحة فقط، ولا تُحفظ كنص أبداً."
+  ],
+  [
+    "Paste your key",
+    "الصق المفتاح"
+  ],
+  [
+    "Pause",
+    "إيقاف مؤقت"
+  ],
+  [
+    "Pause all",
+    "إيقاف الكل"
+  ],
+  [
+    "Pause workshop",
+    "إيقاف الورشة مؤقتاً"
+  ],
+  [
+    "Paused",
+    "متوقفة"
+  ],
+  [
+    "PAUSED",
+    "متوقفة"
+  ],
+  [
+    "Paused — audience contributions are saved.",
+    "متوقفة مؤقتاً — المشاركات محفوظة."
+  ],
+  [
+    "pending",
+    "قيد المراجعة"
+  ],
+  [
+    "Pending",
+    "قيد المراجعة"
+  ],
+  [
+    "Pending approval",
+    "بانتظار الموافقة"
+  ],
+  [
+    "People",
+    "المشاركون"
+  ],
+  [
+    "Photos, sketches, screenshots or PDFs — 3 MB at most. Please do not share personal or sensitive information.",
+    "صور أو رسومات أو لقطات شاشة أو ملفات PDF — بحد أقصى 3 ميغابايت. يرجى عدم مشاركة معلومات شخصية أو حساسة."
+  ],
+  [
+    "Plan the project",
+    "خطط للمشروع"
+  ],
+  [
+    "Please do not share personal or sensitive information. Your draft is kept on this device until you submit.",
+    "يرجى عدم مشاركة معلومات شخصية أو حساسة. تُحفظ مسودتك على هذا الجهاز حتى ترسلها."
+  ],
+  [
+    "Point at one AI output and ask: “How do we know this is correct?”",
+    "أشر إلى أحد مخرجات الذكاء الاصطناعي واسأل: «كيف نعرف أن هذا صحيح؟»"
+  ],
+  [
+    "Posts in the last 10 minutes",
+    "مشاركات آخر 10 دقائق"
+  ],
+  [
+    "Practise constructive critique: improve an idea rather than replace it.",
+    "ممارسة النقد البنّاء: تحسين الفكرة بدلاً من استبدالها."
+  ],
+  [
+    "Present",
+    "اعرض"
+  ],
+  [
+    "Present showcase",
+    "اعرض المشاريع"
+  ],
+  [
+    "Presenter access required",
+    "يتطلب هذا صلاحية مقدم الورشة"
+  ],
+  [
+    "PRESENTER CONTROL CENTER",
+    "مركز تحكم مقدم الورشة"
+  ],
+  [
+    "Presenter guide",
+    "دليل مقدم الورشة"
+  ],
+  [
+    "Presenter key",
+    "مفتاح مقدم الورشة"
+  ],
+  [
+    "Presenter login",
+    "دخول مقدم الورشة"
+  ],
+  [
+    "Presenter view",
+    "عرض مقدم الورشة"
+  ],
+  [
+    "Preview ",
+    "معاينة "
+  ],
+  [
+    "Previous",
+    "السابق"
+  ],
+  [
+    "Previous page",
+    "الصفحة السابقة"
+  ],
+  [
+    "Previous team",
+    "الفريق السابق"
+  ],
+  [
+    "Privacy & cost",
+    "الخصوصية والتكلفة"
+  ],
+  [
+    "Privacy and consent are ethical decisions, owned by people.",
+    "الخصوصية والموافقة قرارات أخلاقية يملكها الإنسان."
+  ],
+  [
+    "Private",
+    "خاصة"
+  ],
+  [
+    "Private and unlisted workshops still work with a shared link or code.",
+    "يمكن الانضمام للورش غير المدرجة باستخدام رابط أو رمز مشترك."
+  ],
+  [
+    "Problem",
+    "المشكلة"
+  ],
+  [
+    "Problem Solving",
+    "حل المشكلات"
+  ],
+  [
+    "Problems · experience · creativity · judgment",
+    "المشكلات · الخبرة · الإبداع · الحكم"
+  ],
+  [
+    "Problems · ideas · experience · creativity · judgment",
+    "المشكلات · الأفكار · الخبرة · الإبداع · الحكم"
+  ],
+  [
+    "Problems we identified",
+    "المشكلات التي حددناها"
+  ],
+  [
+    "Product",
+    "المنتج"
+  ],
+  [
+    "Product builder",
+    "بناء المنتج"
+  ],
+  [
+    "Product canvas",
+    "مخطط المنتج"
+  ],
+  [
+    "Product canvas and prompt saved",
+    "تم حفظ مخطط المنتج والتعليمات"
+  ],
+  [
+    "Product Development",
+    "تطوير المنتجات"
+  ],
+  [
+    "Project",
+    "عرض"
+  ],
+  [
+    "Project brief & build prompt",
+    "ملخص المشروع وتعليمات البناء"
+  ],
+  [
+    "Project focus",
+    "محور المشروع"
+  ],
+  [
+    "Project focus (optional)",
+    "محور المشروع (اختياري)"
+  ],
+  [
+    "Projector keyboard shortcuts",
+    "اختصارات لوحة المفاتيح للعرض"
+  ],
+  [
+    "Propose a concrete way to solve the selected idea. Say what it does and for whom.",
+    "اقترح طريقة ملموسة لتنفيذ الفكرة المختارة. وضّح ما تفعله ولمن."
+  ],
+  [
+    "Publicly share the workshop name, QR code and direct Join button. Ended workshops are hidden.",
+    "اعرض اسم الورشة ورمز QR وزر الانضمام للعامة. تُخفى الورش المنتهية."
+  ],
+  [
+    "QR & join link",
+    "QR ورابط الانضمام"
+  ],
+  [
+    "QR code & join link",
+    "رمز QR ورابط الانضمام"
+  ],
+  [
+    "Question",
+    "سؤال"
+  ],
+  [
+    "Quick start",
+    "بداية سريعة"
+  ],
+  [
+    "Quiet",
+    "هادئة"
+  ],
+  [
+    "raised",
+    "رُفعت"
+  ],
+  [
+    "React",
+    "تفاعل"
+  ],
+  [
+    "Read the 1-minute guide",
+    "اقرأ الدليل في دقيقة"
+  ],
+  [
+    "Read their ideas & comment",
+    "اقرأ أفكارهم وعلّق"
+  ],
+  [
+    "Read two ideas aloud and ask the room to combine them into a third.",
+    "اقرأ فكرتين بصوت عالٍ واطلب من القاعة دمجهما في فكرة ثالثة."
+  ],
+  [
+    "Read, discuss, and build on what your teammates share.",
+    "اقرأ وناقش وطوّر ما يشاركه زملاؤك."
+  ],
+  [
+    "Readable report",
+    "تقرير مقروء"
+  ],
+  [
+    "Recently active",
+    "نشطة مؤخراً"
+  ],
+  [
+    "Reconnecting · contributions are saved",
+    "إعادة الاتصال · المشاركات محفوظة"
+  ],
+  [
+    "Reconnecting…",
+    "إعادة الاتصال…"
+  ],
+  [
+    "Reflection",
+    "التأمل"
+  ],
+  [
+    "Refresh build prompt from canvas",
+    "تحديث التعليمات من المخطط"
+  ],
+  [
+    "Reload",
+    "إعادة التحميل"
+  ],
+  [
+    "Remove",
+    "إزالة"
+  ],
+  [
+    "Remove file",
+    "إزالة الملف"
+  ],
+  [
+    "Remove finalist",
+    "إزالة المرشح"
+  ],
+  [
+    "Remove from team",
+    "إزالة من الفريق"
+  ],
+  [
+    "Reopen ",
+    "إعادة فتح "
+  ],
+  [
+    "Reopen workshop",
+    "إعادة فتح الورشة"
+  ],
+  [
+    "Reset",
+    "استعادة"
+  ],
+  [
+    "Reset invite link",
+    "إعادة تعيين رابط الدعوة"
+  ],
+  [
+    "Reset map",
+    "إعادة ضبط الخريطة"
+  ],
+  [
+    "Responsible AI",
+    "الذكاء الاصطناعي المسؤول"
+  ],
+  [
+    "Restart",
+    "إعادة البدء"
+  ],
+  [
+    "Restore",
+    "استعادة"
+  ],
+  [
+    "Restore defaults",
+    "استعادة الافتراضي"
+  ],
+  [
+    "Restore original wording",
+    "استعادة النص الأصلي"
+  ],
+  [
+    "Restore the default branding?",
+    "استعادة الهوية الافتراضية؟"
+  ],
+  [
+    "Restore the original wording?",
+    "استعادة النص الأصلي؟"
+  ],
+  [
+    "Results are hidden until the presenter reveals them.",
+    "النتائج مخفية حتى يكشفها مقدم الورشة."
+  ],
+  [
+    "Results will be revealed by the presenter.",
+    "سيكشف مقدم الورشة النتائج."
+  ],
+  [
+    "Resume",
+    "متابعة"
+  ],
+  [
+    "Resume all",
+    "استئناف الكل"
+  ],
+  [
+    "Resume workshop & submissions",
+    "استئناف الورشة والمشاركات"
+  ],
+  [
+    "Retry",
+    "إعادة المحاولة"
+  ],
+  [
+    "Retry connection",
+    "إعادة محاولة الاتصال"
+  ],
+  [
+    "Return to current stage",
+    "العودة إلى المرحلة الحالية"
+  ],
+  [
+    "Return to guided workshop",
+    "العودة إلى الورشة الموجهة"
+  ],
+  [
+    "Return to idea wall",
+    "العودة إلى جدار الأفكار"
+  ],
+  [
+    "Return to Plan the project to choose core features.",
+    "عُد إلى التخطيط لاختيار الميزات الأساسية."
+  ],
+  [
+    "Reveal next",
+    "عرض التالي"
+  ],
+  [
+    "Risks",
+    "المخاطر"
+  ],
+  [
+    "Room",
+    "الغرفة"
+  ],
+  [
+    "Room controls",
+    "التحكم في الغرفة"
+  ],
+  [
+    "Room created",
+    "تم إنشاء الغرفة"
+  ],
+  [
+    "Room deleted",
+    "تم حذف الغرفة"
+  ],
+  [
+    "Room ideas",
+    "أفكار الغرفة"
+  ],
+  [
+    "Room is active",
+    "الغرفة نشطة"
+  ],
+  [
+    "Room lead",
+    "قائد الغرفة"
+  ],
+  [
+    "Room leader guide",
+    "دليل قائد الغرفة"
+  ],
+  [
+    "Room name",
+    "اسم الغرفة"
+  ],
+  [
+    "Room name, e.g. Team Falcon",
+    "اسم الغرفة، مثل: فريق الصقر"
+  ],
+  [
+    "Room order saved for every screen",
+    "تم حفظ ترتيب الغرف لكل الشاشات"
+  ],
+  [
+    "Room paused — voting will resume with the room",
+    "الغرفة متوقفة — يُستأنف التصويت مع الغرفة"
+  ],
+  [
+    "Room paused. Read and explore while your leader or presenter resumes the room.",
+    "الغرفة متوقفة. اقرأ واستكشف حتى يستأنف القائد أو مقدم الورشة العمل."
+  ],
+  [
+    "Room saved",
+    "تم حفظ الغرفة"
+  ],
+  [
+    "Room screen updated",
+    "تم تحديث شاشة الغرفة"
+  ],
+  [
+    "Room visibility",
+    "ظهور الغرفة"
+  ],
+  [
+    "Room visibility saved",
+    "تم حفظ ظهور الغرفة"
+  ],
+  [
+    "rooms",
+    "غرف"
+  ],
+  [
+    "Rooms view",
+    "عرض الغرف"
+  ],
+  [
+    "Save",
+    "حفظ"
+  ],
+  [
+    "Save changes",
+    "حفظ التغييرات"
+  ],
+  [
+    "Save home page",
+    "حفظ الصفحة الرئيسية"
+  ],
+  [
+    "Save project brief",
+    "حفظ ملخص المشروع"
+  ],
+  [
+    "Save room",
+    "حفظ الغرفة"
+  ],
+  [
+    "Save settings",
+    "حفظ الإعدادات"
+  ],
+  [
+    "Saving…",
+    "جارٍ الحفظ…"
+  ],
+  [
+    "Scan or click to join",
+    "امسح أو اضغط للانضمام"
+  ],
+  [
+    "Scan the presenter’s QR code or open Join workshop and enter the workshop code.",
+    "امسح رمز QR أو افتح الانضمام للورشة وأدخل رمزها."
+  ],
+  [
+    "Scan the QR code on the screen, or open the website and type the workshop code.",
+    "امسح رمز QR الظاهر على الشاشة، أو افتح الموقع واكتب رمز الورشة."
+  ],
+  [
+    "Scan the QR code or enter the workshop code",
+    "امسح رمز QR أو أدخل رمز الورشة"
+  ],
+  [
+    "Scan the QR on your phone, or click Join workshop on this device.",
+    "امسح رمز QR بهاتفك، أو اضغط «انضم إلى الورشة» على هذا الجهاز."
+  ],
+  [
+    "Scan to join this room",
+    "امسح للانضمام إلى هذه الغرفة"
+  ],
+  [
+    "Scan to join workshop",
+    "امسح للانضمام إلى الورشة"
+  ],
+  [
+    "Search by name, challenge or code…",
+    "ابحث بالاسم أو التحدي أو الرمز…"
+  ],
+  [
+    "Search contributions",
+    "ابحث في المشاركات"
+  ],
+  [
+    "Search rooms",
+    "ابحث في الغرف"
+  ],
+  [
+    "Search rooms…",
+    "ابحث في الغرف…"
+  ],
+  [
+    "Search team rooms",
+    "ابحث في غرف الفرق"
+  ],
+  [
+    "Search workshops",
+    "ابحث في الورش"
+  ],
+  [
+    "See AI as a collaborator: humans set direction, AI drafts, humans verify.",
+    "رؤية الذكاء الاصطناعي كشريك: الإنسان يحدد الاتجاه، والذكاء الاصطناعي يصيغ، والإنسان يتحقق."
+  ],
+  [
+    "See what other teams are building and leave helpful comments. Visiting does not change your own team.",
+    "شاهد ما تبنيه الفرق الأخرى واترك تعليقات مفيدة. الزيارة لا تغيّر فريقك."
+  ],
+  [
+    "Select ",
+    "تحديد "
+  ],
+  [
+    "Select all shown",
+    "تحديد المعروض"
+  ],
+  [
+    "Select an idea below to develop.",
+    "اختر فكرة أدناه للتطوير."
+  ],
+  [
+    "Select an idea to change its color or size.",
+    "اختر فكرة لتغيير لونها أو حجمها."
+  ],
+  [
+    "Select ideas from the finalists to define the core features.",
+    "اختر أفكاراً من المرشحين لتحديد الميزات الأساسية."
+  ],
+  [
+    "Select Invite students or Join QR code. Display the QR code on the projector or share the joining link and code. Students need no account. Use Test student view to rehearse before the workshop.",
+    "اختر دعوة الطلاب أو رمز الانضمام. اعرض رمز QR على الشاشة أو شارك الرابط ورمز الورشة. لا يحتاج الطلاب إلى حساب. جرّب واجهة الطالب قبل بدء الورشة."
+  ],
+  [
+    "Selected idea",
+    "الفكرة المختارة"
+  ],
+  [
+    "Selected teams",
+    "فرق مختارة"
+  ],
+  [
+    "Selected workshops",
+    "الورش المحددة"
+  ],
+  [
+    "Selected workshops ended",
+    "تم إنهاء الورش المحددة"
+  ],
+  [
+    "Send",
+    "إرسال"
+  ],
+  [
+    "Server address",
+    "عنوان الخادم"
+  ],
+  [
+    "Sessions last 12 hours. Ten wrong passwords lock sign-in for 15 minutes.",
+    "تستمر الجلسة 12 ساعة، وتؤدي عشر محاولات خاطئة إلى إيقاف الدخول 15 دقيقة."
+  ],
+  [
+    "Set timer",
+    "ضبط المؤقت"
+  ],
+  [
+    "Sets technical constraints",
+    "يضع قيوداً تقنية"
+  ],
+  [
+    "Settings",
+    "الإعدادات"
+  ],
+  [
+    "Settings saved — visible to everyone now",
+    "تم الحفظ — التغييرات ظاهرة للجميع الآن"
+  ],
+  [
+    "Share ",
+    "مشاركة "
+  ],
+  [
+    "Share a file",
+    "شارك ملفاً"
+  ],
+  [
+    "Share ideas",
+    "شارك الأفكار"
+  ],
+  [
+    "Shared — waiting for approval before others see it.",
+    "تمت المشاركة — بانتظار الموافقة قبل أن يراها الآخرون."
+  ],
+  [
+    "Shortlist",
+    "ترشيح"
+  ],
+  [
+    "Shortlist ideas first",
+    "أضف أفكاراً إلى القائمة المختصرة أولاً"
+  ],
+  [
+    "Shortlisted",
+    "مرشح"
+  ],
+  [
+    "Show",
+    "عرض"
+  ],
+  [
+    "Show on join page",
+    "إظهار في صفحة الانضمام"
+  ],
+  [
+    "Show on projector",
+    "عرض على الشاشة"
+  ],
+  [
+    "Show passwords",
+    "إظهار كلمات المرور"
+  ],
+  [
+    "Show QR",
+    "عرض رمز QR"
+  ],
+  [
+    "Show QR code",
+    "اعرض رمز QR"
+  ],
+  [
+    "Show results",
+    "عرض النتائج"
+  ],
+  [
+    "Show rooms on projector",
+    "عرض الغرف على الشاشة"
+  ],
+  [
+    "Show simple cards",
+    "عرض البطاقات البسيطة"
+  ],
+  [
+    "Show the brief and ask students to spot one thing AI should not decide alone.",
+    "اعرض الملخص واطلب من الطلاب تحديد أمر لا ينبغي للذكاء الاصطناعي أن يقرره وحده."
+  ],
+  [
+    "Show the idea wall",
+    "عرض جدار الأفكار"
+  ],
+  [
+    "Show the join QR code",
+    "عرض رمز الانضمام"
+  ],
+  [
+    "Show voting results",
+    "عرض نتائج التصويت"
+  ],
+  [
+    "Showcase results",
+    "نتائج عرض المشاريع"
+  ],
+  [
+    "Shown in the accent colour after the logo text.",
+    "يظهر بلون مميز بعد نص الشعار."
+  ],
+  [
+    "Shown on join page",
+    "تظهر في صفحة الانضمام"
+  ],
+  [
+    "Shows everything people write — the challenge, ideas and comments — in each viewer’s chosen language, so Arabic and English speakers take part equally.",
+    "تعرض كل ما يكتبه المشاركون — التحدي والأفكار والتعليقات — بلغة كل مشاهد، ليشارك متحدثو العربية والإنجليزية بالتساوي."
+  ],
+  [
+    "Sign in",
+    "تسجيل الدخول"
+  ],
+  [
+    "Sign in to create and manage your workshops.",
+    "سجّل الدخول لإنشاء ورشك وإدارتها."
+  ],
+  [
+    "Sign in with your username and password.",
+    "سجّل الدخول باسم المستخدم وكلمة المرور."
+  ],
+  [
+    "Sign out",
+    "تسجيل الخروج"
+  ],
+  [
+    "Signing in…",
+    "جارٍ تسجيل الدخول…"
+  ],
+  [
+    "Six clearly labeled sample ideas added",
+    "أُضيفت ست أفكار تجريبية موضّحة"
+  ],
+  [
+    "Size",
+    "الحجم"
+  ],
+  [
+    "Skills students said they practised",
+    "المهارات التي قال الطلاب إنهم مارسوها"
+  ],
+  [
+    "Smart Store",
+    "المخزن الذكي"
+  ],
+  [
+    "Smart Tutor",
+    "المعلّم الذكي"
+  ],
+  [
+    "Solution",
+    "الحل"
+  ],
+  [
+    "Solutions",
+    "الحلول"
+  ],
+  [
+    "Solutions we designed",
+    "الحلول التي صممناها"
+  ],
+  [
+    "Sort",
+    "ترتيب"
+  ],
+  [
+    "Sort by",
+    "الترتيب حسب"
+  ],
+  [
+    "Sorting large amounts of text quickly is a strength of AI — a person should still review the groups.",
+    "فرز كميات كبيرة من النصوص بسرعة من نقاط قوة الذكاء الاصطناعي — مع مراجعة بشرية للمجموعات."
+  ],
+  [
+    "Split the audience into team rooms. Each team develops its own project through the same steps — ideas, improvements, voting and a project brief — while this main workshop stays the shared space for the whole class.",
+    "قسّم الحضور إلى غرف فرق. يطوّر كل فريق مشروعه الخاص بالخطوات نفسها — الأفكار والتحسين والتصويت وملخص المشروع — وتبقى هذه الورشة الرئيسية مساحة مشتركة للجميع."
+  ],
+  [
+    "Spotlight",
+    "إبراز"
+  ],
+  [
+    "Spotlight one idea at a time. Celebrate improvements that mention risks or inclusion.",
+    "اعرض فكرة واحدة في كل مرة. احتفِ بالتحسينات التي تذكر المخاطر أو الشمول."
+  ],
+  [
+    "Start a new team room",
+    "أنشئ غرفة فريق جديد"
+  ],
+  [
+    "Start a room for your team",
+    "أنشئ غرفة لفريقك"
+  ],
+  [
+    "Start from a challenge",
+    "ابدأ من تحدٍّ"
+  ],
+  [
+    "Start from ready-made wording, then adjust anything below. Nothing changes for visitors until you click Save.",
+    "ابدأ من نص جاهز ثم عدّل ما تشاء أدناه. لا يتغير شيء للزوار حتى تضغط «حفظ»."
+  ],
+  [
+    "Start mission",
+    "ابدأ المهمة"
+  ],
+  [
+    "Start one below and invite your teammates.",
+    "أنشئ غرفة أدناه وادعُ زملاءك."
+  ],
+  [
+    "Start timer",
+    "بدء المؤقت"
+  ],
+  [
+    "Start voting",
+    "بدء التصويت"
+  ],
+  [
+    "Start workshop",
+    "ابدأ الورشة"
+  ],
+  [
+    "Start: gather problems",
+    "ابدأ: اجمع المشكلات"
+  ],
+  [
+    "States the goal",
+    "يحدد الهدف"
+  ],
+  [
+    "Status",
+    "الحالة"
+  ],
+  [
+    "Stay",
+    "ابقَ"
+  ],
+  [
+    "Stay in the same browser to keep your participation and votes. Finish by choosing a skill during Reflection.",
+    "ابقَ في المتصفح نفسه للاحتفاظ بمشاركتك وأصواتك. اختتم باختيار مهارة في مرحلة التأمل."
+  ],
+  [
+    "Step",
+    "الخطوة"
+  ],
+  [
+    "STEP",
+    "الخطوة"
+  ],
+  [
+    "Stop submissions",
+    "إيقاف المشاركات"
+  ],
+  [
+    "Strong",
+    "قوية"
+  ],
+  [
+    "Student contributions will appear here as they arrive.",
+    "ستظهر مشاركات الطلاب هنا فور وصولها."
+  ],
+  [
+    "Student guide",
+    "دليل الطالب"
+  ],
+  [
+    "Students can create their own rooms",
+    "يمكن للطلاب إنشاء غرفهم"
+  ],
+  [
+    "Students can visit other rooms",
+    "يمكن للطلاب زيارة الغرف الأخرى"
+  ],
+  [
+    "Students can visit other rooms as guests to read and comment — great for peer feedback.",
+    "يمكن للطلاب زيارة غرف أخرى كضيوف للقراءة والتعليق — مفيد للتغذية الراجعة بين الزملاء."
+  ],
+  [
+    "students completed",
+    "طالباً أكملوا"
+  ],
+  [
+    "Students join a team from the Team rooms tab, or with the room’s own link or QR code.",
+    "ينضم الطلاب إلى فريق من تبويب غرف الفرق، أو برابط الغرفة أو رمز QR الخاص بها."
+  ],
+  [
+    "Students join from their phones with a QR code. No account, no download.",
+    "ينضم الطلاب من هواتفهم برمز QR، بلا حساب ولا تنزيل."
+  ],
+  [
+    "students joined",
+    "طالب انضم"
+  ],
+  [
+    "Students learn real job skills",
+    "يتعلم الطلاب مهارات العمل الحقيقية"
+  ],
+  [
+    "Students learn to use AI the right way",
+    "يتعلم الطلاب استخدام الذكاء الاصطناعي بالطريقة الصحيحة"
+  ],
+  [
+    "Students never need an account.",
+    "لا يحتاج الطلاب إلى حساب أبداً."
+  ],
+  [
+    "Students scan a QR code at the clinic, pick a time slot, and receive a reminder one hour before.",
+    "يمسح الطلاب رمز QR في العيادة ويختارون موعداً ويتلقون تذكيراً قبل ساعة."
+  ],
+  [
+    "Students separate a problem from a solution and describe a real need.",
+    "يميّز الطلاب بين المشكلة والحل ويصفون حاجة حقيقية."
+  ],
+  [
+    "Students struggle to … because …",
+    "يواجه الطلاب صعوبة في … لأن …"
+  ],
+  [
+    "Students struggle to book clinic appointments because the phone line is busy during class breaks.",
+    "يواجه الطلاب صعوبة في حجز مواعيد العيادة لأن الخط مشغول خلال فترات الاستراحة."
+  ],
+  [
+    "Submissions are closed. Keep your idea ready for the next stage.",
+    "تم إغلاق المشاركات. احتفظ بفكرتك للمرحلة القادمة."
+  ],
+  [
+    "Suggest one final feature that makes the product genuinely more useful.",
+    "اقترح ميزة أخيرة تجعل المنتج أكثر فائدة فعلاً."
+  ],
+  [
+    "Summarise feedback from 100 users",
+    "تلخيص ملاحظات 100 مستخدم"
+  ],
+  [
+    "Surprise me",
+    "فكرة مفاجئة"
+  ],
+  [
+    "Team & leader",
+    "الفريق والقائد"
+  ],
+  [
+    "Team colour",
+    "لون الفريق"
+  ],
+  [
+    "Team emoji",
+    "رمز الفريق"
+  ],
+  [
+    "Team falcon",
+    "فريق الصقر"
+  ],
+  [
+    "Team identity",
+    "هوية الفريق"
+  ],
+  [
+    "Team leader",
+    "قائد الفريق"
+  ],
+  [
+    "Team members",
+    "أعضاء الفريق"
+  ],
+  [
+    "Team on screen",
+    "الفريق على الشاشة"
+  ],
+  [
+    "Team projects",
+    "مشاريع الفرق"
+  ],
+  [
+    "TEAM ROOM",
+    "غرفة الفريق"
+  ],
+  [
+    "Team rooms",
+    "غرف الفرق"
+  ],
+  [
+    "Team rooms of ",
+    "غرف الفرق في "
+  ],
+  [
+    "Team rooms will appear here.",
+    "ستظهر غرف الفرق هنا."
+  ],
+  [
+    "Team showcase",
+    "عرض مشاريع الفرق"
+  ],
+  [
+    "TEAM SHOWCASE",
+    "عرض مشاريع الفرق"
+  ],
+  [
+    "teammates",
+    "زملاء"
+  ],
+  [
+    "teammates joined",
+    "مشارك انضم"
+  ],
+  [
+    "teams",
+    "فرق"
+  ],
+  [
+    "Teams allowed to visit and discuss with us",
+    "الفرق المسموح لها بالزيارة والنقاش معنا"
+  ],
+  [
+    "Teams asking for help",
+    "فرق تطلب المساعدة"
+  ],
+  [
+    "Teams to visit",
+    "الفرق المطلوب زيارتها"
+  ],
+  [
+    "Tell a student whether their symptoms are serious",
+    "إخبار طالب ما إذا كانت أعراضه خطيرة"
+  ],
+  [
+    "Test",
+    "اختبار"
+  ],
+  [
+    "Test student view",
+    "تجربة واجهة الطالب"
+  ],
+  [
+    "Testing…",
+    "جارٍ الاختبار…"
+  ],
+  [
+    "Thank you for thinking, sharing and building with your team.",
+    "شكراً لتفكيرك ومشاركتك وبنائك مع فريقك."
+  ],
+  [
+    "The backup could not be downloaded. Please retry.",
+    "تعذّر تنزيل النسخة الاحتياطية. يرجى المحاولة مجدداً."
+  ],
+  [
+    "THE CHALLENGE",
+    "التحدي"
+  ],
+  [
+    "The class chooses the best ideas and writes a short project plan.",
+    "يختار الصف أفضل الأفكار ويكتب خطة مشروع قصيرة."
+  ],
+  [
+    "The class has chosen",
+    "اختار الصف"
+  ],
+  [
+    "The class picks one idea and makes it better together.",
+    "يختار الصف فكرة واحدة ويحسّنها معاً."
+  ],
+  [
+    "The discussion is private to this team.",
+    "النقاش خاص بهذا الفريق."
+  ],
+  [
+    "The first member leads the room and can move it through the steps. You can open and guide any room.",
+    "أول عضو يقود الغرفة ويمكنه نقلها بين الخطوات، ويمكنك فتح أي غرفة وتوجيهها."
+  ],
+  [
+    "The first member to join leads the team.",
+    "أول عضو ينضم يقود الفريق."
+  ],
+  [
+    "The first version only needs …",
+    "تحتاج النسخة الأولى فقط إلى …"
+  ],
+  [
+    "The form will be filled with wording for this audience. Your current edits in the form are replaced, but nothing is published until you click Save.",
+    "سيُملأ النموذج بنص مناسب لهذا الجمهور، وتُستبدل تعديلاتك الحالية في النموذج، ولن يُنشر شيء حتى تضغط «حفظ»."
+  ],
+  [
+    "The leader guides the room; members choose who leads.",
+    "يوجه القائد الغرفة، ويختار الأعضاء من يقودهم."
+  ],
+  [
+    "The logo, application name and tagline are edited in “Application & About”.",
+    "يُعدَّل الشعار واسم التطبيق والشعار النصي من «التطبيق وصفحة عن التطبيق»."
+  ],
+  [
+    "The logo, name, version and About text return to their original values. Workshops are not affected.",
+    "يعود الشعار والاسم والإصدار ونص «عن التطبيق» إلى القيم الأصلية. لا تتأثر الورش."
+  ],
+  [
+    "The new passwords do not match.",
+    "كلمتا المرور الجديدتان غير متطابقتين."
+  ],
+  [
+    "The next great idea is on its way",
+    "الفكرة الرائعة التالية في الطريق"
+  ],
+  [
+    "The old link stops working.",
+    "يتوقف الرابط القديم عن العمل."
+  ],
+  [
+    "The presenter can see your team needs help.",
+    "يرى مقدم الورشة أن فريقك يحتاج المساعدة."
+  ],
+  [
+    "The presenter has paused the workshop. Your contributions are saved.",
+    "أوقف مقدم الورشة النشاط مؤقتاً. مشاركاتك محفوظة."
+  ],
+  [
+    "The teacher (the “presenter”) leads the session on a big screen. Students take part from their own phones. No one needs to download anything or create an account, and it works in both English and Arabic.",
+    "يقود المعلم («مقدم الورشة») الجلسة على شاشة كبيرة، ويشارك الطلاب من هواتفهم. لا يحتاج أحد إلى تنزيل أي شيء أو إنشاء حساب، ويعمل الموقع بالعربية والإنجليزية."
+  ],
+  [
+    "The user opens … and then …",
+    "يفتح المستخدم … ثم …"
+  ],
+  [
+    "The workshop prepares your brief and prompt. Build the working prototype in your AI coding tool, then return to discuss it.",
+    "تجهز الورشة الملخص والتعليمات. ابنِ النموذج في أداة البرمجة ثم عُد لمناقشته."
+  ],
+  [
+    "There are no other teams yet.",
+    "لا توجد فرق أخرى بعد."
+  ],
+  [
+    "These are labeled Demo team. Start a fresh workshop for your live audience.",
+    "تظهر باسم «Demo team». ابدأ ورشة جديدة لجمهورك الفعلي."
+  ],
+  [
+    "THINK · SHARE · IMPROVE · VOTE · BUILD",
+    "فكّر · شارك · حسّن · صوّت · ابنِ"
+  ],
+  [
+    "Think • Share • Improve • Vote • Build",
+    "فكّر • شارك • حسّن • صوّت • ابنِ"
+  ],
+  [
+    "Think → Collaborate → Communicate → Use AI → Evaluate → Create",
+    "فكر ← تعاون ← تواصل ← استخدم الذكاء الاصطناعي ← قيّم ← ابتكر"
+  ],
+  [
+    "Think freely. Quantity first — simple and unusual ideas are both welcome.",
+    "فكّر بحرية. الكمية أولاً — الأفكار البسيطة والغريبة مرحّب بها."
+  ],
+  [
+    "Think freely. What useful idea could address our challenge?",
+    "فكر بحرية. ما الفكرة المفيدة التي يمكن أن تعالج تحدينا؟"
+  ],
+  [
+    "This is the future of work.",
+    "هذا هو مستقبل العمل."
+  ],
+  [
+    "This key opens your workshop on another device. Keep it private; students only need the workshop code.",
+    "يفتح هذا المفتاح ورشتك على جهاز آخر. احتفظ به سرّاً؛ يحتاج الطلاب إلى رمز الورشة فقط."
+  ],
+  [
+    "THIS MORNING…",
+    "هذا الصباح…"
+  ],
+  [
+    "This room is private",
+    "هذه الغرفة خاصة"
+  ],
+  [
+    "This room’s screen shows",
+    "شاشة هذه الغرفة تعرض"
+  ],
+  [
+    "This team has chosen to keep its discussion to itself or to invited teams only. You can still see it on the map.",
+    "اختار هذا الفريق أن يبقي نقاشه لنفسه أو للفرق المدعوة فقط. ويمكنك رؤيته على الخريطة."
+  ],
+  [
+    "This team has made its room private, so visitors cannot read it now.",
+    "جعل هذا الفريق غرفته خاصة، لذا لا يمكن للزوار قراءتها الآن."
+  ],
+  [
+    "This team joins by invitation",
+    "ينضم الأعضاء لهذا الفريق بالدعوة"
+  ],
+  [
+    "This team joins by invitation. Ask the team for its invite link — you can still visit if the room is open.",
+    "ينضم الأعضاء لهذا الفريق بالدعوة. اطلب رابط الدعوة من الفريق — ويمكنك الزيارة إن كانت الغرفة مفتوحة."
+  ],
+  [
+    "This team needs help",
+    "هذا الفريق يحتاج المساعدة"
+  ],
+  [
+    "THIS TEAM’S PROJECT",
+    "مشروع هذا الفريق"
+  ],
+  [
+    "This team’s project brief is not ready yet — invite them to present their best ideas.",
+    "ملخص مشروع هذا الفريق غير جاهز بعد — ادعهم لعرض أفضل أفكارهم."
+  ],
+  [
+    "This workshop has ended. Reopen it before inviting participants.",
+    "انتهت هذه الورشة. أعد فتحها قبل دعوة المشاركين."
+  ],
+  [
+    "This workshop has ended. Thank you for your interest.",
+    "انتهت هذه الورشة. شكراً لاهتمامك."
+  ],
+  [
+    "This would be even better if …",
+    "ستكون أفضل لو …"
+  ],
+  [
+    "Time to decide",
+    "حان وقت القرار"
+  ],
+  [
+    "Time’s up",
+    "انتهى الوقت"
+  ],
+  [
+    "Time’s up is a cue, not a cutoff. Submissions stay safe and you decide when to continue.",
+    "انتهاء الوقت تنبيه وليس إغلاقاً. تبقى المشاركات محفوظة وأنت من يقرر متى تتابع."
+  ],
+  [
+    "Tip: use the sun/moon button to switch to the light theme in bright rooms — it is easier to read on most projectors.",
+    "نصيحة: استخدم زر الشمس/القمر للتبديل إلى المظهر الفاتح في القاعات المضيئة — فهو أسهل قراءة على معظم أجهزة العرض."
+  ],
+  [
+    "Title",
+    "العنوان"
+  ],
+  [
+    "To keep it safe, the app should …",
+    "لضمان الأمان، يجب أن …"
+  ],
+  [
+    "To keep it safe, the assistant should always say “I am not a doctor” and link to the campus clinic.",
+    "لضمان الأمان، يجب أن يذكر المساعد دائماً «لست طبيباً» وأن يوجّه إلى عيادة الحرم."
+  ],
+  [
+    "Today you didn’t just learn about AI.",
+    "اليوم لم تتعلم عن الذكاء الاصطناعي فقط."
+  ],
+  [
+    "Today you’re not just attending a workshop. You’re joining an innovation team.",
+    "اليوم أنت لا تحضر ورشة فقط. بل تنضم إلى فريق ابتكار."
+  ],
+  [
+    "Today’s challenge",
+    "تحدي اليوم"
+  ],
+  [
+    "TODAY’S CHALLENGE",
+    "تحدي اليوم"
+  ],
+  [
+    "Together",
+    "معاً"
+  ],
+  [
+    "Too weak",
+    "ضعيفة جداً"
+  ],
+  [
+    "Translate a reminder into Arabic and English",
+    "ترجمة تذكير إلى العربية والإنجليزية"
+  ],
+  [
+    "Translation",
+    "الترجمة"
+  ],
+  [
+    "Translation service",
+    "خدمة الترجمة"
+  ],
+  [
+    "Try a different name or show all teams.",
+    "جرّب اسماً آخر أو اعرض كل الفرق."
+  ],
+  [
+    "Try again",
+    "حاول مجدداً"
+  ],
+  [
+    "Try another search or show all workshops.",
+    "جرّب بحثاً آخر أو اعرض كل الورش."
+  ],
+  [
+    "Turn off to pause the room: members can read but not post.",
+    "أوقفه لإيقاف الغرفة مؤقتاً: يقرأ الأعضاء ولا ينشرون."
+  ],
+  [
+    "Turn off when the team should stop adding and start deciding.",
+    "أوقفه عندما يتوقف الفريق عن الإضافة ويبدأ القرار."
+  ],
+  [
+    "Turn on team rooms",
+    "تفعيل غرف الفرق"
+  ],
+  [
+    "Type a nickname — or join without a name.",
+    "اكتب اسماً مستعاراً — أو انضم دون اسم."
+  ],
+  [
+    "Type DELETE to confirm",
+    "اكتب «حذف» للتأكيد"
+  ],
+  [
+    "Type the workshop code to confirm",
+    "اكتب رمز الورشة للتأكيد"
+  ],
+  [
+    "Unhighlight",
+    "إلغاء التمييز"
+  ],
+  [
+    "Update account",
+    "تحديث الحساب"
+  ],
+  [
+    "Updating live",
+    "يتم التحديث مباشرة"
+  ],
+  [
+    "Uploading…",
+    "جارٍ الرفع…"
+  ],
+  [
+    "Use Shortlist on approved ideas to choose your product candidates.",
+    "استخدم «ترشيح» على الأفكار المعتمدة لاختيار مرشحي المنتج."
+  ],
+  [
+    "Use the projector link from your presenter control center.",
+    "استخدم رابط العرض من مركز تحكم مقدم الورشة."
+  ],
+  [
+    "Use your browser’s fullscreen control.",
+    "استخدم زر ملء الشاشة في المتصفح."
+  ],
+  [
+    "Username",
+    "اسم المستخدم"
+  ],
+  [
+    "Users",
+    "المستخدمون"
+  ],
+  [
+    "Value",
+    "القيمة"
+  ],
+  [
+    "Values and priorities come from people who live the problem.",
+    "القيم والأولويات تأتي من الأشخاص الذين يعيشون المشكلة."
+  ],
+  [
+    "Version",
+    "الإصدار"
+  ],
+  [
+    "View About page",
+    "عرض صفحة «عن التطبيق»"
+  ],
+  [
+    "View home page",
+    "عرض الصفحة الرئيسية"
+  ],
+  [
+    "Visit",
+    "زيارة"
+  ],
+  [
+    "Visit another room",
+    "زيارة غرفة أخرى"
+  ],
+  [
+    "Visitor",
+    "زائر"
+  ],
+  [
+    "visitors",
+    "زوار"
+  ],
+  [
+    "Visitors",
+    "الزوار"
+  ],
+  [
+    "Visitors from other teams",
+    "زوار من فرق أخرى"
+  ],
+  [
+    "Visitors give feedback without changing teams.",
+    "يقدم الزوار الملاحظات دون تغيير فرقهم."
+  ],
+  [
+    "Visitors read and comment but cannot post ideas or vote there.",
+    "الزوار يقرؤون ويعلّقون لكن لا يضيفون أفكاراً ولا يصوّتون."
+  ],
+  [
+    "vote",
+    "صوت"
+  ],
+  [
+    "Vote",
+    "التصويت"
+  ],
+  [
+    "Vote for the best ideas when voting opens.",
+    "صوّت لأفضل الأفكار عندما يُفتح التصويت."
+  ],
+  [
+    "Vote for the best team project",
+    "صوّت لأفضل مشروع فريق"
+  ],
+  [
+    "Vote for this idea",
+    "صوّت لهذه الفكرة"
+  ],
+  [
+    "Vote for this project",
+    "صوّت لهذا المشروع"
+  ],
+  [
+    "Vote saved ✓",
+    "تم حفظ صوتك ✓"
+  ],
+  [
+    "voted",
+    "صوّتوا"
+  ],
+  [
+    "votes",
+    "صوت"
+  ],
+  [
+    "Votes",
+    "الأصوات"
+  ],
+  [
+    "votes from the class",
+    "صوتاً من الصف"
+  ],
+  [
+    "Votes per student",
+    "أصوات لكل طالب"
+  ],
+  [
+    "votes received",
+    "أصوات مستلمة"
+  ],
+  [
+    "votes used",
+    "أصوات مستخدمة"
+  ],
+  [
+    "Voting is closed. Thank you for helping your team decide.",
+    "التصويت مغلق. شكراً لمساعدة فريقك في اتخاذ القرار."
+  ],
+  [
+    "Voting is still open",
+    "التصويت ما زال مفتوحاً"
+  ],
+  [
+    "Voting opens when the presenter starts it.",
+    "يبدأ التصويت عندما يفتحه مقدم الورشة."
+  ],
+  [
+    "Wait for approval if moderation is enabled. Improve the highlighted idea when asked, and vote for shortlisted ideas when voting opens.",
+    "انتظر الموافقة عند تفعيل الإشراف. حسّن الفكرة المعروضة عند الطلب وصوّت للأفكار المختصرة عند فتح التصويت."
+  ],
+  [
+    "Waiting for a member",
+    "بانتظار عضو"
+  ],
+  [
+    "Waiting for approval",
+    "بانتظار الموافقة"
+  ],
+  [
+    "Waiting for the first idea…",
+    "بانتظار أول فكرة…"
+  ],
+  [
+    "Waiting for the presenter to select an idea…",
+    "ننتظر أن يختار مقدم الورشة فكرة…"
+  ],
+  [
+    "Waiting for the room",
+    "بانتظار القاعة"
+  ],
+  [
+    "Want to rehearse?",
+    "هل تريد التدرّب؟"
+  ],
+  [
+    "We could use AI to …",
+    "يمكننا استخدام الذكاء الاصطناعي لـ …"
+  ],
+  [
+    "We couldn’t load the workshop list. You can still use a code below.",
+    "تعذّر تحميل قائمة الورش. يمكنك استخدام الرمز أدناه."
+  ],
+  [
+    "We created this together.",
+    "لقد ابتكرنا هذا معاً."
+  ],
+  [
+    "We had nothing but a problem.",
+    "لم يكن لدينا سوى مشكلة."
+  ],
+  [
+    "We have our top ideas",
+    "لدينا أفكارنا الأفضل"
+  ],
+  [
+    "We need the presenter",
+    "نحتاج مقدم الورشة"
+  ],
+  [
+    "Weak",
+    "ضعيفة"
+  ],
+  [
+    "Website",
+    "الموقع"
+  ],
+  [
+    "Welcome",
+    "الترحيب"
+  ],
+  [
+    "Welcome to the innovation team",
+    "مرحباً بك في فريق الابتكار"
+  ],
+  [
+    "Welcome to the team",
+    "مرحباً بك في الفريق"
+  ],
+  [
+    "Welcome! New here?",
+    "أهلاً بك! هل أنت جديد هنا؟"
+  ],
+  [
+    "What could go wrong? Who might be left out? How could it be simpler?",
+    "ما الذي قد يسوء؟ من قد يُستبعد؟ كيف نجعلها أبسط؟"
+  ],
+  [
+    "What could make a difference?",
+    "ما الفكرة التي يمكن أن تحدث فرقاً؟"
+  ],
+  [
+    "What did you actually practice today?",
+    "ما المهارات التي مارستها اليوم؟"
+  ],
+  [
+    "What did you practice today?",
+    "ما المهارات التي مارستها اليوم؟"
+  ],
+  [
+    "What final feature would make our product more useful?",
+    "ما الميزة الأخيرة التي ستجعل منتجنا أكثر فائدة؟"
+  ],
+  [
+    "What if a chat assistant reminded students about appointments in Arabic and English, so they never miss one?",
+    "ماذا لو ذكّر مساعد محادثة الطلاب بمواعيدهم بالعربية والإنجليزية حتى لا يفوتهم أي موعد؟"
+  ],
+  [
+    "What if we …",
+    "ماذا لو …"
+  ],
+  [
+    "What is it?",
+    "ما هو التطبيق؟"
+  ],
+  [
+    "What problem should we solve?",
+    "ما المشكلة التي ينبغي أن نحلها؟"
+  ],
+  [
+    "What should we call you?",
+    "ماذا نناديك؟"
+  ],
+  [
+    "What students and the projector show by default. Each student can still switch language on their phone.",
+    "اللغة الافتراضية للطلاب وشاشة العرض. ويمكن لكل طالب تغيير اللغة على هاتفه."
+  ],
+  [
+    "What this room’s screen shows",
+    "ما تعرضه شاشة هذه الغرفة"
+  ],
+  [
+    "What works? What would you improve?",
+    "ما الذي ينجح؟ وما الذي ستحسّنه؟"
+  ],
+  [
+    "When translation is on, the challenge text and approved ideas and comments are sent to the chosen service. Pending ideas are not sent.",
+    "عند تفعيل الترجمة، يُرسل نص التحدي والأفكار والتعليقات المعتمدة إلى الخدمة المختارة، ولا تُرسل الأفكار قيد المراجعة."
+  ],
+  [
+    "Which skill matters most for your future career?",
+    "ما المهارة الأهم في مسيرتك المهنية المستقبلية؟"
+  ],
+  [
+    "Which skill will be most important in your future career?",
+    "ما المهارة الأهم في مسيرتك المهنية المستقبلية؟"
+  ],
+  [
+    "Which solution creates the most value?",
+    "أي حل يقدم أكبر قيمة؟"
+  ],
+  [
+    "Who can join this team?",
+    "من يمكنه الانضمام لهذا الفريق؟"
+  ],
+  [
+    "Who can see our discussion?",
+    "من يمكنه رؤية نقاشنا؟"
+  ],
+  [
+    "Who can see this room’s discussion?",
+    "من يمكنه رؤية نقاش هذه الغرفة؟"
+  ],
+  [
+    "Who exactly? When does it happen? What does it cost them?",
+    "من بالتحديد؟ متى يحدث ذلك؟ وما أثره عليهم؟"
+  ],
+  [
+    "Who is your audience?",
+    "من هو جمهورك؟"
+  ],
+  [
+    "Why is it important?",
+    "لماذا هو مهم؟"
+  ],
+  [
+    "With moderation on, pending ideas need approval before other students can see them. Highlight or spotlight an idea for discussion; shortlist approved finalists before voting. Use Show results / Hide results to control the vote display.",
+    "عند تفعيل الإشراف، تحتاج الأفكار المعلقة إلى الموافقة قبل ظهورها للطلاب الآخرين. ميّز الفكرة أو اعرضها للنقاش، وأضف الأفكار المعتمدة للقائمة المختصرة قبل التصويت. استخدم إظهار أو إخفاء النتائج للتحكم في العرض."
+  ],
+  [
+    "With team rooms, join your team from the Team rooms tab or its QR code. The first member leads the room; others can visit to read and comment.",
+    "عند استخدام غرف الفرق، انضم إلى فريقك من تبويب غرف الفرق أو رمز QR الخاص به. أول عضو يقود الغرفة، ويمكن للآخرين الزيارة للقراءة والتعليق."
+  ],
+  [
+    "Withdraw my vote",
+    "سحب صوتي"
+  ],
+  [
+    "Without a focus, a room starts from the main challenge. Each room can change its own challenge in its settings.",
+    "دون محور، تبدأ الغرفة من التحدي الرئيسي. ويمكن لكل غرفة تعديل تحديها من إعداداتها."
+  ],
+  [
+    "Workplace skill",
+    "مهارة العمل"
+  ],
+  [
+    "Workplace skills",
+    "مهارات العمل"
+  ],
+  [
+    "Workshop",
+    "الورشة"
+  ],
+  [
+    "Workshop activity",
+    "نشاط الورشة"
+  ],
+  [
+    "Workshop code",
+    "رمز الورشة"
+  ],
+  [
+    "Workshop deleted",
+    "تم حذف الورشة"
+  ],
+  [
+    "Workshop details saved",
+    "تم حفظ تفاصيل الورشة"
+  ],
+  [
+    "Workshop ended",
+    "تم إنهاء الورشة"
+  ],
+  [
+    "Workshop ended — voting closed",
+    "انتهت الورشة — التصويت مغلق"
+  ],
+  [
+    "Workshop ended. Your project brief is saved.",
+    "انتهت الورشة وتم حفظ ملخص المشروع."
+  ],
+  [
+    "Workshop ended. Your team’s work is still available to read.",
+    "انتهت الورشة. يظل عمل فريقك متاحاً للقراءة."
+  ],
+  [
+    "Workshop hidden from join page",
+    "أُخفيت الورشة من صفحة الانضمام"
+  ],
+  [
+    "Workshop ideas",
+    "أفكار الورشة"
+  ],
+  [
+    "Workshop journey",
+    "رحلة الورشة"
+  ],
+  [
+    "WORKSHOP JOURNEY",
+    "رحلة الورشة"
+  ],
+  [
+    "Workshop language",
+    "لغة الورشة"
+  ],
+  [
+    "Workshop name",
+    "اسم الورشة"
+  ],
+  [
+    "Workshop paused · Your contributions are saved",
+    "الورشة متوقفة مؤقتاً · مشاركاتكم محفوظة"
+  ],
+  [
+    "Workshop reopened",
+    "أُعيد فتح الورشة"
+  ],
+  [
+    "Workshop settings",
+    "إعدادات الورشة"
+  ],
+  [
+    "Workshop settings saved",
+    "تم حفظ إعدادات الورشة"
+  ],
+  [
+    "Workshop shown on join page",
+    "تظهر الورشة في صفحة الانضمام"
+  ],
+  [
+    "Workshops",
+    "الورش"
+  ],
+  [
+    "Write a first draft of the app’s welcome screen",
+    "كتابة مسودة أولى لشاشة الترحيب في التطبيق"
+  ],
+  [
+    "Write your idea and press Send. Not sure how to start? Tap one of the ready-made sentence starters.",
+    "اكتب فكرتك واضغط «أرسل». لست متأكداً كيف تبدأ؟ اضغط على إحدى بدايات الجمل الجاهزة."
+  ],
+  [
+    "you",
+    "أنت"
+  ],
+  [
+    "You",
+    "أنت"
+  ],
+  [
+    "You are joining",
+    "أنت تنضم إلى"
+  ],
+  [
+    "You are visiting, not changing teams. Read and give feedback when comments are open. Only members add ideas, upload files, or vote here.",
+    "أنت في زيارة دون تغيير فريقك. اقرأ وقدم ملاحظات عندما تكون التعليقات مفتوحة. الأعضاء فقط يضيفون الأفكار والملفات ويصوّتون هنا."
+  ],
+  [
+    "You built on teammates’ ideas instead of starting over.",
+    "طوّرت أفكار زملائك بدلاً من البدء من جديد."
+  ],
+  [
+    "You can share ideas, comment, vote when voting opens, and share files.",
+    "يمكنك مشاركة الأفكار والتعليقات والملفات، والتصويت عند فتحه."
+  ],
+  [
+    "You chose between good options using value and feasibility.",
+    "اخترت بين خيارات جيدة بناءً على القيمة وقابلية التنفيذ."
+  ],
+  [
+    "You decided what AI should do, and what people must check.",
+    "حددت ما ينبغي للذكاء الاصطناعي فعله، وما يجب أن يراجعه الإنسان."
+  ],
+  [
+    "You explained an idea clearly enough for others to improve it.",
+    "شرحت فكرة بوضوح يكفي ليطوّرها الآخرون."
+  ],
+  [
+    "You generated options before judging them, and combined ideas into new ones.",
+    "ولّدت خيارات قبل الحكم عليها، ودمجت الأفكار لتكوين أفكار جديدة."
+  ],
+  [
+    "You have unsaved changes.",
+    "لديك تغييرات غير محفوظة."
+  ],
+  [
+    "You looked for risks and weaknesses — and suggested fixes.",
+    "بحثت عن المخاطر ونقاط الضعف — واقترحت حلولاً."
+  ],
+  [
+    "You moved from problem to features to a buildable brief.",
+    "انتقلت من المشكلة إلى الميزات إلى ملخص قابل للبناء."
+  ],
+  [
+    "You start as leader; members can elect another leader. A blank project uses the main challenge — useful when teams compete on the same idea. Creating this room moves you out of your current team.",
+    "تبدأ قائداً ويمكن للأعضاء انتخاب قائد آخر. دون فكرة خاصة، تبدأ الغرفة بالتحدي الرئيسي — مناسب للتنافس على الفكرة نفسها. إنشاء الغرفة ينقلك من فريقك الحالي."
+  ],
+  [
+    "You turned a vague challenge into a clear problem worth solving.",
+    "حوّلت تحدياً غامضاً إلى مشكلة واضحة تستحق الحل."
+  ],
+  [
+    "You will join as",
+    "ستنضم باسم"
+  ],
+  [
+    "You worked with AI.",
+    "بل عملت معه."
+  ],
+  [
+    "You’re in!",
+    "أنت معنا!"
+  ],
+  [
+    "You’re ready. Your next task appears when your room lead or the presenter starts.",
+    "أنت جاهز. ستظهر مهمتك التالية عندما يبدأ قائد الغرفة أو مقدم الورشة."
+  ],
+  [
+    "You’re ready. Your next task will appear when the presenter begins.",
+    "أنت جاهز. ستظهر مهمتك التالية عندما يبدأ مقدم الورشة."
+  ],
+  [
+    "Your account is updated. Other devices have been signed out; this one stays signed in.",
+    "تم تحديث حسابك. سُجّل الخروج من الأجهزة الأخرى، ويبقى هذا الجهاز مسجلاً."
+  ],
+  [
+    "Your choice is private; the team sees totals only. Ballots reset after a majority, a membership change, or a direct handover.",
+    "اختيارك خاص؛ يرى الفريق مجموع الأصوات فقط. يبدأ تصويت جديد بعد الأغلبية أو تغيير الأعضاء أو تسليم القيادة مباشرة."
+  ],
+  [
+    "Your comment",
+    "تعليقك"
+  ],
+  [
+    "Your comments help other teams improve their projects.",
+    "تعليقاتك تساعد الفرق الأخرى على تحسين مشاريعها."
+  ],
+  [
+    "Your contribution",
+    "مشاركتك"
+  ],
+  [
+    "Your contribution is part of our collective project.",
+    "مشاركتك أصبحت جزءاً من مشروعنا الجماعي."
+  ],
+  [
+    "Your Healthcare Assistant",
+    "مساعدك الصحي"
+  ],
+  [
+    "Your key is provided when you create a workshop. Keep it private.",
+    "يُعطى لك المفتاح عند إنشاء الورشة. احتفظ به سرّاً."
+  ],
+  [
+    "YOUR NEXT BIG IDEA STARTS HERE",
+    "فكرتك الكبيرة التالية تبدأ هنا"
+  ],
+  [
+    "Your next task appears when the presenter changes the stage.",
+    "تظهر مهمتك التالية عندما يغيّر مقدم الورشة المرحلة."
+  ],
+  [
+    "Your presenter will open the rooms.",
+    "سيفتح مقدم الورشة الغرف."
+  ],
+  [
+    "Your private presenter key",
+    "مفتاحك الخاص"
+  ],
+  [
+    "YOUR PROJECT",
+    "مشروعك"
+  ],
+  [
+    "Your project idea (optional)",
+    "فكرة مشروعكم (اختياري)"
+  ],
+  [
+    "Your reflection is saved. You can change your choice.",
+    "تم حفظ إجابتك. يمكنك تغيير اختيارك."
+  ],
+  [
+    "Your room lead decides this.",
+    "قائد غرفتك هو من يقرر ذلك."
+  ],
+  [
+    "Your task",
+    "مهمتك"
+  ],
+  [
+    "Your team",
+    "فريقك"
+  ],
+  [
+    "Your team — vote for another",
+    "فريقك — صوّت لفريق آخر"
+  ],
+  [
+    "Your team & leader",
+    "فريقك وقائده"
+  ],
+  [
+    "Your team and the teams you invited can see and discuss here.",
+    "يمكن لفريقك والفرق المدعوة الرؤية والنقاش هنا."
+  ],
+  [
+    "Your team is waiting for you. Choose “Lead the room” to start the first step.",
+    "فريقك بانتظارك. اختر «قيادة الغرفة» لبدء الخطوة الأولى."
+  ],
+  [
+    "Your team room",
+    "غرفة فريقك"
+  ],
+  [
+    "YOUR TEAM ROOM",
+    "غرفة فريقك"
+  ],
+  [
+    "YOUR TOOLKIT",
+    "أدواتك"
+  ],
+  [
+    "Your vote",
+    "صوتك"
+  ],
+  [
+    "Your vote was withdrawn.",
+    "تم سحب صوتك."
+  ],
+  [
+    "Your workshops",
+    "ورشك"
+  ]
+]
