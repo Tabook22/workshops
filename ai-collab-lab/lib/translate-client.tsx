@@ -7,7 +7,7 @@ import type {Language,Snapshot} from './workshop';
 import {detectLang,needsTranslation,snapshotTexts,translatedSnapshot,localizeNumbers,type Target} from './localization';
 export {detectLang};
 const cache=new Map<string,string>();
-type Scope={code?:string;directory?:boolean;account?:boolean;app?:boolean};
+type Scope={code?:string;directory?:boolean;account?:boolean;app?:boolean;board?:boolean;boardPublic?:boolean};
 type State={pending:boolean;enabled:boolean|null;error:string;retryAt:number};
 const states=new Map<string,State>();
 const listeners=new Set<()=>void>();let version=0;

@@ -1,0 +1,4 @@
+"use client";
+import {useEffect} from 'react';
+import {appUrl} from './urls';
+export function useParticipantPresence(code:string,id:string|undefined){useEffect(()=>{if(!code||!id)return;let pending=false;const ping=async()=>{if(document.visibilityState!=='visible'||pending)return;pending=true;try{await fetch(appUrl('/api/participants'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code}),keepalive:true})}catch{/* presence is approximate; never block contributing */}finally{pending=false}};void ping();const timer=setInterval(()=>void ping(),30000);const visible=()=>void ping();document.addEventListener('visibilitychange',visible);window.addEventListener('focus',visible);return()=>{clearInterval(timer);document.removeEventListener('visibilitychange',visible);window.removeEventListener('focus',visible)}},[code,id])}

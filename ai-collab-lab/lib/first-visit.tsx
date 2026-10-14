@@ -34,10 +34,10 @@ export function NewHereBanner({lang}: {lang: string}) {
   const [show, setShow] = useState(() => typeof window !== 'undefined' && !seen());
   if (!show) return null;
   const close = () => { markSeen(); setShow(false); };
-  return <div className="new-here" role="note"><Sparkles size={16} /><span>{tx(lang, 'New here? Learn how it works in one minute.', 'جديد هنا؟ تعرّف على طريقة الاستخدام في دقيقة.')}</span><a href={appUrl('/guide.html')} target="_blank" rel="noreferrer" onClick={markSeen}>{tx(lang, 'Open the guide', 'افتح الدليل')}</a><button type="button" className="icon-action" aria-label={tx(lang, 'Dismiss', 'إغلاق')} onClick={close}><X size={15} /></button></div>;
+  return <div className="new-here" role="note"><Sparkles size={16} /><span>{tx(lang, 'New here? Learn how it works in one minute.', 'جديد هنا؟ تعرّف على طريقة الاستخدام في دقيقة.')}</span><a href={appUrl('/guide.html?lang='+(lang==='ar'?'ar':'en'))} target="_blank" rel="noreferrer" onClick={markSeen}>{tx(lang, 'Open the guide', 'افتح الدليل')}</a><button type="button" className="icon-action" aria-label={tx(lang, 'Dismiss', 'إغلاق')} onClick={close}><X size={15} /></button></div>;
 }
 
 /** A small link into the illustrated participant guide (public/guide.html), opened in a new tab so the workshop keeps running. */
-export function GuideLink({lang, section, en, ar}: {lang: string; section?: 'part-1' | 'part-2' | 'part-3' | 'part-4' | 'help'; en: string; ar: string}) {
-  return <a className="guide-link" href={appUrl('/guide.html' + (section ? '#' + section : ''))} target="_blank" rel="noreferrer"><BookOpen size={15} />{tx(lang, en, ar)}</a>;
+export function GuideLink({lang, section, en, ar}: {lang: string; section?: 'quick-start' | 'part-1' | 'part-2' | 'part-3' | 'part-4' | 'help'; en: string; ar: string}) {
+  return <a className="guide-link" href={appUrl('/guide.html?lang='+(lang==='ar'?'ar':'en') + '#'+(section||'quick-start'))} target="_blank" rel="noreferrer"><BookOpen size={15} />{tx(lang, en, ar)}</a>;
 }

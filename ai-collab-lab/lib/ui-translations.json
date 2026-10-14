@@ -192,8 +192,20 @@
     "النشاط"
   ],
   [
+    "Activity by room — includes earlier teams and visits",
+    "النشاط حسب الغرفة — يشمل الفرق السابقة والزيارات"
+  ],
+  [
+    "Activity filter",
+    "تصفية النشاط"
+  ],
+  [
     "Add a comment",
     "أضف تعليقاً"
+  ],
+  [
+    "Add a short title (optional)",
+    "أضف عنواناً قصيراً (اختياري)"
   ],
   [
     "Add another contribution",
@@ -218,6 +230,10 @@
   [
     "Administrator of this application",
     "مسؤول هذا التطبيق"
+  ],
+  [
+    "After sending, look for “Response saved” or “Awaiting approval”. If the room is paused or you are waiting, your leader or presenter opens the next activity.",
+    "بعد الإرسال ابحث عن «تم حفظ الإجابة» أو «بانتظار الموافقة». إذا توقفت الغرفة أو كنت تنتظر، يفتح القائد أو مقدم الورشة النشاط التالي."
   ],
   [
     "Agree",
@@ -304,8 +320,16 @@
     "الكل"
   ],
   [
+    "All participants",
+    "كل المشاركين"
+  ],
+  [
     "All room screens show",
     "كل شاشات الغرف تعرض"
+  ],
+  [
+    "All rooms",
+    "كل الغرف"
   ],
   [
     "All rooms moved",
@@ -320,6 +344,10 @@
     "تم استئناف كل الغرف"
   ],
   [
+    "ALL TEAMS · ONE SHARED SPACE",
+    "كل الفرق · مساحة مشتركة واحدة"
+  ],
+  [
     "All teams report",
     "تقرير كل الفرق"
   ],
@@ -332,8 +360,16 @@
     "تطبيق يساعد الطلاب على … من خلال …"
   ],
   [
+    "Announcements, shared ideas and requests across the workshop.",
+    "إعلانات وأفكار مشتركة وطلبات لجميع فرق الورشة."
+  ],
+  [
     "Anonymous",
     "مشارك دون اسم"
+  ],
+  [
+    "Answer the current question. Read teammates’ ideas, comment when allowed, and vote when voting opens.",
+    "أجب عن السؤال الحالي. اقرأ أفكار زملائك، وعلّق عند السماح، وصوّت عند فتح التصويت."
   ],
   [
     "Anyone visiting the join page can see its name, QR code and join link. Ended workshops remain hidden.",
@@ -362,6 +398,18 @@
   [
     "Approve",
     "موافقة"
+  ],
+  [
+    "Approve / restore",
+    "اعتماد / استعادة"
+  ],
+  [
+    "Approve reply",
+    "اعتماد الرد"
+  ],
+  [
+    "Approved contributions in this shared workshop can be read by people with its link or code. Pending work is visible to its author and the presenter only.",
+    "يمكن لمن لديهم رابط الورشة أو رمزها قراءة المشاركات المعتمدة في النقاش المشترك. المشاركات المعلقة تظهر لكاتبها ومقدم الورشة فقط."
   ],
   [
     "ar",
@@ -408,8 +456,16 @@
     "مظهر تلقائي (يتبع الجهاز)"
   ],
   [
+    "Automatic refresh is paused while you browse older notices. Tap Refresh to return to the latest posts.",
+    "يتوقف التحديث التلقائي أثناء تصفح المشاركات الأقدم. اضغط تحديث للعودة إلى أحدث المشاركات."
+  ],
+  [
     "Automatic translation",
     "الترجمة التلقائية"
+  ],
+  [
+    "Automatic translation is not configured. Original public text is shown until reviewed translations or a translation service are available.",
+    "الترجمة التلقائية غير مفعّلة. يظهر النص العام الأصلي حتى تتوفر ترجمات مُراجعة أو خدمة ترجمة."
   ],
   [
     "Automatic translation is on for everyone",
@@ -420,8 +476,16 @@
     "تم إيقاف الترجمة التلقائية"
   ],
   [
+    "Avoid personal or confidential information.",
+    "تجنّب المعلومات الشخصية أو السرية."
+  ],
+  [
     "Awaiting approval",
     "بانتظار الموافقة"
+  ],
+  [
+    "Awaiting approval. Your response is saved and visible to you and the presenter; teammates see it after approval.",
+    "بانتظار الموافقة. حُفظت إجابتك وتظهر لك ولمقدم الورشة؛ وتظهر لزملائك بعد الموافقة."
   ],
   [
     "Awaiting presenter approval",
@@ -442,6 +506,10 @@
   [
     "Back to my room",
     "العودة إلى غرفتي"
+  ],
+  [
+    "Back to my team",
+    "العودة إلى فريقي"
   ],
   [
     "Back to the main workshop",
@@ -548,6 +616,14 @@
     "اختر ورشة مشتركة أدناه، أو استخدم الرمز الذي يقدمه مقدم الورشة."
   ],
   [
+    "Choose a team",
+    "اختر فريقاً"
+  ],
+  [
+    "Choose a team to participate",
+    "اختر فريقاً للمشاركة"
+  ],
+  [
     "Choose an idea",
     "اختر فكرة"
   ],
@@ -568,12 +644,20 @@
     "اختر أفكار المشروع ثم حدد المستخدمين والمشكلة والميزات ودور الذكاء الاصطناعي."
   ],
   [
+    "Choose the team your presenter assigned you, or a project you want to help with. Tap Join this team; your task opens next.",
+    "اختر الفريق الذي حدده مقدم الورشة لك، أو مشروعاً ترغب في المشاركة فيه. اضغط «انضم لهذا الفريق» وستظهر مهمتك التالية."
+  ],
+  [
     "Choose what personal data the app is allowed to collect",
     "اختيار البيانات الشخصية التي يُسمح للتطبيق بجمعها"
   ],
   [
     "Choose your project ideas",
     "اختر أفكار مشروعك"
+  ],
+  [
+    "Choose your team",
+    "اختر فريقك"
   ],
   [
     "Choose your team leader",
@@ -644,6 +728,10 @@
     "إغلاق المساعدة"
   ],
   [
+    "Close participant details",
+    "إغلاق تفاصيل المشارك"
+  ],
+  [
     "Close voting",
     "إغلاق التصويت"
   ],
@@ -688,6 +776,10 @@
     "تعليقات"
   ],
   [
+    "Comments",
+    "التعليقات"
+  ],
+  [
     "comments below",
     "تعليقات أدناه"
   ],
@@ -700,6 +792,14 @@
     "سجل كامل قابل للنقل للأرشفة أو التحليل."
   ],
   [
+    "Confirm team change",
+    "تأكيد تغيير الفريق"
+  ],
+  [
+    "Confirm that this message is public to the whole workshop.",
+    "أكد أن هذه الرسالة عامة لكل الورشة."
+  ],
+  [
     "Connected as",
     "متصل باسم"
   ],
@@ -708,8 +808,16 @@
     "جارٍ الاتصال بالورشة…"
   ],
   [
+    "Connection / last opened",
+    "الاتصال / آخر صفحة مفتوحة"
+  ],
+  [
     "Connection lost. Retrying…",
     "انقطع الاتصال. جارٍ إعادة المحاولة…"
+  ],
+  [
+    "Connection signal",
+    "إشارة الاتصال"
   ],
   [
     "Consider value for users, feasibility, and responsibility. One vote per idea.",
@@ -722,6 +830,10 @@
   [
     "Continue anonymously",
     "المتابعة دون اسم"
+  ],
+  [
+    "Continue to my task",
+    "تابع إلى مهمتي"
   ],
   [
     "Continue workshop",
@@ -738,6 +850,10 @@
   [
     "Contributions",
     "المشاركات"
+  ],
+  [
+    "Contributors incl. visitors",
+    "المساهمون بمن فيهم الزوار"
   ],
   [
     "Copied to clipboard",
@@ -770,6 +886,14 @@
   [
     "Core features",
     "الميزات الأساسية"
+  ],
+  [
+    "Could not update board settings. Please retry.",
+    "تعذّر تحديث إعدادات اللوحة. حاول مجدداً."
+  ],
+  [
+    "Counts include pending and hidden work, exclude deleted work, and keep contributions in earlier rooms. Votes are current idea/showcase votes, not private leader ballots. Last contribution uses dated room/public posts, files and reactions; votes have no historical timestamp. Older team-entry dates and presence are shown as not recorded rather than guessed. CSV exports the filtered registrations; keep it private.",
+    "تشمل الأعداد العمل المعلق والمخفي، وتستثني المحذوف، وتحتفظ بمشاركات الغرف السابقة. الأصوات هي أصوات الأفكار والعروض الحالية، وليست اقتراعات القائد الخاصة. تستخدم آخر مشاركة أوقات منشورات الغرف واللوحة العامة والملفات والتفاعلات؛ ولا تملك الأصوات طابعاً زمنياً تاريخياً. تظهر تواريخ الانضمام وإشارات الاتصال القديمة كغير مسجلة بدلاً من تخمينها. يصدّر CSV التسجيلات المعروضة؛ احتفظ به سراً."
   ],
   [
     "Create or open another workshop",
@@ -820,8 +944,16 @@
     "التفكير النقدي"
   ],
   [
+    "Cross-team visits are turned off by the presenter. Your team and the presenter can read this room’s discussion.",
+    "أوقف مقدم الورشة الزيارات بين الفرق. يستطيع فريقك ومقدم الورشة قراءة نقاش هذه الغرفة."
+  ],
+  [
     "CURRENT LEADER",
     "القائد الحالي"
+  ],
+  [
+    "Current members",
+    "الأعضاء الحاليون"
   ],
   [
     "Current release",
@@ -960,6 +1092,14 @@
     "ناقش هذه الفكرة"
   ],
   [
+    "Discussion is shared only with this team and the presenter. Other teams cannot read it.",
+    "يُشارك النقاش مع هذا الفريق ومقدم الورشة فقط. لا تستطيع الفرق الأخرى قراءته."
+  ],
+  [
+    "Discussion is shared with this team, the presenter, and only the teams selected by the room leader. Unselected teams cannot read it.",
+    "يُشارك النقاش مع هذا الفريق ومقدم الورشة والفرق التي اختارها قائد الغرفة فقط. لا تستطيع الفرق الأخرى قراءته."
+  ],
+  [
     "Dismiss",
     "إغلاق"
   ],
@@ -1068,6 +1208,10 @@
     "تعديل فكرتي"
   ],
   [
+    "Edit original text",
+    "تعديل النص الأصلي"
+  ],
+  [
     "Edit room",
     "تعديل الغرفة"
   ],
@@ -1136,10 +1280,6 @@
     "تم تحديث شاشات كل الغرف"
   ],
   [
-    "Every team can visit this room, read your ideas and comment.",
-    "يمكن لكل الفرق زيارة هذه الغرفة وقراءة أفكاركم والتعليق."
-  ],
-  [
     "Every text on the home page returns to its original version, for everyone, straight away.",
     "تعود كل نصوص الصفحة الرئيسية إلى نسختها الأصلية، للجميع، فوراً."
   ],
@@ -1160,12 +1300,12 @@
     "لكل شخص دور مهم"
   ],
   [
-    "Everyone in this workshop sees approved ideas and comments. Pending contributions are visible only to their author and the presenter.",
-    "يرى أعضاء هذه الورشة الأفكار والتعليقات المعتمدة. المشاركات المعلقة تظهر لكاتبها ومقدم الورشة فقط."
-  ],
-  [
     "Everything is saved.",
     "تم حفظ كل شيء."
+  ],
+  [
+    "Example: “We need help testing our prototype” or “Join our demo at 11:30”.",
+    "مثال: «نحتاج مساعدة في اختبار نموذجنا» أو «انضموا لعرضنا في الساعة ١١:٣٠»."
   ],
   [
     "Excellent — ready to share",
@@ -1190,6 +1330,10 @@
   [
     "Explore team ideas & comments",
     "تصفح أفكار الفريق وتعليقاته"
+  ],
+  [
+    "Export filtered CSV",
+    "تصدير المعروض CSV"
   ],
   [
     "Export workshop",
@@ -1226,6 +1370,10 @@
   [
     "Fill the form",
     "املأ النموذج"
+  ],
+  [
+    "Filter public board",
+    "تصفية اللوحة العامة"
   ],
   [
     "Filter rooms",
@@ -1270,6 +1418,10 @@
   [
     "Find workshop",
     "ابحث عن الورشة"
+  ],
+  [
+    "First entry",
+    "أول دخول"
   ],
   [
     "Fit map",
@@ -1352,20 +1504,12 @@
     "فهمت، لنبدأ"
   ],
   [
-    "Great contribution!",
-    "مشاركة رائعة!"
-  ],
-  [
     "Great idea",
     "فكرة رائعة"
   ],
   [
     "Great products begin with a problem.",
     "تبدأ المنتجات الرائعة بمشكلة."
-  ],
-  [
-    "Great products begin with a problem. What do students need help with?",
-    "تبدأ المنتجات الرائعة بمشكلة. ما الذي يحتاج الطلاب إلى المساعدة فيه؟"
   ],
   [
     "Group 60 ideas into themes",
@@ -1400,12 +1544,20 @@
     "لديك رمز ورشة؟"
   ],
   [
+    "Have contributed",
+    "قدّموا مشاركات"
+  ],
+  [
     "Health decisions need qualified professionals. AI must not diagnose.",
     "القرارات الصحية تحتاج إلى مختصين مؤهلين. لا يجوز للذكاء الاصطناعي التشخيص."
   ],
   [
     "Hidden",
     "مخفية"
+  ],
+  [
+    "Hidden by presenter",
+    "أخفاها مقدم الورشة"
   ],
   [
     "Hidden while ended",
@@ -1422,6 +1574,10 @@
   [
     "Hide passwords",
     "إخفاء كلمات المرور"
+  ],
+  [
+    "Hide reply",
+    "إخفاء الرد"
   ],
   [
     "Hide results",
@@ -1456,6 +1612,10 @@
     "كيف يمكننا حل هذه المشكلة؟"
   ],
   [
+    "How do I participate?",
+    "كيف أشارك؟"
+  ],
+  [
     "How does it work? Five simple steps",
     "كيف يعمل؟ خمس خطوات بسيطة"
   ],
@@ -1480,6 +1640,10 @@
     "كيف حسّنّاها"
   ],
   [
+    "How we work together",
+    "كيف نعمل معاً"
+  ],
+  [
     "Human",
     "الإنسان"
   ],
@@ -1490,6 +1654,10 @@
   [
     "Human Role",
     "دور الإنسان"
+  ],
+  [
+    "I understand this is visible to all teams, visitors and the main screen. My team agrees to share this information publicly.",
+    "أفهم أن هذه المشاركة تظهر لجميع الفرق والزوار والشاشة الرئيسية. يوافق فريقي على نشر هذه المعلومات للعامة."
   ],
   [
     "I’ve saved it",
@@ -1518,6 +1686,10 @@
   [
     "Idea wall",
     "جدار الأفكار"
+  ],
+  [
+    "Idea/showcase votes",
+    "أصوات الأفكار والعروض"
   ],
   [
     "ideas",
@@ -1572,6 +1744,10 @@
     "في الصف المعتاد يتحدث عدد قليل من الطلاب أغلب الوقت. هنا يستطيع كل طالب مشاركة أفكاره من هاتفه — حتى الخجولون، وحتى دون ذكر أسمائهم."
   ],
   [
+    "In a team",
+    "ضمن فريق"
+  ],
+  [
     "In one sentence",
     "باختصار"
   ],
@@ -1614,6 +1790,10 @@
   [
     "Invite link copied",
     "تم نسخ رابط الدعوة"
+  ],
+  [
+    "Invite link required",
+    "يلزم رابط دعوة"
   ],
   [
     "Invite participants",
@@ -1664,8 +1844,20 @@
     "انضم"
   ],
   [
+    "Join = become a team member: add ideas, comment and vote when those activities are open. You can belong to one team at a time.",
+    "الانضمام = تصبح عضواً في الفريق: تضيف الأفكار وتعلّق وتصوّت عند فتح هذه الأنشطة. تنتمي إلى فريق واحد في كل مرة."
+  ],
+  [
     "Join = build & vote. Visit = read & give feedback where allowed.",
     "الانضمام = بناء وتصويت. الزيارة = قراءة وملاحظات حيث يُسمح."
+  ],
+  [
+    "Join a team before posting to the public board.",
+    "انضم إلى فريق قبل النشر في اللوحة العامة."
+  ],
+  [
+    "Join a team to publish announcements or reply. You can read the board without changing rooms.",
+    "انضم إلى فريق لنشر الإعلانات أو الرد. يمكنك قراءة اللوحة دون تغيير الغرفة."
   ],
   [
     "Join a workshop",
@@ -1674,10 +1866,6 @@
   [
     "Join as a student",
     "انضم كطالب"
-  ],
-  [
-    "Join one team to build together. Visit other teams to give feedback — visiting never moves you out of your own team.",
-    "انضم إلى فريق واحد للبناء معاً. زُر الفرق الأخرى لتقديم الملاحظات — الزيارة لا تنقلك من فريقك."
   ],
   [
     "Join our innovation team",
@@ -1692,10 +1880,6 @@
     "انضم إلى فريق الابتكار"
   ],
   [
-    "Join the team",
-    "انضم إلى الفريق"
-  ],
-  [
     "Join the workshop, then open the Team rooms tab to find your team.",
     "انضم إلى الورشة، ثم افتح تبويب غرف الفرق لتجد فريقك."
   ],
@@ -1708,12 +1892,24 @@
     "انضم لهذا الفريق بدلاً من ذلك"
   ],
   [
+    "Join time",
+    "وقت الانضمام"
+  ],
+  [
     "Join workshop",
     "انضم إلى الورشة"
   ],
   [
     "joined",
     "انضموا"
+  ],
+  [
+    "Joined current team",
+    "الانضمام للفريق الحالي"
+  ],
+  [
+    "Joined team",
+    "تاريخ الانضمام للفريق"
   ],
   [
     "Joined the team",
@@ -1728,8 +1924,16 @@
     "تنضم كطالب؟ ادخل من هنا."
   ],
   [
+    "Joining this team moves you out of your current team. Your earlier ideas stay in its room. Visiting does not move you.",
+    "الانضمام لهذا الفريق ينقلك من فريقك الحالي. تبقى أفكارك السابقة في غرفته. الزيارة لا تنقلك."
+  ],
+  [
     "Joining, voting and submissions will close. All contributions, the product canvas and the build prompt stay saved.",
     "سيُغلق الانضمام والتصويت والمشاركات. تبقى جميع المشاركات ومخطط المنتج وتعليمات البناء محفوظة."
+  ],
+  [
+    "Joining…",
+    "جارٍ الانضمام…"
   ],
   [
     "Joins by invitation",
@@ -1748,10 +1952,6 @@
     "للتجربة فقط"
   ],
   [
-    "Just visit — read and comment",
-    "زيارة فقط — قراءة وتعليق"
-  ],
-  [
     "Keep",
     "إبقاء"
   ],
@@ -1762,6 +1962,10 @@
   [
     "Keep it respectful and avoid personal information.",
     "احترم الآخرين وتجنب المعلومات الشخصية."
+  ],
+  [
+    "Keep my team",
+    "احتفظ بفريقي"
   ],
   [
     "Keep them",
@@ -1784,8 +1988,24 @@
     "آخر نشاط"
   ],
   [
+    "Last contribution",
+    "آخر مشاركة"
+  ],
+  [
+    "Last opened",
+    "آخر صفحة مفتوحة"
+  ],
+  [
+    "Last seen",
+    "آخر اتصال"
+  ],
+  [
     "Later",
     "لاحقاً"
+  ],
+  [
+    "Latest membership entry",
+    "آخر انضمام كعضو"
   ],
   [
     "Layout",
@@ -1826,10 +2046,6 @@
   [
     "Leaving keeps your ideas and files here. You become a visitor. If you lead, the earliest remaining member takes over automatically.",
     "تظل أفكارك وملفاتك هنا بعد المغادرة، وتصبح زائراً. إذا كنت القائد، يتولى أول عضو متبقٍ القيادة تلقائياً."
-  ],
-  [
-    "Let’s build",
-    "لنبدأ البناء"
   ],
   [
     "Let’s build our product",
@@ -1880,12 +2096,24 @@
     "التحكم المباشر في الورشة"
   ],
   [
+    "Load older notices",
+    "تحميل المشاركات الأقدم"
+  ],
+  [
     "Loading available workshops…",
     "جارٍ تحميل الورش المتاحة…"
   ],
   [
+    "Loading participant records…",
+    "جارٍ تحميل سجلات المشاركين…"
+  ],
+  [
     "Loading presenter login…",
     "جارٍ تحميل تسجيل الدخول…"
+  ],
+  [
+    "Loading public notices…",
+    "جارٍ تحميل المشاركات العامة…"
   ],
   [
     "Loading room controls…",
@@ -1940,8 +2168,16 @@
     "ينسى كثيرون أن …"
   ],
   [
+    "Mark resolved",
+    "تم حل الطلب"
+  ],
+  [
     "Markdown summary of problems, ideas, votes, canvas and reflections — ready to share with colleagues.",
     "ملخص بصيغة Markdown للمشكلات والأفكار والأصوات والمخطط والتأملات — جاهز للمشاركة."
+  ],
+  [
+    "matching registrations",
+    "تسجيلات مطابقة"
   ],
   [
     "member",
@@ -2016,6 +2252,14 @@
     "المزيد من الأدوات"
   ],
   [
+    "More ways to browse",
+    "خيارات إضافية للتصفح"
+  ],
+  [
+    "Most contributions",
+    "الأكثر مشاركة"
+  ],
+  [
     "Mouse wheel to zoom · Shift + wheel to scroll · pinch on touch screens",
     "عجلة الماوس للتكبير · Shift مع العجلة للتمرير · استخدم إصبعين على شاشة اللمس"
   ],
@@ -2042,6 +2286,14 @@
   [
     "Need a different team?",
     "تحتاج إلى فريق آخر؟"
+  ],
+  [
+    "Need a different team? Use the main workshop’s team list. Joining another team moves your membership; your existing ideas stay in the old room.",
+    "تريد فريقاً آخر؟ استخدم قائمة الفرق في الورشة الرئيسية. الانضمام لفريق آخر ينقل عضويتك؛ وتبقى أفكارك السابقة في الغرفة القديمة."
+  ],
+  [
+    "Need help getting started?",
+    "تحتاج مساعدة للبدء؟"
   ],
   [
     "Needs help",
@@ -2080,6 +2332,14 @@
     "التالي: "
   ],
   [
+    "Nickname",
+    "الاسم المستعار"
+  ],
+  [
+    "Nickname, room, project or ID",
+    "الاسم المستعار أو الغرفة أو المشروع أو المعرّف"
+  ],
+  [
     "No activity yet",
     "لا نشاط بعد"
   ],
@@ -2090,6 +2350,10 @@
   [
     "No contributions match this filter.",
     "لا توجد مشاركات مطابقة لهذا الفلتر."
+  ],
+  [
+    "No contributions yet",
+    "دون مشاركات بعد"
   ],
   [
     "No discussion yet",
@@ -2108,6 +2372,10 @@
     "لا يوجد قائد بعد"
   ],
   [
+    "No matching participants. Try another filter.",
+    "لا يوجد مشاركون مطابقون. جرّب تصفية أخرى."
+  ],
+  [
     "No matching teams",
     "لا توجد فرق مطابقة"
   ],
@@ -2118,6 +2386,10 @@
   [
     "No public workshops right now",
     "لا توجد ورش عامة حالياً"
+  ],
+  [
+    "No recent signal",
+    "دون إشارة حديثة"
   ],
   [
     "No rooms match your search.",
@@ -2140,6 +2412,10 @@
     "لا توجد غرف فرق بعد."
   ],
   [
+    "No team yet",
+    "دون فريق بعد"
+  ],
+  [
     "No workshop code to type. A nickname may be requested.",
     "لا حاجة لكتابة رمز الورشة. قد يُطلب اسم مستعار."
   ],
@@ -2150,6 +2426,10 @@
   [
     "Nobody has joined yet.",
     "لم ينضم أحد بعد."
+  ],
+  [
+    "Not recorded",
+    "غير مسجل"
   ],
   [
     "Not started",
@@ -2180,6 +2460,10 @@
     "أحد المخاطر هو الخصوصية، لذا يجب ألا تُظهر التذكيرات نوع الموعد على شاشة القفل."
   ],
   [
+    "One row per workshop registration, not per visit. Participants use nicknames, not verified accounts; another browser or device may create a separate record.",
+    "صف واحد لكل تسجيل في الورشة، وليس لكل زيارة. يستخدم المشاركون أسماء مستعارة وليست حسابات موثّقة؛ وقد ينشئ متصفح أو جهاز آخر سجلاً منفصلاً."
+  ],
+  [
     "One vote. You can change it until voting closes. Choose another team’s project, not your own.",
     "صوت واحد، ويمكنك تغييره حتى يُغلق التصويت. اختر مشروع فريق آخر، لا فريقك."
   ],
@@ -2188,12 +2472,20 @@
     "فقط من لديهم هذا الرابط يمكنهم الانضمام إلى فريقك — شاركه مع من تختار."
   ],
   [
-    "Only you and the presenter see this",
-    "لا يرى هذا إلا أنت ومقدم الورشة"
+    "Only the workshop presenter can moderate the public board.",
+    "مقدم الورشة فقط يمكنه الإشراف على اللوحة العامة."
   ],
   [
-    "Only your team and the presenter can see inside this room.",
-    "فقط فريقك ومقدم الورشة يمكنهم رؤية ما بداخل هذه الغرفة."
+    "Only the workshop presenter or admin can view these records.",
+    "مقدم الورشة أو المشرف فقط يمكنه رؤية هذه السجلات."
+  ],
+  [
+    "Only want to look around?",
+    "تريد الاطلاع فقط؟"
+  ],
+  [
+    "Only you and the presenter see this",
+    "لا يرى هذا إلا أنت ومقدم الورشة"
   ],
   [
     "Open",
@@ -2320,6 +2612,10 @@
     "لا تتغير النصوص الأصلية أبداً، ويمكن للجميع اختيار «عرض الأصل»."
   ],
   [
+    "Other participants can read approved ideas in this room when visiting is allowed. Visitors may comment only while discussion is open; they cannot add team ideas or vote.",
+    "يمكن للمشاركين الآخرين قراءة الأفكار المعتمدة في هذه الغرفة عند السماح بالزيارات. يعلّق الزوار فقط عندما يكون النقاش مفتوحاً؛ ولا يضيفون أفكار الفريق أو يصوّتون."
+  ],
+  [
     "Other rooms",
     "الغرف الأخرى"
   ],
@@ -2360,8 +2656,36 @@
     "ضمن"
   ],
   [
+    "Participant / joined",
+    "المشارك / الانضمام"
+  ],
+  [
+    "Participant ID",
+    "معرف المشارك"
+  ],
+  [
+    "Participant records of ",
+    "سجلات المشاركين في "
+  ],
+  [
+    "Participant records table",
+    "جدول سجلات المشاركين"
+  ],
+  [
     "Participants",
     "المشاركون"
+  ],
+  [
+    "Participants & activity",
+    "المشاركون والنشاط"
+  ],
+  [
+    "Participants & room activity",
+    "المشاركون ونشاط الغرف"
+  ],
+  [
+    "Participate",
+    "شارك"
   ],
   [
     "Password",
@@ -2412,6 +2736,14 @@
     "بانتظار الموافقة"
   ],
   [
+    "pending items",
+    "مشاركات معلقة"
+  ],
+  [
+    "Pending items",
+    "المشاركات المعلقة"
+  ],
+  [
     "People",
     "المشاركون"
   ],
@@ -2420,16 +2752,56 @@
     "صور أو رسومات أو لقطات شاشة أو ملفات PDF — بحد أقصى 3 ميغابايت. يرجى عدم مشاركة معلومات شخصية أو حساسة."
   ],
   [
+    "Pin notice",
+    "تثبيت الإعلان"
+  ],
+  [
+    "Pin updated.",
+    "تم تحديث التثبيت."
+  ],
+  [
+    "Pinned",
+    "مثبّتة"
+  ],
+  [
     "Plan the project",
     "خطط للمشروع"
+  ],
+  [
+    "Plan, build and test",
+    "خطط وابنِ واختبر"
   ],
   [
     "Please do not share personal or sensitive information. Your draft is kept on this device until you submit.",
     "يرجى عدم مشاركة معلومات شخصية أو حساسة. تُحفظ مسودتك على هذا الجهاز حتى ترسلها."
   ],
   [
+    "Please wait a minute before posting again.",
+    "انتظر دقيقة قبل النشر مجدداً."
+  ],
+  [
     "Point at one AI output and ask: “How do we know this is correct?”",
     "أشر إلى أحد مخرجات الذكاء الاصطناعي واسأل: «كيف نعرف أن هذا صحيح؟»"
+  ],
+  [
+    "Post approved.",
+    "اعتُمدت المشاركة."
+  ],
+  [
+    "Post hidden.",
+    "أُخفيت المشاركة."
+  ],
+  [
+    "Post public reply",
+    "انشر الرد العام"
+  ],
+  [
+    "Post removed.",
+    "أُزيلت المشاركة."
+  ],
+  [
+    "Post to public board",
+    "انشر في اللوحة العامة"
   ],
   [
     "Posts in the last 10 minutes",
@@ -2448,8 +2820,16 @@
     "اعرض المشاريع"
   ],
   [
+    "Presenter",
+    "مقدم الورشة"
+  ],
+  [
     "Presenter access required",
     "يتطلب هذا صلاحية مقدم الورشة"
+  ],
+  [
+    "Presenter board controls",
+    "إعدادات اللوحة لمقدم الورشة"
   ],
   [
     "PRESENTER CONTROL CENTER",
@@ -2568,8 +2948,52 @@
     "اقترح طريقة ملموسة لتنفيذ الفكرة المختارة. وضّح ما تفعله ولمن."
   ],
   [
+    "Public board",
+    "اللوحة العامة"
+  ],
+  [
+    "Public board — all teams",
+    "اللوحة العامة — كل الفرق"
+  ],
+  [
+    "Public board posting is closed.",
+    "النشر في اللوحة العامة مغلق."
+  ],
+  [
+    "Public message",
+    "الرسالة العامة"
+  ],
+  [
+    "Public post title",
+    "عنوان المشاركة العامة"
+  ],
+  [
+    "Public posts",
+    "المشاركات العامة"
+  ],
+  [
+    "Public posts / replies",
+    "المشاركات العامة / الردود"
+  ],
+  [
+    "Public replies",
+    "الردود العامة"
+  ],
+  [
+    "Public reply saved.",
+    "حُفظ الرد العام."
+  ],
+  [
+    "Public to everyone with this workshop code, including other teams, visitors and the main screen. Private room ideas, files and discussions are never copied here automatically. Share only information your team agrees to make public.",
+    "متاحة لكل من لديه رمز هذه الورشة، بما في ذلك الفرق الأخرى والزوار والشاشة الرئيسية. لا تُنسخ أفكار الغرف الخاصة وملفاتها ونقاشاتها هنا تلقائياً. شارك فقط المعلومات التي يوافق فريقك على نشرها للعامة."
+  ],
+  [
     "Publicly share the workshop name, QR code and direct Join button. Ended workshops are hidden.",
     "اعرض اسم الورشة ورمز QR وزر الانضمام للعامة. تُخفى الورش المنتهية."
+  ],
+  [
+    "Published to the public board.",
+    "نُشرت المشاركة في اللوحة العامة."
   ],
   [
     "QR & join link",
@@ -2600,6 +3024,10 @@
     "تفاعل"
   ],
   [
+    "Reactions",
+    "التفاعلات"
+  ],
+  [
     "Read the 1-minute guide",
     "اقرأ الدليل في دقيقة"
   ],
@@ -2610,6 +3038,10 @@
   [
     "Read two ideas aloud and ask the room to combine them into a third.",
     "اقرأ فكرتين بصوت عالٍ واطلب من القاعة دمجهما في فكرة ثالثة."
+  ],
+  [
+    "Read workshop ideas",
+    "اقرأ أفكار الورشة"
   ],
   [
     "Read, discuss, and build on what your teammates share.",
@@ -2624,6 +3056,18 @@
     "نشطة مؤخراً"
   ],
   [
+    "Recently connected",
+    "متصلون مؤخراً"
+  ],
+  [
+    "Recently connected = a visible participant page sent a signal within 90 seconds. It does not prove attention or current engagement. No recent signal can mean a background tab, closed page or connection issue. Last opened is not guaranteed to be the current room.",
+    "متصل مؤخراً = أرسلت صفحة مشارك ظاهرة إشارة خلال ٩٠ ثانية. هذا لا يثبت الانتباه أو المشاركة الحالية. قد تعني الإشارة غير الحديثة تبويباً خلفياً أو صفحة مغلقة أو مشكلة اتصال. آخر صفحة مفتوحة لا تضمن موقعه الحالي."
+  ],
+  [
+    "Recently connected members",
+    "الأعضاء المتصلون مؤخراً"
+  ],
+  [
     "Reconnecting · contributions are saved",
     "إعادة الاتصال · المشاركات محفوظة"
   ],
@@ -2636,8 +3080,32 @@
     "التأمل"
   ],
   [
+    "Refresh",
+    "تحديث"
+  ],
+  [
     "Refresh build prompt from canvas",
     "تحديث التعليمات من المخطط"
+  ],
+  [
+    "Refresh records",
+    "تحديث السجلات"
+  ],
+  [
+    "Refreshes every 15 seconds",
+    "تُحدّث كل ١٥ ثانية"
+  ],
+  [
+    "Refreshing…",
+    "جارٍ التحديث…"
+  ],
+  [
+    "Registered",
+    "مسجل"
+  ],
+  [
+    "Relationship",
+    "العلاقة"
   ],
   [
     "Reload",
@@ -2660,12 +3128,52 @@
     "إزالة من الفريق"
   ],
   [
+    "Remove reply",
+    "إزالة الرد"
+  ],
+  [
+    "Remove this public post and its replies?",
+    "إزالة هذه المشاركة العامة وردودها؟"
+  ],
+  [
+    "Remove this reply?",
+    "إزالة هذا الرد؟"
+  ],
+  [
     "Reopen ",
     "إعادة فتح "
   ],
   [
+    "Reopen request",
+    "إعادة فتح الطلب"
+  ],
+  [
     "Reopen workshop",
     "إعادة فتح الورشة"
+  ],
+  [
+    "replies",
+    "ردود"
+  ],
+  [
+    "Reply",
+    "رد"
+  ],
+  [
+    "Reply publicly",
+    "رد عام"
+  ],
+  [
+    "Reply removed.",
+    "أُزيل الرد."
+  ],
+  [
+    "Reply updated.",
+    "تم تحديث الرد."
+  ],
+  [
+    "Request updated.",
+    "تم تحديث الطلب."
   ],
   [
     "Reset",
@@ -2678,6 +3186,14 @@
   [
     "Reset map",
     "إعادة ضبط الخريطة"
+  ],
+  [
+    "Resolved",
+    "تم الحل"
+  ],
+  [
+    "Response saved",
+    "تم حفظ الإجابة"
   ],
   [
     "Responsible AI",
@@ -2760,8 +3276,16 @@
     "المخاطر"
   ],
   [
+    "Role",
+    "الدور"
+  ],
+  [
     "Room",
     "الغرفة"
+  ],
+  [
+    "Room code",
+    "رمز الغرفة"
   ],
   [
     "Room controls",
@@ -2820,6 +3344,10 @@
     "تم تحديث شاشة الغرفة"
   ],
   [
+    "Room statistics",
+    "إحصاءات الغرف"
+  ],
+  [
     "Room visibility",
     "ظهور الغرفة"
   ],
@@ -2860,6 +3388,10 @@
     "حفظ الإعدادات"
   ],
   [
+    "Saved — awaiting presenter approval before other teams see it.",
+    "حُفظت المشاركة — بانتظار موافقة مقدم الورشة قبل ظهورها للفرق الأخرى."
+  ],
+  [
     "Saving…",
     "جارٍ الحفظ…"
   ],
@@ -2898,6 +3430,18 @@
   [
     "Search contributions",
     "ابحث في المشاركات"
+  ],
+  [
+    "Search messages, teams or people",
+    "ابحث في الرسائل أو الفرق أو الأشخاص"
+  ],
+  [
+    "Search participants",
+    "البحث عن المشاركين"
+  ],
+  [
+    "Search public board",
+    "ابحث في اللوحة العامة"
   ],
   [
     "Search rooms",
@@ -3004,6 +3548,10 @@
     "شارك الأفكار"
   ],
   [
+    "Share, discuss and improve",
+    "شارك وناقش وطوّر"
+  ],
+  [
     "Shared — waiting for approval before others see it.",
     "تمت المشاركة — بانتظار الموافقة قبل أن يراها الآخرون."
   ],
@@ -3024,8 +3572,16 @@
     "عرض"
   ],
   [
+    "Show members",
+    "عرض الأعضاء"
+  ],
+  [
     "Show on join page",
     "إظهار في صفحة الانضمام"
+  ],
+  [
+    "Show on main screen",
+    "عرض على الشاشة الرئيسية"
   ],
   [
     "Show on projector",
@@ -3140,12 +3696,20 @@
     "الحلول التي صممناها"
   ],
   [
+    "Some public text could not be translated yet. Originals are shown temporarily.",
+    "تعذّرت ترجمة بعض النصوص العامة حالياً؛ تُعرض الأصول مؤقتاً."
+  ],
+  [
     "Sort",
     "ترتيب"
   ],
   [
     "Sort by",
     "الترتيب حسب"
+  ],
+  [
+    "Sort records",
+    "ترتيب السجلات"
   ],
   [
     "Sorting large amounts of text quickly is a strength of AI — a person should still review the groups.",
@@ -3194,6 +3758,10 @@
   [
     "Start voting",
     "بدء التصويت"
+  ],
+  [
+    "Start with the people affected by this challenge. What difficulty do they face?",
+    "ابدأ بالأشخاص المعنيين بالتحدي. ما الصعوبة التي يواجهونها؟"
   ],
   [
     "Start workshop",
@@ -3316,8 +3884,16 @@
     "فكرة مفاجئة"
   ],
   [
+    "Team / project",
+    "الفريق / المشروع"
+  ],
+  [
     "Team & leader",
     "الفريق والقائد"
+  ],
+  [
+    "Team attribution is recorded when published.",
+    "يُسجل اسم الفريق عند النشر."
   ],
   [
     "Team colour",
@@ -3340,16 +3916,36 @@
     "قائد الفريق"
   ],
   [
+    "team members",
+    "أعضاء الفريق"
+  ],
+  [
     "Team members",
     "أعضاء الفريق"
+  ],
+  [
+    "Team members, invites & room options",
+    "أعضاء الفريق والدعوات وخيارات الغرفة"
+  ],
+  [
+    "Team membership",
+    "عضوية الفريق"
   ],
   [
     "Team on screen",
     "الفريق على الشاشة"
   ],
   [
+    "Team project",
+    "مشروع الفريق"
+  ],
+  [
     "Team projects",
     "مشاريع الفرق"
+  ],
+  [
+    "Team room",
+    "غرفة الفريق"
   ],
   [
     "TEAM ROOM",
@@ -3396,6 +3992,10 @@
     "فرق تطلب المساعدة"
   ],
   [
+    "Teams may develop different ideas or compete on the same challenge. Visiting another team does not change your membership; sharing depends on its room settings.",
+    "قد تطوّر الفرق أفكاراً مختلفة أو تتنافس في التحدي نفسه. زيارة فريق آخر لا تغيّر عضويتك؛ والمشاركة تعتمد على إعدادات غرفته."
+  ],
+  [
     "Teams to visit",
     "الفرق المطلوب زيارتها"
   ],
@@ -3424,6 +4024,10 @@
     "تعذّر تنزيل النسخة الاحتياطية. يرجى المحاولة مجدداً."
   ],
   [
+    "The board is read-only for now. Published notices remain available.",
+    "اللوحة للقراءة فقط حالياً. تظل المشاركات المنشورة متاحة."
+  ],
+  [
     "THE CHALLENGE",
     "التحدي"
   ],
@@ -3442,6 +4046,10 @@
   [
     "The discussion is private to this team.",
     "النقاش خاص بهذا الفريق."
+  ],
+  [
+    "The first member in an empty room starts as leader. Members can elect another leader from Team & leader, inside the room options. The presenter can always help and read room discussions.",
+    "أول عضو في غرفة فارغة يبدأ قائداً. يمكن للأعضاء انتخاب قائد آخر من «الفريق والقائد» داخل خيارات الغرفة. يستطيع مقدم الورشة دائماً المساعدة وقراءة نقاش الغرف."
   ],
   [
     "The first member leads the room and can move it through the steps. You can open and guide any room.",
@@ -3488,8 +4096,16 @@
     "يرى مقدم الورشة أن فريقك يحتاج المساعدة."
   ],
   [
+    "The presenter has disabled the public board.",
+    "عطّل مقدم الورشة اللوحة العامة."
+  ],
+  [
     "The presenter has paused the workshop. Your contributions are saved.",
     "أوقف مقدم الورشة النشاط مؤقتاً. مشاركاتك محفوظة."
+  ],
+  [
+    "The presenter will review this before publication.",
+    "يراجع مقدم الورشة المشاركة قبل نشرها."
   ],
   [
     "The teacher (the “presenter”) leads the session on a big screen. Students take part from their own phones. No one needs to download anything or create an account, and it works in both English and Arabic.",
@@ -3532,6 +4148,14 @@
     "فكر بحرية. ما الفكرة المفيدة التي يمكن أن تعالج تحدينا؟"
   ],
   [
+    "This controls who can read the discussion, not who can become a member. Use invitation-only joining to restrict membership. The presenter can always read the room.",
+    "هذا يحدد من يقرأ النقاش، وليس من يصبح عضواً. استخدم الانضمام بالدعوة لتقييد العضوية. يستطيع مقدم الورشة دائماً قراءة الغرفة."
+  ],
+  [
+    "This is a PUBLIC message, not a private team note.",
+    "هذه رسالة عامة، وليست ملاحظة خاصة بالفريق."
+  ],
+  [
     "This is the future of work.",
     "هذا هو مستقبل العمل."
   ],
@@ -3542,6 +4166,18 @@
   [
     "THIS MORNING…",
     "هذا الصباح…"
+  ],
+  [
+    "This notice has reached its reply limit. Start a new public post.",
+    "وصل الإعلان إلى الحد الأقصى للردود. ابدأ مشاركة عامة جديدة."
+  ],
+  [
+    "This public post is not available.",
+    "هذه المشاركة العامة غير متاحة."
+  ],
+  [
+    "This reply is visible to everyone in the workshop.",
+    "هذا الرد ظاهر لكل من في الورشة."
   ],
   [
     "This room is private",
@@ -3648,6 +4284,10 @@
     "ترجمة تذكير إلى العربية والإنجليزية"
   ],
   [
+    "Translating public posts…",
+    "جارٍ ترجمة المشاركات العامة…"
+  ],
+  [
     "Translation",
     "الترجمة"
   ],
@@ -3692,12 +4332,32 @@
     "اكتب رمز الورشة للتأكيد"
   ],
   [
+    "Unable to load participant records. Please retry.",
+    "تعذّر تحميل سجلات المشاركين. حاول مجدداً."
+  ],
+  [
+    "Unable to load the public board. Please retry.",
+    "تعذّر تحميل اللوحة العامة. حاول مجدداً."
+  ],
+  [
+    "Unassigned",
+    "دون فريق"
+  ],
+  [
     "Unhighlight",
     "إلغاء التمييز"
   ],
   [
+    "Unpin",
+    "إلغاء التثبيت"
+  ],
+  [
     "Update account",
     "تحديث الحساب"
+  ],
+  [
+    "Updated",
+    "محدّثة"
   ],
   [
     "Updating live",
@@ -3748,16 +4408,40 @@
     "عرض الصفحة الرئيسية"
   ],
   [
+    "visible notices",
+    "مشاركات متاحة"
+  ],
+  [
     "Visit",
     "زيارة"
+  ],
+  [
+    "Visit = read and give feedback where allowed. You keep your own team. Invitation-only membership and private discussion are different settings.",
+    "الزيارة = قراءة وتقديم ملاحظات حيث يُسمح. تحتفظ بفريقك. العضوية بالدعوة وخصوصية النقاش إعدادان مختلفان."
   ],
   [
     "Visit another room",
     "زيارة غرفة أخرى"
   ],
   [
+    "Visit without joining",
+    "زيارة دون انضمام"
+  ],
+  [
+    "Visiting does not join you to a team. To participate, choose Join this team.",
+    "الزيارة لا تجعلك عضواً في الفريق. للمشاركة، اختر الانضمام لهذا الفريق."
+  ],
+  [
+    "Visiting does not make you a member. Read and comment only where allowed; join to add team ideas and vote.",
+    "الزيارة لا تجعلك عضواً. اقرأ وعلّق حيث يُسمح؛ وانضم لإضافة أفكار الفريق والتصويت."
+  ],
+  [
     "Visitor",
     "زائر"
+  ],
+  [
+    "Visitor / earlier team",
+    "زائر / فريق سابق"
   ],
   [
     "visitors",
@@ -3818,6 +4502,10 @@
   [
     "Votes",
     "الأصوات"
+  ],
+  [
+    "Votes / files",
+    "الأصوات / الملفات"
   ],
   [
     "votes from the class",
@@ -3916,12 +4604,16 @@
     "مرحباً بك في فريق الابتكار"
   ],
   [
-    "Welcome to the team",
-    "مرحباً بك في الفريق"
+    "Welcome to the workshop",
+    "مرحباً بك في الورشة"
   ],
   [
     "Welcome! New here?",
     "أهلاً بك! هل أنت جديد هنا؟"
+  ],
+  [
+    "What are you sharing?",
+    "ماذا تريد مشاركته؟"
   ],
   [
     "What could go wrong? Who might be left out? How could it be simpler?",
@@ -4060,6 +4752,10 @@
     "تم حفظ تفاصيل الورشة"
   ],
   [
+    "Workshop discussion & help",
+    "نقاش الورشة والمساعدة"
+  ],
+  [
     "Workshop ended",
     "تم إنهاء الورشة"
   ],
@@ -4104,6 +4800,14 @@
     "الورشة متوقفة مؤقتاً · مشاركاتكم محفوظة"
   ],
   [
+    "Workshop project",
+    "مشروع الورشة"
+  ],
+  [
+    "Workshop registration",
+    "تسجيل الورشة"
+  ],
+  [
     "Workshop reopened",
     "أُعيد فتح الورشة"
   ],
@@ -4132,6 +4836,10 @@
     "اكتب فكرتك واضغط «أرسل». لست متأكداً كيف تبدأ؟ اضغط على إحدى بدايات الجمل الجاهزة."
   ],
   [
+    "Write your response to the current task, then tap Send. The presenter or team leader guides each next step.",
+    "اكتب إجابتك على المهمة الحالية ثم اضغط إرسال. يرشدك مقدم الورشة أو قائد الفريق في كل خطوة تالية."
+  ],
+  [
     "you",
     "أنت"
   ],
@@ -4150,6 +4858,14 @@
   [
     "You built on teammates’ ideas instead of starting over.",
     "طوّرت أفكار زملائك بدلاً من البدء من جديد."
+  ],
+  [
+    "You can only change your own public posts.",
+    "يمكنك تغيير مشاركاتك العامة فقط."
+  ],
+  [
+    "You can read the shared discussion without choosing a team. Join a team to work on its project.",
+    "يمكنك قراءة النقاش المشترك قبل اختيار فريق. انضم إلى فريق للعمل على مشروعه."
   ],
   [
     "You can share ideas, comment, vote when voting opens, and share files.",
@@ -4184,12 +4900,20 @@
     "انتقلت من المشكلة إلى الميزات إلى ملخص قابل للبناء."
   ],
   [
+    "You only need to join one team. Not sure which one? Ask the presenter.",
+    "يكفي الانضمام إلى فريق واحد. لست متأكداً أي فريق تختار؟ اسأل مقدم الورشة."
+  ],
+  [
     "You start as leader; members can elect another leader. A blank project uses the main challenge — useful when teams compete on the same idea. Creating this room moves you out of your current team.",
     "تبدأ قائداً ويمكن للأعضاء انتخاب قائد آخر. دون فكرة خاصة، تبدأ الغرفة بالتحدي الرئيسي — مناسب للتنافس على الفكرة نفسها. إنشاء الغرفة ينقلك من فريقك الحالي."
   ],
   [
     "You turned a vague challenge into a clear problem worth solving.",
     "حوّلت تحدياً غامضاً إلى مشكلة واضحة تستحق الحل."
+  ],
+  [
+    "You will be the first member and start as team leader. The presenter can help you get started.",
+    "ستكون أول عضو وتبدأ قائداً للفريق. يمكن لمقدم الورشة مساعدتك على البدء."
   ],
   [
     "You will join as",
@@ -4232,10 +4956,6 @@
     "مشاركتك"
   ],
   [
-    "Your contribution is part of our collective project.",
-    "مشاركتك أصبحت جزءاً من مشروعنا الجماعي."
-  ],
-  [
     "Your Healthcare Assistant",
     "مساعدك الصحي"
   ],
@@ -4244,12 +4964,16 @@
     "يُعطى لك المفتاح عند إنشاء الورشة. احتفظ به سرّاً."
   ],
   [
-    "YOUR NEXT BIG IDEA STARTS HERE",
-    "فكرتك الكبيرة التالية تبدأ هنا"
+    "Your leader or presenter helps the team choose features and prepare a brief. Build the prototype in a coding tool, then discuss and test it together.",
+    "يساعدكم القائد أو مقدم الورشة في اختيار الميزات وتجهيز ملخص المشروع. يُبنى النموذج في أداة برمجة ثم تناقشونه وتختبرونه معاً."
   ],
   [
-    "Your next task appears when the presenter changes the stage.",
-    "تظهر مهمتك التالية عندما يغيّر مقدم الورشة المرحلة."
+    "Your name",
+    "اسمك"
+  ],
+  [
+    "YOUR NEXT BIG IDEA STARTS HERE",
+    "فكرتك الكبيرة التالية تبدأ هنا"
   ],
   [
     "Your presenter will open the rooms.",
@@ -4268,8 +4992,16 @@
     "فكرة مشروعكم (اختياري)"
   ],
   [
+    "Your public reply",
+    "ردك العام"
+  ],
+  [
     "Your reflection is saved. You can change your choice.",
     "تم حفظ إجابتك. يمكنك تغيير اختيارك."
+  ],
+  [
+    "Your response is saved in this room and available to teammates and permitted visitors.",
+    "حُفظت إجابتك في هذه الغرفة وهي متاحة لزملائك والزوار المسموح لهم."
   ],
   [
     "Your room lead decides this.",
@@ -4290,10 +5022,6 @@
   [
     "Your team & leader",
     "فريقك وقائده"
-  ],
-  [
-    "Your team and the teams you invited can see and discuss here.",
-    "يمكن لفريقك والفرق المدعوة الرؤية والنقاش هنا."
   ],
   [
     "Your team is waiting for you. Choose “Lead the room” to start the first step.",

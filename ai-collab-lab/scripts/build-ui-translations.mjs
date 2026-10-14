@@ -16,6 +16,7 @@ for(const pair of [
  ['How can we use technology and AI to create a useful smart tutor to help students, and parents teach their students, at home, and also students understand their homeworks, and explain to them what they had studied in the school classes?','كيف يمكننا استخدام التقنية والذكاء الاصطناعي لإنشاء معلّم ذكي ومفيد يساعد الطلاب على فهم واجباتهم وما درسوه في المدرسة، ويساعد أولياء الأمور على تعليم أبنائهم في المنزل؟'],
  ['How can we use technology and AI to create a useful healthcare assistant for university students?','كيف يمكننا استخدام التقنية والذكاء الاصطناعي لإنشاء مساعد صحي مفيد لطلاب الجامعة؟'],
  ['Think • Share • Improve • Vote • Build','فكّر • شارك • حسّن • صوّت • ابنِ'],
+ ['Your contribution','مشاركتك'],
  ['English','الإنجليزية'],['Define the problem','حدد المشكلة'],['Today’s challenge','تحدي اليوم'],['TODAY’S CHALLENGE','تحدي اليوم']
  ])add(...pair);
 writeFileSync('lib/ui-translations.json',JSON.stringify([...pairs].sort((a,b)=>a[0].localeCompare(b[0])),null,2)+'\n');

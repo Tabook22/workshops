@@ -13,7 +13,7 @@ const pick = (lang: Language, pair: Pair | readonly [string, string, ...unknown[
 export function Journey({step, lang}: {step: number; lang: Language}) {
   return <ol className="journey-track" aria-label={lang === 'ar' ? 'مراحل الورشة' : 'Workshop journey'}>
     {lessonSteps.map((s, i) => <li key={s[0]} className={i < step ? 'done' : i === step ? 'current' : ''} aria-current={i === step ? 'step' : undefined}>
-      <span className="journey-dot">{i < step ? <Check size={12} /> : i + 1}</span>
+      <span className="journey-dot">{i < step ? <Check size={12} /> : displayNumber(i + 1,lang)}</span>
       <span className="journey-label">{pick(lang, s)}</span>
     </li>)}
   </ol>;
@@ -37,14 +37,14 @@ export function Coach({stage, lang, onStarter}: {stage: number; lang: Language; 
 
 const strength: Pair[] = [['Just getting started', 'بداية'], ['Getting there', 'في الطريق'], ['Good start', 'بداية جيدة'], ['Strong', 'قوية'], ['Excellent — ready to share', 'ممتازة — جاهزة للمشاركة']];
 /** Live, rule-based feedback while typing. Encourages clearer contributions without blocking anyone. */
-export function QualityMeter({text, lang}: {text: string; lang: Language}) {
+export function QualityMeter({text, lang,compact=false}: {text: string; lang: Language;compact?:boolean}) {
   const checks = useMemo(() => assessContribution(text), [text]);
   if (!text.trim()) return null;
   const score = checks.filter(c => c.ok).length;
   return <div className={'quality-meter q' + score} aria-live="polite">
     <div className="quality-bar" aria-hidden="true">{checks.map((c, i) => <span key={c.key} className={i < score ? 'on' : ''} />)}</div>
     <strong>{pick(lang, strength[score])}</strong>
-    <ul>{checks.map(c => <li key={c.key} className={c.ok ? 'ok' : ''}>{c.ok ? <Check size={13} /> : <span className="todo-dot" />}{pick(lang, c.label)}</li>)}</ul>
+    <details className="writing-feedback" open={compact?undefined:true}><summary>{lang==='ar'?'نصائح اختيارية لتحسين إجابتك — ليست درجة':'Optional writing tips — not a grade'}</summary><ul>{checks.map(c => <li key={c.key} className={c.ok ? 'ok' : ''}>{c.ok ? <Check size={13} /> : <span className="todo-dot" />}{pick(lang, c.label)}</li>)}</ul></details>
   </div>;
 }
 
