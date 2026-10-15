@@ -83,3 +83,10 @@
 .orb-moon[data-level="2"]{animation-delay:.16s}
 .orb-moon[data-level="3"]{animation-delay:.24s}
 @media (prefers-reduced-motion:reduce){.moon-link{animation:none}}
+
+/* Attention: bigger bubbles for comments that drew replies and reactions; the busiest one on an idea glows. */
+.orb-moon{align-content:center;gap:1px;transition:transform .15s var(--ease,ease),box-shadow .15s,width .3s,height .3s}
+.orb-moon-count{display:block;font-size:.62em;font-weight:800;line-height:1;opacity:.92}
+.orb-moon.hot{box-shadow:0 0 0 4px color-mix(in srgb,hsl(var(--moon-hue) 70% 50%) 30%,transparent),0 0 22px 4px hsl(var(--moon-hue) 75% 55% / .55),0 6px 14px -4px #0006;animation:moon-in .4s ease both,moon-glow 2.6s ease-in-out .4s infinite}
+@keyframes moon-glow{50%{box-shadow:0 0 0 7px color-mix(in srgb,hsl(var(--moon-hue) 70% 50%) 18%,transparent),0 0 30px 8px hsl(var(--moon-hue) 75% 55% / .35),0 6px 14px -4px #0006}}
+@media (prefers-reduced-motion:reduce){.orb-moon.hot{animation:none}}
