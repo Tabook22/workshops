@@ -1,0 +1,45 @@
+/* Comment threads (lib/comment-thread.tsx): replies hang from their comment on coloured branch lines,
+   one colour per level, so the shape of the conversation is visible at a glance. */
+.thread-wrap{display:grid;gap:10px}
+.thread-summary{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0;font-size:13px;color:var(--muted)}
+.thread-summary svg{color:var(--accent)}
+.thread{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.thread-node{--branch:var(--accent);position:relative;animation:thread-in .35s var(--ease,ease) both}
+.thread-node[data-depth="1"]{--branch:var(--purple,#8b7cf6)}
+.thread-node[data-depth="2"]{--branch:var(--teal,#2bb3a3)}
+.thread-node[data-depth="3"],.thread-node[data-depth="4"]{--branch:var(--amber,#f0a43a)}
+@keyframes thread-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.thread-card{position:relative;padding:12px 14px;border:1px solid var(--line);border-inline-start:4px solid var(--branch);border-radius:14px;background:var(--panel2,var(--surface-1));box-shadow:var(--shadow-sm,none);transition:border-color .2s,box-shadow .2s}
+.thread-card.mine{background:color-mix(in srgb,var(--branch) 7%,var(--panel2,var(--surface-1)))}
+.thread-card.replying{box-shadow:0 0 0 3px color-mix(in srgb,var(--branch) 35%,transparent)}
+.thread-head{display:flex;align-items:center;gap:10px;min-width:0}
+.thread-who{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;min-width:0;flex:1}
+.thread-who strong{font-size:15px}
+.thread-you{padding:1px 8px;border-radius:999px;background:var(--branch);color:var(--on-accent,#111);font-size:11px;font-weight:800}
+.thread-to{display:inline-flex;align-items:center;gap:3px;font-size:12px;color:var(--muted)}
+.thread-to b{color:var(--text)}
+.thread-time{flex:none;font-size:12px;color:var(--muted)}
+.thread-body{margin:8px 0 2px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.55}
+.thread-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.thread-reply,.thread-toggle{display:inline-flex;align-items:center;gap:5px;min-height:34px;padding:4px 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--text);font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.thread-reply{border-color:color-mix(in srgb,var(--branch) 55%,var(--line));color:var(--branch)}
+.thread-reply:hover,.thread-toggle:hover{background:color-mix(in srgb,var(--branch) 12%,transparent)}
+.thread-reply:focus-visible,.thread-toggle:focus-visible{outline:3px solid var(--ring,var(--accent));outline-offset:2px}
+.thread-inline-form{margin:10px 0 0;margin-inline-start:22px;padding:12px;border:2px dashed var(--branch);border-radius:14px}
+
+/* Branches: a vertical line from the parent card down to its last reply, and a rounded elbow into each reply. */
+.thread-children{margin-top:12px;margin-inline-start:20px;padding-inline-start:20px}
+.thread-children>.thread-node::before{content:"";position:absolute;inset-inline-start:-20px;top:-12px;width:18px;height:38px;border-inline-start:2px solid var(--branch);border-bottom:2px solid var(--branch);border-end-start-radius:16px;pointer-events:none}
+.thread-children>.thread-node:not(:last-child)::after{content:"";position:absolute;inset-inline-start:-20px;top:0;bottom:-12px;border-inline-start:2px solid var(--branch);pointer-events:none}
+.thread-children>.thread-node>.thread-card::before{content:"";position:absolute;inset-inline-start:-8px;top:21px;width:10px;height:10px;border-radius:50%;background:var(--branch);box-shadow:0 0 0 3px var(--bg,#fff)}
+@media (max-width:520px){.thread-children{margin-inline-start:10px;padding-inline-start:14px}.thread-children>.thread-node::before{inset-inline-start:-14px;width:12px}.thread-children>.thread-node:not(:last-child)::after{inset-inline-start:-14px}.thread-inline-form{margin-inline-start:0}.thread-card{padding:10px 12px}}
+
+/* Reactions: labelled agree/disagree/like/dislike and the names of who reacted. */
+.reaction-label{font-size:12px;font-weight:700}
+.reaction-people{display:flex;flex-wrap:wrap;gap:4px 12px;width:100%;margin:2px 0 0;font-size:12px;color:var(--muted)}
+.reaction-person b{color:var(--text);font-weight:700}
+.reaction-person.r-agree b{color:var(--teal,#2bb3a3)}
+.reaction-person.r-disagree b,.reaction-person.r-dislike b{color:var(--coral,#e5654f)}
+@media (prefers-reduced-motion:reduce){.thread-node{animation:none}}
+.modal .wall-thread:has(.thread-wrap){max-height:none;overflow:visible}

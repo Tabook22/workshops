@@ -2,6 +2,13 @@
 
 A live UTAS workshop platform: Think · Share · Improve · Vote · Build.
 
+## Comment threads and reactions
+
+- Any approved comment can be answered with **Reply**, and replies can be answered too, up to 4 levels (`MAX_REPLY_DEPTH`). A reply keeps `parent` = the idea and stores the comment it answers in `ideas.replyTo` (migration `0011_comment_replies`), so idea counts, moderation and deletion work as before. A reply whose comment was removed shows at the top level.
+- The idea window draws the discussion as a tree (`lib/comment-thread.tsx`): coloured branch lines per level, "replying to <name>", collapsible replies, and a summary of comments, replies and people. Idea bubbles show `💬 total · ↳ replies`; the presenter's idea window shows the same thread read-only.
+- Reactions are 👍 Like, 👎 Dislike, ✅ Agree, ❌ Disagree, 💡, ❓ and 🔥. Like/dislike and agree/disagree replace each other. Under each idea and comment a line names who reacted ("✅ Sara, Mona agree · 👎 Ali disliked").
+- Verify with `scripts/verify-comment-threads.mjs` against a localhost test server using `WORKSHOP_TEST_ORIGIN`.
+
 ## Write or speak (voice notes)
 
 - Every contribution form (task answers, wall comments, public-board posts and replies) has a **Write / Speak** switch. The choice and the speaking language (English / العربية) are remembered on the device.

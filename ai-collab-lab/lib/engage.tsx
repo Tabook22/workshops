@@ -12,13 +12,20 @@ import {appUrl} from './urls';
 
 type L=(en:string,ar:string)=>string;
 const translator=(lang:Language):L=>(en,ar)=>localizeNumbers(lang==='ar'?ar:en,lang);
-const reactionNames:Record<string,[string,string]>={'👍':['Agree','أوافق'],'💡':['Great idea','فكرة رائعة'],'❓':['Question','سؤال'],'🔥':['Exciting','مثيرة']};
+const reactionNames:Record<string,[string,string]>={'👍':['Like','أعجبني'],'👎':['Dislike','لم يعجبني'],'✅':['Agree','أوافق'],'❌':['Disagree','لا أوافق'],'💡':['Great idea','فكرة رائعة'],'❓':['Question','سؤال'],'🔥':['Exciting','مثيرة']};
+/** What the people who reacted are saying, for the "who reacted" line. */
+const reactionVerbs:Record<string,[string,string,string,string]>={'👍':['liked','liked','أعجبه','أعجبهم'],'👎':['disliked','disliked','لم يعجبه','لم يعجبهم'],'✅':['agrees','agree','يوافق','يوافقون'],'❌':['disagrees','disagree','لا يوافق','لا يوافقون'],'💡':['loves the idea','love the idea','أعجبته الفكرة','أعجبتهم الفكرة'],'❓':['has a question','have a question','لديه سؤال','لديهم سؤال'],'🔥':['is excited','are excited','متحمس','متحمسون']};
+const names=(list:string[],lang:Language)=>{const shown=list.slice(0,3).join(lang==='ar'?'، ':', ');return list.length>3?shown+(lang==='ar'?` و${displayNumber(list.length-3,lang)} آخرون`:` +${list.length-3}`):shown};
+
+/** Who reacted and how: "✅ Sara, Ali agree · 👎 Omar disliked". */
+export function ReactionPeople({item,lang}:{item:Idea;lang:Language}){const t=translator(lang);const list=REACTIONS.filter(e=>item.reactors?.[e]?.length);if(!list.length)return null;
+ return <p className="reaction-people">{list.map(e=><span key={e} className={'reaction-person r-'+(reactionNames[e]?.[0]||'').toLowerCase().split(' ').join('-')}><span aria-hidden="true">{e}</span> <b dir="auto">{names(item.reactors![e],lang)}</b> {(([one,many,arOne,arMany])=>item.reactors![e].length===1?t(one,arOne):t(many,arMany))(reactionVerbs[e])}</span>)}</p>}
 
 /** One tap to react: the easiest way for a shy student to take part. Tapping again takes the reaction back. */
 export function ReactionBar({data,item,lang,refresh,disabled=false}:{data:Snapshot;item:Idea;lang:Language;refresh:()=>Promise<void>;disabled?:boolean}){const t=translator(lang);const [busy,setBusy]=useState(false),[error,setError]=useState('');
- if(item.status!=='approved'||!data.me)return null;const mine=item.myReactions||[];
+ if(item.status!=='approved')return null;if(!data.me)return <ReactionPeople item={item} lang={lang}/>;const mine=item.myReactions||[];
  async function toggle(emoji:string){setBusy(true);setError('');try{await action({action:'react',code:data.code,id:item.id,emoji,on:!mine.includes(emoji)});await refresh()}catch(e){setError((e as Error).message)}finally{setBusy(false)}}
- return <div className="reaction-bar" role="group" aria-label={t('React','تفاعل')}>{REACTIONS.map(e=>{const n=item.reactions?.[e]||0,on=mine.includes(e);return <button key={e} type="button" className={'reaction'+(on?' on':'')} aria-pressed={on} disabled={busy||disabled} title={t(...reactionNames[e])} aria-label={`${t(...reactionNames[e])} ${n}`} onClick={()=>void toggle(e)}><span aria-hidden="true">{e}</span>{n>0&&<b>{displayNumber(n,lang)}</b>}</button>})}{error&&<small className="error-text">{error}</small>}</div>}
+ return <div className="reaction-bar" role="group" aria-label={t('React','تفاعل')}>{REACTIONS.map(e=>{const n=item.reactions?.[e]||0,on=mine.includes(e);return <button key={e} type="button" className={'reaction'+(on?' on':'')} aria-pressed={on} disabled={busy||disabled} title={t(...reactionNames[e])+(item.reactors?.[e]?.length?': '+item.reactors[e].join(', '):'')} aria-label={`${t(...reactionNames[e])} ${n}`} onClick={()=>void toggle(e)}><span aria-hidden="true">{e}</span>{['👍','👎','✅','❌'].includes(e)&&<span className="reaction-label">{t(...reactionNames[e])}</span>}{n>0&&<b>{displayNumber(n,lang)}</b>}</button>})}{error&&<small className="error-text">{error}</small>}<ReactionPeople item={item} lang={lang}/></div>}
 
 /** Total reactions on an item, for read-only places (presenter feed). */
 export function ReactionCounts({item}:{item:Idea}){const list=REACTIONS.filter(e=>item.reactions?.[e]);if(!list.length)return null;return <span className="reaction-counts">{list.map(e=><span key={e}>{e} {displayNumber(item.reactions![e])}</span>)}</span>}

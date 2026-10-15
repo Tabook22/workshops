@@ -3,6 +3,7 @@ import "./globals.css";
 import "./design-system.css";
 import "./team-experience.css";
 import "./voice-input.css";
+import "./comment-thread.css";
 
 export const metadata: Metadata = {
   title: "AI Collab Lab · From Idea to AI Product",

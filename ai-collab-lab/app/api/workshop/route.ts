@@ -1,5 +1,5 @@
 import { database, hash, cookie, setCookie } from '../../../db/server';
-import { defaults, skills, REACTIONS, ROOM_EMOJIS, ROOM_HUES, type Config, type Idea } from '../../../lib/workshop';
+import { defaults, skills, REACTIONS, OPPOSITE_REACTIONS, MAX_REPLY_DEPTH, ROOM_EMOJIS, ROOM_HUES, type Config, type Idea } from '../../../lib/workshop';
 import { reply, failure, clean, invalidate, snapshot, readCode, unavailable, presenterFor, teamOf, roomVisible, voiceNote, type Session } from '../../../lib/snapshot';
 import {repairLeader,clearLeadershipVotes,leadershipBallot} from '../../../lib/leadership';
 export const dynamic='force-dynamic';
@@ -101,7 +101,8 @@ export async function POST(req:Request){let code='';try{const origin=req.headers
   if(c.session.parent&&me.role==='guest'){const pc=await db.prepare('SELECT config FROM sessions WHERE code=?').bind(c.session.parent).first<{config:string}>();if(!pc||!roomVisible(config,code,await teamOf(db,c.session.parent,me.member||''),(JSON.parse(pc.config) as Config).gallery!==false))return failure('This team keeps its discussion private.',403);}
   const id=clean(b.id,100);const target=await db.prepare("SELECT id FROM ideas WHERE id=? AND code=? AND status='approved'").bind(id,code).first();if(!target)return failure('Idea not found.',404);
   if(b.on===false)await db.prepare('DELETE FROM reactions WHERE code=? AND idea=? AND participant=? AND emoji=?').bind(code,id,me.id,emoji).run();
-  else await db.prepare('INSERT OR IGNORE INTO reactions (code,idea,participant,emoji,created) VALUES (?,?,?,?,?)').bind(code,id,me.id,emoji,Date.now()).run();
+  // Like/dislike and agree/disagree are opposites: choosing one takes back the other.
+  else await db.batch([db.prepare('DELETE FROM reactions WHERE code=? AND idea=? AND participant=? AND emoji=?').bind(code,id,me.id,OPPOSITE_REACTIONS[emoji]||''),db.prepare('INSERT OR IGNORE INTO reactions (code,idea,participant,emoji,created) VALUES (?,?,?,?,?)').bind(code,id,me.id,emoji,Date.now())]);
   return reply({ok:true});}
  if(action==='member'){
   // The room lead (or the presenter) removes a member — they stay as a visitor, keeping their ideas — or hands over the lead.
@@ -152,7 +153,10 @@ export async function POST(req:Request){let code='';try{const origin=req.headers
  if(!/^[a-f0-9-]{36}$/.test(id))return failure('Invalid comment identifier.');
  const status=config.moderated?'pending':'approved';
  const audio=await voiceNote(db,code,me.id,b.audio);if(audio===undefined)return failure('Your voice note was not saved. Please record it again.');
- const saved=await db.prepare("INSERT OR IGNORE INTO ideas (id,code,participant,nickname,type,parent,title,text,status,shortlisted,highlighted,sortOrder,created,audio) SELECT ?,?,?,?,'comment',?,'Comment',?,?,0,0,0,?,? WHERE EXISTS (SELECT 1 FROM ideas WHERE id=? AND code=? AND status='approved' AND type!='comment') AND EXISTS (SELECT 1 FROM sessions WHERE code=? AND json_extract(config,'$.paused')=0 AND json_extract(config,'$.submissionsOpen')=1 AND json_extract(config,'$.ended')=0) AND (SELECT COUNT(*) FROM ideas WHERE code=? AND parent=? AND participant=? AND type='comment' AND status!='deleted')<20").bind(id,code,me.id,me.nickname,parent,text,status,Date.now(),audio,parent,code,code,code,parent,me.id).run();
+ // A reply hangs under another approved comment on the same idea, at most MAX_REPLY_DEPTH levels deep.
+ let replyTo:string|null=null;
+ if(b.replyTo){replyTo=clean(b.replyTo,100);let at:string|null=replyTo,depth=0;while(at){const row:{replyTo:string|null}|null=await db.prepare("SELECT replyTo FROM ideas WHERE id=? AND code=? AND parent=? AND type='comment' AND status='approved'").bind(at,code,parent).first<{replyTo:string|null}>();if(!row)return failure('The comment you are replying to is unavailable.');depth++;if(depth>=MAX_REPLY_DEPTH)return failure('This conversation is already very deep. Reply to an earlier comment instead.');at=row.replyTo;}}
+ const saved=await db.prepare("INSERT OR IGNORE INTO ideas (id,code,participant,nickname,type,parent,title,text,status,shortlisted,highlighted,sortOrder,created,audio,replyTo) SELECT ?,?,?,?,'comment',?,'Comment',?,?,0,0,0,?,?,? WHERE EXISTS (SELECT 1 FROM ideas WHERE id=? AND code=? AND status='approved' AND type!='comment') AND EXISTS (SELECT 1 FROM sessions WHERE code=? AND json_extract(config,'$.paused')=0 AND json_extract(config,'$.submissionsOpen')=1 AND json_extract(config,'$.ended')=0) AND (SELECT COUNT(*) FROM ideas WHERE code=? AND parent=? AND participant=? AND type='comment' AND status!='deleted')<40").bind(id,code,me.id,me.nickname,parent,text,status,Date.now(),audio,replyTo,parent,code,code,code,parent,me.id).run();
  if(!saved.meta.changes){const existing=await db.prepare("SELECT id FROM ideas WHERE id=? AND code=? AND participant=? AND type='comment'").bind(id,code,me.id).first();if(existing)return reply({ok:true,status});return failure('This idea is unavailable, discussion is closed, or your comment limit is reached.');}
  return reply({ok:true,status},201);
  }
