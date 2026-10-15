@@ -8,5 +8,5 @@ export type AvatarId=typeof AVATARS[number][0];
 export const validAvatar=(value:unknown):value is AvatarId=>typeof value==='string'&&AVATARS.some(a=>a[0]===value);
 export const avatarName=(id:string|undefined,lang:Language)=>{const a=AVATARS.find(a=>a[0]===id);return a?(lang==='ar'?a[2]:a[1]):lang==='ar'?'الحروف الأولى':'Initials'};
 export type RoomMood='ready'|'thinking'|'writing';
-export type Seat={key:string;name:string;avatar:AvatarId|null;lead:boolean;me:boolean;recent:boolean;state:RoomMood;hand:number|null;speaking:boolean};
-export type RoomExperience={avatar:AvatarId|null;members:Seat[];manage:boolean;member:boolean;ended:boolean;generated:number};
+export type Seat={key:string;name:string;avatar:AvatarId|null;lead:boolean;me:boolean;recent:boolean;state:RoomMood;hand:number|null;speaking:boolean;/** When the speaking turn ends (server time), while speaking. */until:number|null};
+export type RoomExperience={avatar:AvatarId|null;members:Seat[];manage:boolean;member:boolean;ended:boolean;generated:number;/** Speaking turns pass to the next raised hand by themselves (the leader can turn this off). */autoTurns:boolean;/** Length of a speaking turn, in milliseconds. */turn:number};
