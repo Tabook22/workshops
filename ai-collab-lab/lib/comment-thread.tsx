@@ -18,7 +18,7 @@ export {buildThread,threadStats};
 type Props={data:Snapshot;lang:Language;refresh:()=>Promise<void>;comments:Idea[];own:(participant:string)=>boolean;canReply:boolean;replyTo:string|null;onReply:(id:string)=>void;form:React.ReactNode;readOnly?:boolean;/** A comment to scroll to and briefly highlight (opened from the idea map). */focus?:string|null};
 
 export default function CommentThread(props:Props){
- const {comments,lang,focus}=props;const [collapsed,setCollapsed]=useState<string[]>([]);const root=useRef<HTMLDivElement>(null);
+ const {comments,lang}=props;/* "id#nonce" lets the same comment be focused again. */const focus=props.focus?.split('#')[0]||null;const [collapsed,setCollapsed]=useState<string[]>([]);const root=useRef<HTMLDivElement>(null);
  useEffect(()=>{if(!focus)return;const el=root.current?.querySelector<HTMLElement>(`[data-comment="${CSS.escape(focus)}"] > .thread-card`);if(!el)return;el.scrollIntoView({block:'center',behavior:'smooth'});el.classList.add('flash');const timer=setTimeout(()=>el.classList.remove('flash'),2400);return()=>clearTimeout(timer)},[focus]);
  const t=(en:string,ar:string)=><T en={en} ar={ar} lang={lang}/>;
  const tree=buildThread(comments),stats=threadStats(comments);
