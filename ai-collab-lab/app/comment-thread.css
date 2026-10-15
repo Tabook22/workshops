@@ -43,3 +43,28 @@
 .reaction-person.r-disagree b,.reaction-person.r-dislike b{color:var(--coral,#e5654f)}
 @media (prefers-reduced-motion:reduce){.thread-node{animation:none}}
 .modal .wall-thread:has(.thread-wrap){max-height:none;overflow:visible}
+
+/* Comment moons on the idea map (lib/comment-moons.tsx): one small bubble per comment, tethered to its idea. */
+.orb-moon{--moon-hue:200;position:absolute;z-index:3;display:grid;place-items:center;width:34px;height:34px;padding:0;border-radius:50%;border:2px solid #fff;background:hsl(var(--moon-hue) 70% 46%);color:#fff;font:inherit;font-size:12px;font-weight:800;line-height:1;cursor:pointer;box-shadow:0 4px 10px -3px #0006;transition:transform .15s var(--ease,ease),box-shadow .15s;animation:moon-in .4s var(--ease,ease) both}
+.orb-moon::before{content:"";position:absolute;left:50%;top:50%;width:26px;height:2px;background:hsl(var(--moon-hue) 60% 55% / .7);transform-origin:0 50%;transform:rotate(var(--moon-angle,90deg));z-index:-1}
+.orb-moon:hover,.orb-moon:focus-visible{transform:scale(1.18);box-shadow:0 6px 16px -4px #0007;z-index:6}
+.orb-moon:focus-visible{outline:3px solid var(--ring,var(--accent));outline-offset:2px}
+.orb-moon.pending{border-style:dashed;opacity:.75}
+.orb-moon.more{--moon-hue:220;background:var(--surface-raised,#fff);color:var(--text);border-color:var(--line)}
+.orb-moon.static{position:static;width:26px;height:26px;font-size:10px;animation:none;box-shadow:none;border-width:1.5px}
+.orb-moon.static::before{display:none}
+.orb-moon-replies{position:absolute;top:-9px;inset-inline-end:-14px;padding:1px 5px;border-radius:999px;background:var(--accent);color:var(--on-accent,#111);font-size:10px;font-weight:800;white-space:nowrap;box-shadow:0 2px 5px #0004}
+@keyframes moon-in{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
+.idea-orb .orb-voice{position:absolute;top:10px;inset-inline-end:22px;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#fffc;font-style:normal;font-size:15px;box-shadow:0 2px 6px #0003}
+
+/* Discover card (phones): the same comments as chips. */
+.moon-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:4px 0 10px}
+.moon-chip{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:3px 10px 3px 4px;border-radius:999px;border:1px solid var(--line);background:var(--surface-1,transparent);color:var(--text);font:inherit;font-size:13px;cursor:pointer}
+.moon-chip b{font-size:11px;color:var(--accent)}
+.moon-chip:hover{border-color:var(--accent)}
+.moon-chip-name{max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* A comment opened from the map flashes briefly. */
+.thread-card.flash{animation:thread-flash 2.4s ease}
+@keyframes thread-flash{0%,60%{box-shadow:0 0 0 4px color-mix(in srgb,var(--branch) 55%,transparent)}100%{box-shadow:none}}
+@media (prefers-reduced-motion:reduce){.orb-moon,.thread-card.flash{animation:none}}
