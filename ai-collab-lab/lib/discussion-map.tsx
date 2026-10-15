@@ -29,10 +29,10 @@ export function DiscussionSwitch({view,onChange,lang}:{view:DiscussionView;onCha
  </div>;
 }
 
-type Props={data:Snapshot;lang:Language;refresh:()=>Promise<void>;idea:Idea;comments:Idea[];canReply:boolean;readOnly?:boolean;onReply?:(id:string)=>void;onShow?:(id:string)=>void};
+type Props={data:Snapshot;lang:Language;refresh:()=>Promise<void>;idea:Idea;comments:Idea[];canReply:boolean;readOnly?:boolean;onReply?:(id:string)=>void;onShow?:(id:string)=>void;/** A comment to select when the map opens (picked on the idea map). */focus?:string|null};
 
-export default function DiscussionMap({data,lang,refresh,idea,comments,canReply,readOnly=false,onReply,onShow}:Props){
- const [selected,setSelected]=useState<string|null>(null),[collapsed,setCollapsed]=useState<string[]>([]);
+export default function DiscussionMap({data,lang,refresh,idea,comments,canReply,readOnly=false,onReply,onShow,focus}:Props){
+ const [selected,setSelected]=useState<string|null>(()=>focus?.split('#')[0]||null),[collapsed,setCollapsed]=useState<string[]>([]);
  const t=(en:string,ar:string)=><T en={en} ar={ar} lang={lang}/>;
  const rtl=lang==='ar';
 
