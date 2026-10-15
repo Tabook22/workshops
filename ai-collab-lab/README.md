@@ -2,6 +2,15 @@
 
 A live UTAS workshop platform: Think · Share · Improve · Vote · Build.
 
+## Write or speak (voice notes)
+
+- Every contribution form (task answers, wall comments, public-board posts and replies) has a **Write / Speak** switch. The choice and the speaking language (English / العربية) are remembered on the device.
+- **Speak** records a voice note (WebM/Opus, or MP4 on iPhone; 3 minutes at most) and, where the browser supports speech recognition (Chrome, Edge, Safari), types the words live into the text box so the speaker can correct them before sending. Firefox and other browsers still record; the person adds a few words, or the text defaults to “🎙️ Voice note”.
+- The recording is uploaded only when the form is sent (`/api/upload?kind=voice`, in 96 KB pieces), checked by its bytes to be audio, and linked to the contribution (`ideas.audio`, `board_posts.audio`; migration `0010_voice_notes`). Only the person who recorded it can attach it. Voice notes follow their contribution's moderation and never appear in a room's file list.
+- Everyone who can read a contribution can replay its voice note (wall, idea cards with 🎙️, presenter console, public board). Playback supports byte ranges for Safari.
+- The VPS sends `Permissions-Policy: microphone=(self)`; the microphone needs HTTPS (or localhost).
+- Verify with `scripts/verify-voice-notes.mjs` against a localhost test server using `WORKSHOP_TEST_ORIGIN`.
+
 ## Workshop QR codes and direct entry
 
 - The public **Join** page lists only active main workshops explicitly marked **Show on join page**. Existing and new workshops are unlisted by default. Team rooms never appear in this directory.

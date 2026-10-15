@@ -64,6 +64,20 @@
       "when": 1792002626903,
       "tag": "0008_magenta_solo",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1792008472457,
+      "tag": "0009_easy_wasp",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1792040279433,
+      "tag": "0010_voice_notes",
+      "breakpoints": true
     }
   ]
 }

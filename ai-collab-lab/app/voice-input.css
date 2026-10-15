@@ -1,0 +1,40 @@
+/* Write / Speak: the voice option on every contribution form (lib/voice-input.tsx). */
+.voice-input{display:grid;gap:12px}
+.voice-mode{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border:1px solid var(--line);border-radius:14px;background:var(--surface-1)}
+.voice-mode button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;border:0;border-radius:10px;background:transparent;color:var(--muted);font:inherit;font-weight:700;font-size:16px;cursor:pointer;transition:background .2s var(--ease,ease),color .2s var(--ease,ease)}
+.voice-mode button.on{background:var(--accent);color:var(--on-accent,#111)}
+.voice-mode button:disabled{opacity:.5;cursor:not-allowed}
+.voice-mode button:focus-visible,.voice-lang button:focus-visible,.voice-button:focus-visible{outline:3px solid var(--ring,var(--accent));outline-offset:2px}
+.voice-panel{display:grid;gap:12px;padding:16px;border:1px dashed var(--line);border-radius:16px;background:var(--surface-1)}
+.voice-panel.live{border-style:solid;border-color:var(--coral,#ff7a6b)}
+.voice-lang{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:14px}
+.voice-lang button{min-height:34px;padding:4px 12px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--text);font:inherit;cursor:pointer}
+.voice-lang button[aria-pressed=true]{border-color:var(--accent);color:var(--accent);font-weight:700}
+.voice-stage{--level:0;display:flex;align-items:center;gap:28px;padding:6px}
+.voice-button{position:relative;flex:none;display:grid;place-items:center;width:88px;height:88px;border:0;border-radius:50%;background:var(--accent);color:var(--on-accent,#111);cursor:pointer;box-shadow:var(--shadow-sm,0 2px 8px #0003);transition:transform .15s var(--ease,ease)}
+.voice-button:active{transform:scale(.94)}
+.voice-button:disabled{opacity:.6;cursor:wait}
+.voice-ring{position:absolute;inset:-8px;border-radius:50%;border:3px solid var(--accent);opacity:.35;pointer-events:none}
+.voice-panel:not(.live) .voice-ring{animation:voice-invite 2.4s ease-in-out infinite}
+.voice-panel.live .voice-button{background:var(--coral,#ff7a6b);color:#fff}
+.voice-panel.live .voice-ring{border-color:var(--coral,#ff7a6b);opacity:calc(.25 + var(--level) * .75);transform:scale(calc(1 + var(--level) * .18));transition:transform .08s linear,opacity .08s linear}
+@keyframes voice-invite{0%,100%{transform:scale(1);opacity:.35}50%{transform:scale(1.12);opacity:.1}}
+.voice-status{display:grid;gap:4px;min-width:0}
+.voice-status strong{font-size:17px}
+.voice-clock{display:inline-flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums}
+.voice-dot{width:10px;height:10px;border-radius:50%;background:var(--coral,#ff7a6b);animation:voice-blink 1s steps(2,start) infinite}
+@keyframes voice-blink{to{visibility:hidden}}
+.voice-bars{display:flex;align-items:flex-end;gap:4px;height:26px}
+.voice-bars i{display:block;width:6px;border-radius:3px;background:var(--coral,#ff7a6b);height:calc(5px + var(--level) * 21px);transition:height .08s linear}
+.voice-bars i:nth-child(2),.voice-bars i:nth-child(4){height:calc(4px + var(--level) * 15px)}
+.voice-bars i:nth-child(3){height:calc(6px + var(--level) * 20px)}
+.voice-note-hint{margin:0;font-size:14px;color:var(--muted)}
+.voice-attached{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--surface-1)}
+.voice-attached-label{font-weight:700;font-size:14px}
+.voice-attached audio{flex:1 1 220px;min-width:0;height:40px}
+.voice-player{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:6px 0}
+.voice-player-label{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);font-size:12px;color:var(--muted)}
+.voice-player audio{flex:1 1 200px;min-width:0;max-width:360px;height:36px}
+@media (max-width:480px){.voice-stage{gap:22px}.voice-button{width:76px;height:76px}}
+@media (prefers-reduced-motion:reduce){.voice-ring,.voice-dot,.voice-bars i,.voice-button{animation:none!important;transition:none!important}}
+.contribution-question{font-weight:700;font-size:17px;color:var(--text)}

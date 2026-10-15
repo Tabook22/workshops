@@ -4,6 +4,7 @@ import { resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Readable } from 'node:stream';
 import { GET as workshopGet, POST as workshopPost } from '../app/api/workshop/route';
+import { GET as roomExperienceGet, POST as roomExperiencePost } from '../app/api/room-experience/route';
 import { GET as boardGet, POST as boardPost } from '../app/api/board/route';
 import { GET as participantsGet, POST as participantsPost } from '../app/api/participants/route';
 import { GET as eventsGet } from '../app/api/events/route';
@@ -27,7 +28,7 @@ const types: Record<string, string> = { '.html': 'text/html; charset=utf-8', '.j
 function headers(response: ServerResponse) {
   response.setHeader('X-Content-Type-Options', 'nosniff');
   response.setHeader('Referrer-Policy', 'same-origin');
-  response.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  response.setHeader('Permissions-Policy', 'camera=(), microphone=(self), geolocation=()');
 }
 function sendFile(response: ServerResponse, filename: string, head: boolean) {
   const extension = filename.slice(filename.lastIndexOf('.'));
@@ -77,7 +78,8 @@ async function relay(request: IncomingMessage, response: ServerResponse, url: UR
     if(!presenterAuthenticated(fetched))result=Response.json({error:'Presenter login required.'},{status:401});
     else if(parsed.action==='unlock')result=Response.json({ok:true});
     else result=await workshopPost(fetched);
-  } else if(url.pathname===base+'/api/board') result = request.method === 'POST' ? await boardPost(fetched) : await boardGet(fetched);
+  } else if(url.pathname===base+'/api/room-experience') result = request.method === 'POST' ? await roomExperiencePost(fetched) : await roomExperienceGet(fetched);
+  else if(url.pathname===base+'/api/board') result = request.method === 'POST' ? await boardPost(fetched) : await boardGet(fetched);
   else if(url.pathname===base+'/api/participants') result = request.method === 'POST' ? await participantsPost(fetched) : await participantsGet(fetched);
   else if(url.pathname===base+'/api/app') result = request.method === 'POST' ? await appPost(fetched) : await appGet(fetched);
   else if(url.pathname===base+'/api/translate'&&request.method==='POST') result = await translatePost(fetched);
@@ -98,7 +100,7 @@ const server = createServer(async (request, response) => {
     const path = url.pathname;
     if (path === base) { response.writeHead(308, { Location: base + '/' + url.search }); response.end(); return; }
     if (path === base + '/healthz' && request.method === 'GET') { response.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }); response.end(JSON.stringify({ status: 'ok', build: buildConfig.build || '' })); return; }
-    if ((path === base + '/api/workshop'||path===base+'/api/account'||path===base+'/api/app'||path===base+'/api/participants'||path===base+'/api/board') && (request.method === 'GET' || request.method === 'POST') || path === base + '/api/translate' && request.method === 'POST' || path === base + '/api/upload' && (request.method === 'GET' || request.method === 'POST') || path === base + '/api/events' && request.method === 'GET') { await relay(request, response, url); return; }
+    if ((path === base + '/api/workshop'||path===base+'/api/account'||path===base+'/api/app'||path===base+'/api/participants'||path===base+'/api/room-experience'||path===base+'/api/board') && (request.method === 'GET' || request.method === 'POST') || path === base + '/api/translate' && request.method === 'POST' || path === base + '/api/upload' && (request.method === 'GET' || request.method === 'POST') || path === base + '/api/events' && request.method === 'GET') { await relay(request, response, url); return; }
     if (request.method !== 'GET' && request.method !== 'HEAD') { response.writeHead(405); response.end('Method not allowed'); return; }
     const local = path.slice(base.length);
     if (path.startsWith(base + '/') && ['/', '/join', '/join/', '/presenter', '/presenter/', '/project', '/project/', '/about', '/about/'].includes(local)) { sendFile(response, resolve(root, 'index.html'), request.method === 'HEAD'); return; }
