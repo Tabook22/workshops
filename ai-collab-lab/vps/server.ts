@@ -23,7 +23,7 @@ const publicOrigin = (process.env.PUBLIC_ORIGIN || `http://127.0.0.1:${port}`).r
 const root = fileURLToPath(new URL('./public/', import.meta.url));
 const buildConfig = JSON.parse(readFileSync(fileURLToPath(new URL('./runtime-config.json', import.meta.url)), 'utf8'));
 if (buildConfig.basePath !== base) throw new Error('BASE_PATH differs from the built asset prefix. Rebuild with the intended path.');
-const types: Record<string, string> = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.woff2': 'font/woff2', '.ico': 'image/x-icon', '.json': 'application/json' };
+const types: Record<string, string> = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.jpg': 'image/jpeg', '.woff2': 'font/woff2', '.ico': 'image/x-icon', '.json': 'application/json' };
 
 function headers(response: ServerResponse) {
   response.setHeader('X-Content-Type-Options', 'nosniff');
@@ -106,7 +106,7 @@ const server = createServer(async (request, response) => {
     if (path.startsWith(base + '/') && ['/', '/join', '/join/', '/presenter', '/presenter/', '/project', '/project/', '/about', '/about/'].includes(local)) { sendFile(response, resolve(root, 'index.html'), request.method === 'HEAD'); return; }
     // The illustrated participant guide is a plain static page (public/guide.html).
     if (local === '/guide' || local === '/guide.html') { sendFile(response, resolve(root, 'guide.html'), request.method === 'HEAD'); return; }
-    if (path.startsWith(base + '/assets/') || path === base + '/favicon.svg') {
+    if (path.startsWith(base + '/assets/') || path.startsWith(base + '/avatars/') || path === base + '/favicon.svg') {
       const filename = resolve(root, '.' + decodeURIComponent(local));
       if (filename.startsWith(root.replace(/[\\/]$/, '') + sep) && existsSync(filename) && statSync(filename).isFile()) { sendFile(response, filename, request.method === 'HEAD'); return; }
     }
