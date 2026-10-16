@@ -1,10 +1,11 @@
 import { database, hash, cookie, setCookie } from '../../../db/server';
 import { defaults, skills, REACTIONS, OPPOSITE_REACTIONS, MAX_REPLY_DEPTH, ROOM_EMOJIS, ROOM_HUES, type Config, type Idea } from '../../../lib/workshop';
-import { reply, failure, clean, invalidate, snapshot, readCode, unavailable, presenterFor, teamOf, roomVisible, voiceNote, type Session } from '../../../lib/snapshot';
+import { reply, failure, clean, invalidate, snapshot, readCode, unavailable, presenterFor, teamOf, roomVisible, voiceNote, studentCookie, myWorkshops, type Session } from '../../../lib/snapshot';
 import {repairLeader,clearLeadershipVotes,leadershipBallot} from '../../../lib/leadership';
 export const dynamic='force-dynamic';
 async function context(req:Request,code:string){const db=database();const session=await db.prepare('SELECT * FROM sessions WHERE code = ?').bind(code).first<Session>();if(!session)return null;const isPresenter=await presenterFor(req,session);const participant=cookie(req,'student_'+code);const me=participant?await db.prepare('SELECT id,nickname,role,member FROM participants WHERE id = ? AND code = ?').bind(participant,code).first<{id:string;nickname:string;role:string;member:string|null}>():null;return {db,session,config:JSON.parse(session.config) as Config,isPresenter,me};}
 const MAX_ROOMS=40;
+const LOCKED='The presenter has locked the teams. Ask the presenter if you need to change team.';
 const rows=async<T>(db:D1Database,sql:string,...values:unknown[])=>(await db.batch([db.prepare(sql).bind(...values)]))[0].results as T[];
 const withCookies=(res:Response,cookies:string[])=>{for(const c of cookies)res.headers.append('Set-Cookie',c);return res;};
 /** Children first, because ideas and participants reference the session. */
@@ -22,9 +23,11 @@ async function enterRoom(req:Request,db:D1Database,room:Session,roomConfig:Confi
  const existing=await db.prepare('SELECT id,role FROM participants WHERE code=? AND member=?').bind(room.code,base.id).first<{id:string;role:string}>();
  const statements:D1PreparedStatement[]=[];const id=existing?.id||crypto.randomUUID();
  if(want==='member'&&roomConfig.joining==='invite'&&existing?.role!=='member'&&existing?.role!=='lead'&&clean(b.invite,40)!==roomConfig.inviteToken)return failure('This team joins by invitation. Ask the team for its invite link.',403);
- if(newBase){statements.push(db.prepare('INSERT INTO participants (id,code,nickname,created) VALUES (?,?,?,?)').bind(base.id,parentCode,base.nickname,Date.now()));cookies.push(setCookie(req,'student_'+parentCode,base.id));}
+ if(newBase){statements.push(db.prepare('INSERT INTO participants (id,code,nickname,created) VALUES (?,?,?,?)').bind(base.id,parentCode,base.nickname,Date.now()));cookies.push(studentCookie(req,parentCode,base.id));}
  if(want==='member'){
   const previous=await rows<{code:string}>(db,"SELECT code FROM participants WHERE member=? AND role!='guest' AND code!=? AND code IN (SELECT code FROM sessions WHERE parent=?)",base.id,room.code,parentCode);
+  // Locked teams: a student without a team may still choose one, but nobody moves between teams on their own.
+  if(pc.lockTeams&&previous.length)return failure(LOCKED,403);
   // One team per student: other memberships become guest visits, so the ideas posted there stay.
   statements.push(db.prepare("UPDATE participants SET role='guest' WHERE member=? AND role!='guest' AND code!=? AND code IN (SELECT code FROM sessions WHERE parent=?)").bind(base.id,room.code,parentCode));
   const lead=await db.prepare("SELECT id FROM participants WHERE code=? AND role='lead' AND id!=?").bind(room.code,id).first();const role=lead?'member':'lead';
@@ -35,10 +38,11 @@ async function enterRoom(req:Request,db:D1Database,room:Session,roomConfig:Confi
   if(!existing||existing.role==='guest')statements.push(clearLeadershipVotes(db,room.code));
  } else if(!existing)statements.push(db.prepare("INSERT INTO participants (id,code,nickname,created,member,role) VALUES (?,?,?,?,?,'guest')").bind(id,room.code,base.nickname,Date.now(),base.id));
  if(statements.length)await db.batch(statements);
- cookies.push(setCookie(req,'student_'+room.code,id));
+ cookies.push(studentCookie(req,room.code,id));
  return withCookies(reply({ok:true,code:room.code},existing?200:201),cookies);
 }
 export async function GET(req:Request){try{
+ if(new URL(req.url).searchParams.get('mine')==='1')return reply({workshops:await myWorkshops(req)});
  if(new URL(req.url).searchParams.get('directory')==='1'){
   const workshops=await rows<{code:string;name:string;challenge:string;language:Config['language']}>(database(),"SELECT code,json_extract(config,'$.name') AS name,json_extract(config,'$.challenge') AS challenge,json_extract(config,'$.language') AS language FROM sessions WHERE parent IS NULL AND json_extract(config,'$.showOnJoinPage')=1 AND json_extract(config,'$.ended')=0 ORDER BY created DESC LIMIT 100");
   return reply({workshops});
@@ -50,14 +54,14 @@ export async function POST(req:Request){let code='';try{const origin=req.headers
  if(action==='unlock'){const key=clean(b.key,200);if(await hash(key)!==c.session.adminHash)return failure('The presenter key is incorrect.',403);return reply({ok:true},200,{'Set-Cookie':setCookie(req,'admin_'+code,key)});}
  if(action==='join'&&c.session.parent)return enterRoom(req,db,c.session,config,b,'member');
  if(action==='joinRoom'){if(!c.session.parent)return failure('Room not found.',404);return enterRoom(req,db,c.session,config,b,b.role==='guest'?'guest':'member');}
- if(action==='join'){if(config.ended)return failure('This workshop has ended.');if(me)return reply({ok:true});let nickname=clean(b.nickname,40);if(!nickname&&!config.anonymous)return failure('Please enter a nickname.');if(!nickname)nickname='Anonymous';const id=crypto.randomUUID();await db.prepare('INSERT INTO participants (id,code,nickname,created) VALUES (?,?,?,?)').bind(id,code,nickname,Date.now()).run();return reply({ok:true},201,{'Set-Cookie':setCookie(req,'student_'+code,id)});}
+ if(action==='join'){if(config.ended)return failure('This workshop has ended.');if(me)return reply({ok:true});let nickname=clean(b.nickname,40);if(!nickname&&!config.anonymous)return failure('Please enter a nickname.');if(!nickname)nickname='Anonymous';const id=crypto.randomUUID();await db.prepare('INSERT INTO participants (id,code,nickname,created) VALUES (?,?,?,?)').bind(id,code,nickname,Date.now()).run();return reply({ok:true},201,{'Set-Cookie':studentCookie(req,code,id)});}
  if(action==='deleteWorkshop'){if(!isPresenter)return failure('Presenter access required.',403);if(clean(b.confirm,20).toUpperCase()!==code)return failure('Type the workshop code to confirm.');
   // One transaction that also removes the workshop's team rooms.
   const rooms=(await rows<{code:string}>(db,'SELECT code FROM sessions WHERE parent=?',code)).map(r=>r.code);
   await db.batch(removeSessions(db,[...rooms,code]));return reply({ok:true});}
  if(action==='createRoom'){
   if(c.session.parent)return failure('Create rooms from the main workshop.');if(config.ended)return failure('This workshop has ended.');
-  if(!isPresenter){if(!me)return failure('Join the workshop first.',401);if(!config.teamRooms||config.studentRooms===false)return failure('Only the presenter can create rooms in this workshop.',403);}
+  if(!isPresenter){if(!me)return failure('Join the workshop first.',401);if(!config.teamRooms||config.studentRooms===false)return failure('Only the presenter can create rooms in this workshop.',403);if(config.lockTeams&&await teamOf(db,code,me.id))return failure(LOCKED,403);}
   const names=(Array.isArray(b.names)?b.names:[b.name]).map(n=>clean(n,60)).filter(Boolean).slice(0,isPresenter?20:1);if(!names.length)return failure('Give the room a name.');
   const existing=await rows<{code:string}>(db,'SELECT code FROM sessions WHERE parent=?',code);if(existing.length+names.length>MAX_ROOMS)return failure('This workshop has reached its room limit.');
   let n=Math.max(0,...existing.map(r=>Number(r.code.slice(code.length+2))||0));const focus=clean(b.challenge,100);
@@ -73,7 +77,11 @@ export async function POST(req:Request){let code='';try{const origin=req.headers
   const patch=b.patch as Record<string,unknown>||{};const list=await rows<Session>(db,'SELECT * FROM sessions WHERE parent=?',code);
   if(list.length)await db.batch(list.map(r=>{const next={...JSON.parse(r.config) as Config};if(Number.isInteger(patch.stage)&&Number(patch.stage)>=0&&Number(patch.stage)<=8){next.stage=Number(patch.stage);next.screen='stage';if(next.stage!==5)next.votingOpen=false;}for(const f of ['paused','submissionsOpen'] as const)if(typeof patch[f]==='boolean')next[f]=patch[f] as boolean;if(patch.timerEnd===null||typeof patch.timerEnd==='number')next.timerEnd=patch.timerEnd as number|null;if(typeof patch.screen==='string'&&['stage','qr','wall','voting'].includes(patch.screen))next.screen=patch.screen;next.revision=crypto.randomUUID();return db.prepare('UPDATE sessions SET config=? WHERE code=?').bind(JSON.stringify(next),r.code);}));
   return reply({ok:true,rooms:list.length});}
- if(action==='leaveRoom'){if(!me||!c.session.parent)return failure('Room not found.',404);if(me.role!=='guest')await db.batch([db.prepare("UPDATE participants SET role='guest' WHERE id=? AND code=?").bind(me.id,code),repairLeader(db,code),clearLeadershipVotes(db,code)]);return reply({ok:true});}
+ if(action==='leaveRoom'){if(!me)return failure('Room not found.',404);
+  const main=c.session.parent?JSON.parse((await db.prepare('SELECT config FROM sessions WHERE code=?').bind(c.session.parent).first<{config:string}>())?.config||'{}') as Config:config;if(main.lockTeams&&!isPresenter)return failure(LOCKED,403);
+  // From the main workshop ("My room"): leave whichever team this person belongs to. Their ideas stay in that room; they become a visitor there.
+  if(!c.session.parent){const team=await teamOf(db,code,me.id);if(team)await db.batch([db.prepare("UPDATE participants SET role='guest' WHERE member=? AND code=?").bind(me.id,team),repairLeader(db,team),clearLeadershipVotes(db,team)]);return reply({ok:true,left:team});}
+  if(me.role!=='guest')await db.batch([db.prepare("UPDATE participants SET role='guest' WHERE id=? AND code=?").bind(me.id,code),repairLeader(db,code),clearLeadershipVotes(db,code)]);return reply({ok:true});}
  if(action==='leadershipVote'){
   if(!c.session.parent)return failure('Room not found.',404);
   if(!me||me.role==='guest')return failure('Only team members can elect a leader.',403);
@@ -173,5 +181,5 @@ if(!config.submissionsOpen)return failure('Submissions are closed.');if((b.expec
  if(action==='reflect'){const skill=clean(b.skill,100);if(config.stage!==8||!skills.includes(skill))return failure('Reflection is not available.');await db.prepare('INSERT INTO reflections(code,participant,skill) VALUES(?,?,?) ON CONFLICT(code,participant) DO UPDATE SET skill=excluded.skill').bind(code,me.id,skill).run();return reply({ok:true});}
  return failure('Unknown action.');
  }catch(e){console.error('Workshop action failed',e);return failure('Unable to save right now. Keep your text and retry.',503);}finally{if(code)invalidate(code);}}
-function settings(b:Record<string,unknown>,partial=false){const out:Partial<Config>={};for(const field of ['name','challenge','question','description'] as const){if(typeof b[field]==='string'){const value=clean(b[field],field==='question'||field==='description'?1000:100);if(value||field==='description')out[field]=value;}}if(!partial){out.name=out.name||defaults.name;out.challenge=out.challenge||defaults.challenge;out.question=out.question||defaults.question;}for(const f of ['anonymous','moderated','liveResults','multiple','teamRooms','studentRooms','gallery','boardEnabled','boardOpen','boardModerated'] as const)if(typeof b[f]==='boolean')out[f]=b[f] as boolean;if(['en','ar','both'].includes(String(b.language)))out.language=b.language as Config['language'];if(Number.isInteger(b.maxVotes)&&Number(b.maxVotes)>=1&&Number(b.maxVotes)<=10)out.maxVotes=Number(b.maxVotes);return out;}
+function settings(b:Record<string,unknown>,partial=false){const out:Partial<Config>={};for(const field of ['name','challenge','question','description'] as const){if(typeof b[field]==='string'){const value=clean(b[field],field==='question'||field==='description'?1000:100);if(value||field==='description')out[field]=value;}}if(!partial){out.name=out.name||defaults.name;out.challenge=out.challenge||defaults.challenge;out.question=out.question||defaults.question;}for(const f of ['anonymous','moderated','liveResults','multiple','teamRooms','studentRooms','gallery','lockTeams','boardEnabled','boardOpen','boardModerated'] as const)if(typeof b[f]==='boolean')out[f]=b[f] as boolean;if(['en','ar','both'].includes(String(b.language)))out.language=b.language as Config['language'];if(Number.isInteger(b.maxVotes)&&Number(b.maxVotes)>=1&&Number(b.maxVotes)<=10)out.maxVotes=Number(b.maxVotes);return out;}
 

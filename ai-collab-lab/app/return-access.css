@@ -1,0 +1,21 @@
+/* Coming back: "Welcome back", "My room" and the personal return code. Phone-first; logical properties keep RTL right. */
+.welcome-back{position:relative;display:flex;flex-direction:column;gap:12px;margin:18px 0;border-color:color-mix(in srgb,var(--accent) 45%,var(--line));background:linear-gradient(160deg,color-mix(in srgb,var(--accent-fill,var(--accent)) 9%,var(--panel)),var(--panel) 60%)}
+.welcome-back h1,.welcome-back h2{margin:0;overflow-wrap:anywhere}
+.welcome-back h1{font-size:clamp(28px,7vw,36px);line-height:1.2}
+.welcome-back p{margin:0}
+.welcome-back-icon{display:grid;place-items:center;width:52px;height:52px;border-radius:16px;color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent)}
+.welcome-back-room{font-size:19px;color:var(--text)!important}
+.welcome-back-room strong{color:var(--accent)}
+.welcome-back.compact{padding:18px;gap:10px}
+.welcome-back.compact h2{font-size:22px}
+.resume-workshops{display:grid;gap:12px;margin:8px 0 22px}
+.welcome-page{max-width:560px}
+.my-room-panel{display:flex;flex-direction:column;gap:12px;margin:0 0 18px;padding:18px;border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+.my-room-panel .my-room-name{font-size:24px;margin:0;overflow-wrap:anywhere}
+.my-room-panel p{margin:0}
+.my-room-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.my-room-actions .btn{white-space:normal;min-width:0}
+.my-room-confirm{display:grid;gap:10px;padding:12px;border-radius:12px;border:1px solid #ff9d9d40;background:#ff9d9d0c}
+.my-room-confirm p{color:var(--text)!important}
+.my-room-locked{display:flex;gap:8px;align-items:flex-start;margin:0}
+.my-room-locked svg{flex:none;margin-top:2px}

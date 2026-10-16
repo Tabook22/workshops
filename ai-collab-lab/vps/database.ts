@@ -63,8 +63,8 @@ export function cookie(req: Request, name: string) {
   const value = req.headers.get('cookie')?.split(';').map(item => item.trim()).find(item => item.startsWith(name + '='));
   return value ? decodeURIComponent(value.slice(name.length + 1)) : '';
 }
-export function setCookie(req: Request, name: string, value: string) {
+export function setCookie(req: Request, name: string, value: string, maxAge = 604800) {
   const base = process.env.BASE_PATH || '/workshops';
-  return `${name}=${encodeURIComponent(value)}; Path=${base}; HttpOnly; SameSite=Lax; Max-Age=604800${new URL(req.url).protocol === 'https:' ? '; Secure' : ''}`;
+  return `${name}=${encodeURIComponent(value)}; Path=${base}; HttpOnly; SameSite=Lax; Max-Age=${maxAge}${new URL(req.url).protocol === 'https:' ? '; Secure' : ''}`;
 }
 export function closeDatabase() { sqlite.close(); }

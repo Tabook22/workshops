@@ -2,7 +2,7 @@
 import {localizeNumbers} from './localization';
 import {displayNumber} from './i18n';
 import {useState} from 'react';
-import {Users,Crown,Vote,Check,LogOut} from 'lucide-react';
+import {Users,Crown,Vote,Check,LogOut,Lock} from 'lucide-react';
 import {action,Modal} from './client';
 import type {Snapshot,Language} from './workshop';
 
@@ -42,7 +42,7 @@ export default function TeamLeadership({data,lang,refresh}:{data:Snapshot;lang:L
    {election.myVote&&canVote&&<button className="btn small ghost" disabled={busy} onClick={()=>void choose(null)}>{t('Withdraw my vote','سحب صوتي')}</button>}
    {message&&<p className="success" role="status">{message}</p>}{error&&<p className="error" role="alert">{error}</p>}
   </section>
-  {member&&<section className="team-leave"><h3>{t('Need a different team?','تحتاج إلى فريق آخر؟')}</h3><p className="inline-help">{t('Leaving keeps your ideas and files here. You become a visitor. If you lead, the earliest remaining member takes over automatically.','تظل أفكارك وملفاتك هنا بعد المغادرة، وتصبح زائراً. إذا كنت القائد، يتولى أول عضو متبقٍ القيادة تلقائياً.')}</p>{leaving?<div className="actions"><span>{t('Leave this team?','مغادرة هذا الفريق؟')}</span><button className="btn small danger" disabled={busy} onClick={()=>void leave()}>{t('Leave team','غادر الفريق')}</button><button className="btn small secondary" disabled={busy} onClick={()=>setLeaving(false)}>{t('Stay','ابقَ')}</button></div>:<button className="btn small ghost" onClick={()=>setLeaving(true)}><LogOut size={15}/>{t('Leave this team','غادر هذا الفريق')}</button>}</section>}
+  {member&&data.parent?.lockTeams&&<section className="team-leave"><h3>{t('Need a different team?','تحتاج إلى فريق آخر؟')}</h3><p className="inline-help"><Lock size={14}/> {t('The presenter has locked the teams. Ask the presenter if you need to change team.','قفل مقدم الورشة الفرق. اطلب من مقدم الورشة إن احتجت إلى تغيير فريقك.')}</p></section>}{member&&!data.parent?.lockTeams&&<section className="team-leave"><h3>{t('Need a different team?','تحتاج إلى فريق آخر؟')}</h3><p className="inline-help">{t('Leaving keeps your ideas and files here. You become a visitor. If you lead, the earliest remaining member takes over automatically.','تظل أفكارك وملفاتك هنا بعد المغادرة، وتصبح زائراً. إذا كنت القائد، يتولى أول عضو متبقٍ القيادة تلقائياً.')}</p>{leaving?<div className="actions"><span>{t('Leave this team?','مغادرة هذا الفريق؟')}</span><button className="btn small danger" disabled={busy} onClick={()=>void leave()}>{t('Leave team','غادر الفريق')}</button><button className="btn small secondary" disabled={busy} onClick={()=>setLeaving(false)}>{t('Stay','ابقَ')}</button></div>:<button className="btn small ghost" onClick={()=>setLeaving(true)}><LogOut size={15}/>{t('Leave this team','غادر هذا الفريق')}</button>}</section>}
  </Modal>}
  </>;
 }
