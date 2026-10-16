@@ -92,6 +92,13 @@
       "when": 1792185939532,
       "tag": "0012_return_codes",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "6",
+      "when": 1792186967114,
+      "tag": "0013_username_pin",
+      "breakpoints": true
     }
   ]
 }

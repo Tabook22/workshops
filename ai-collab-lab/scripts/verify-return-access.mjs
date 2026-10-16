@@ -94,5 +94,33 @@ await phone.request({action:'forgetMe',code:r1});assert.equal((await phone.get(c
 const guesser=client('192.0.2.'+run);for(let i=0;i<30;i++)await guesser.request({action:'restore',returnCode:'QQ-QQ'+'23456789ABCDEFGHJKMNPQRSTWXYZ'[i%29]+'2'},404);
 await guesser.request({action:'restore',returnCode:reissued.returnCode},429);assert.equal((await client().request({action:'restore',returnCode:reissued.returnCode})).code,code);
 
+// 8. Optional "Protect my account" (code mode): username + PIN, unique per workshop, hashed, rate limited per username.
+assert.equal((await carol.get(code)).me.username,null);
+await carol.request({action:'protect',code,username:'ab',pin:'1234'},400);await carol.request({action:'protect',code,username:'carol.k',pin:'12'},400);await carol.request({action:'protect',code,username:'carol.k',pin:'1234567'},400);
+assert.equal((await carol.request({action:'protect',code,username:' Carol.K ',pin:'٢٤٦٨'})).username,'carol.k');
+assert.equal((await carol.get(code)).me.username,'carol.k');assert.equal((await carol.get(r1)).me.username,'carol.k','the room page knows the account too');
+await dana.request({action:'protect',code,username:'CAROL.K',pin:'1111'},409);
+const laptop=client();const signedIn=await laptop.request({action:'restorePin',code,username:'carol.k',pin:'2468'});assert.deepEqual([signedIn.code,signedIn.room],[code,r1]);
+assert.equal((await laptop.get(r1)).me.id,carolRoomId);
+// Restoring from a room code works too (the account belongs to the main workshop).
+assert.equal((await client().request({action:'restorePin',code:r1,username:'carol.k',pin:'2468'})).code,code);
+for(const json of [await presenter.get(code),await carol.get(code)])assert.ok(!JSON.stringify(json).includes('pinHash')&&!JSON.stringify(json).includes('2468'));
+// Five wrong PINs for one username: that username waits, even with the right PIN; other usernames are fine.
+const pinGuesser=client('192.0.2.'+((run%250)+1));for(const p of ['0000','1111','2222','3333','4444'])await pinGuesser.request({action:'restorePin',code,username:'carol.k',pin:p},404);
+await client().request({action:'restorePin',code,username:'carol.k',pin:'2468'},429);
+await carol.request({action:'protect',code,username:'carol.two',pin:'9753'});assert.equal((await client().request({action:'restorePin',code,username:'carol.two',pin:'9753'})).code,code);
+await client().request({action:'restorePin',code,username:'nobody',pin:'1234'},404);
+
+// 9. Presenter setting: require username + PIN when joining.
+await presenter.request({action:'control',code,patch:{returnMode:'pin'}});assert.equal((await presenter.get(code)).config.returnMode,'pin');assert.equal((await presenter.get(r1)).parent.returnMode,'pin');
+const erin=client();await erin.request({action:'join',code,nickname:'QA Erin'},400);await erin.request({action:'join',code,nickname:'QA Erin',username:'carol.two',pin:'1234'},409);
+const erinJoin=await erin.request({action:'join',code,nickname:'QA Erin',username:'erin',pin:'4321'},201);assert.equal(erinJoin.returnCode,undefined,'no return code handed out in PIN mode');assert.equal(erinJoin.username,'erin');
+// Joining through a room link asks for them too.
+await client().request({action:'joinRoom',code:r2,nickname:'QA Fay'},400);const fay=client();assert.equal((await fay.request({action:'joinRoom',code:r2,nickname:'QA Fay',username:'fay',pin:'5555'},201)).returnCode,undefined);
+assert.equal((await client().request({action:'restorePin',code,username:'fay',pin:'5555'})).room,r2);
+// The presenter can still issue a return code for someone who forgot their PIN.
+const erinId=(await erin.get(code)).me.id;const rescue=await presenter.request({action:'reissueCode',code,participant:erinId});assert.equal((await client().request({action:'restore',returnCode:rescue.returnCode})).nickname,'QA Erin');
+await presenter.request({action:'control',code,patch:{returnMode:'code'}});assert.match((await client().request({action:'join',code,nickname:'QA Gus'},201)).returnCode,CODE);
+
 await presenter.request({action:'deleteWorkshop',code,confirm:code});
-console.log('Return access verified: 180-day cookie, my workshops, room re-entry, leave/switch with kept contributions, team lock, return codes (hash-only, restore, renew, reissue, sign-out, rate limit).');
+console.log('Return access verified: 180-day cookie, my workshops, room re-entry, leave/switch with kept contributions, team lock, return codes (hash-only, restore, renew, reissue, sign-out, rate limit), username + PIN (optional and required modes, uniqueness, per-username limit).');

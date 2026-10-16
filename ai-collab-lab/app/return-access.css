@@ -34,3 +34,12 @@
 .restore-form summary{display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:700}
 .restore-form[open] summary{margin-bottom:14px}
 .presenter-reissue{padding:14px;border:1px solid var(--line);border-radius:12px;max-width:420px}
+.login-fields{display:grid;gap:12px;margin:0;padding:14px;border:1px solid var(--line);border-radius:12px;min-width:0}
+.login-fields legend{padding:0 6px;font-weight:700;font-size:14px}
+.login-fields label{margin:0}
+.protect-account{display:grid;gap:10px;margin:14px 0;padding-top:14px;border-top:1px solid var(--line)}
+.protect-account h3{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0;font-size:18px}
+.protect-account h3 small{font-weight:500;font-size:13px}
+.protect-account p{margin:0}
+.restore-modes{margin-bottom:14px}
+.restore-modes button{flex:1;min-height:40px}

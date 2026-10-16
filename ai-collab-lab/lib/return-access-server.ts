@@ -36,3 +36,19 @@ export async function forgetCookies(req:Request,db:D1Database,code:string){
  const rooms=(await db.batch([db.prepare('SELECT code FROM sessions WHERE parent=?').bind(code)]))[0].results as {code:string}[];
  return [code,...rooms.map(r=>r.code)].map(c=>setCookie(req,'student_'+c,'',0));
 }
+
+/* Optional "Protect my account": a username (unique in the workshop) and a 4–6 digit PIN, salted with the participant id and hashed.
+   A PIN is short, so failures are limited per username as well as per address and per workshop. */
+const toAscii=(v:string)=>v.replace(/[٠-٩۰-۹]/g,d=>ARABIC_DIGITS[d]);
+export const normalizeUsername=(value:unknown)=>toAscii(String(value??'').normalize('NFKC').trim().toLowerCase()).replace(/\s+/g,'.').slice(0,40);
+export const normalizePin=(value:unknown)=>toAscii(String(value??'')).replace(/\s/g,'').slice(0,12);
+export const pinHash=(participant:string,pin:string)=>hash('pin:'+participant+':'+pin);
+/** The username and PIN from a request, or the reason they cannot be used. */
+export function credentials(b:Record<string,unknown>):{username:string;pin:string}|string{
+ const username=normalizeUsername(b.username),pin=normalizePin(b.pin);
+ if(!/^[\p{L}\p{N}._-]{3,20}$/u.test(username))return 'Choose a username of 3–20 letters or numbers.';
+ if(!/^\d{4,6}$/.test(pin))return 'Choose a PIN of 4 to 6 digits.';
+ return {username,pin};
+}
+export const usernameTaken=async(db:D1Database,code:string,username:string,except='')=>!!await db.prepare('SELECT 1 FROM participants WHERE code=? AND username=? AND id!=?').bind(code,username,except).first();
+export const pinLimits=(req:Request,code:string,username:string):Limit[]=>[{key:'pin:user:'+code+':'+username,max:5},{key:'pin:ip:'+clientAddress(req),max:30},{key:'pin:ws:'+code,max:100}];

@@ -2,7 +2,7 @@
 /* Coming back to a workshop: "Welcome back" on the same device, the "My room" area (enter, switch, leave),
    and the list of workshops this browser already joined. Every string is bilingual; layout follows dir. */
 import {useEffect,useState} from 'react';
-import {DoorOpen,ArrowRight,LogOut,Repeat,Lock,Users,Sparkles,KeyRound,Copy,QrCode,RefreshCw,Check,UserX} from 'lucide-react';
+import {DoorOpen,ArrowRight,LogOut,Repeat,Lock,Users,Sparkles,KeyRound,Copy,QrCode,RefreshCw,Check,UserX,ShieldCheck} from 'lucide-react';
 import {QRCodeSVG} from 'qrcode.react';
 import {localizeNumbers} from './localization';
 import {action,copyText} from './client';
@@ -102,12 +102,13 @@ export function ReturnCodeCard({workshop,lang,prominent=false,onDone}:{workshop:
 }
 
 /** Bottom of the participant page: the return code, and "Not you?" for shared computers. */
-export function ReturnAccess({workshop,lang}:{workshop:string;lang:Language}){
+export function ReturnAccess({workshop,lang,username}:{workshop:string;lang:Language;username?:string|null}){
  const t=translator(lang);const [forget,setForget]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState('');
  async function signOut(){setBusy(true);setError('');try{await action({action:'forgetMe',code:workshop});location.href=appUrl('/join')}catch(e){setError((e as Error).message);setBusy(false)}}
  return <details className="participant-extra return-access">
   <summary><KeyRound size={16}/>{t('Come back later or on another device','العودة لاحقاً أو من جهاز آخر')}</summary>
   <ReturnCodeCard workshop={workshop} lang={lang}/>
+  <ProtectAccount workshop={workshop} lang={lang} username={username||null}/>
   <div className="return-forget">{forget?<div className="my-room-confirm"><p>{t('Sign out on this device? Your work stays saved. You will need your return code to come back here.','تسجيل الخروج من هذا الجهاز؟ يبقى عملك محفوظاً، وستحتاج إلى رمز العودة للرجوع هنا.')}</p><div className="actions"><button type="button" className="btn small danger" disabled={busy} onClick={()=>void signOut()}><UserX size={15}/>{t('Sign out','تسجيل الخروج')}</button><button type="button" className="btn small secondary" onClick={()=>setForget(false)}>{t('Cancel','إلغاء')}</button></div></div>
   :<button type="button" className="btn small ghost" onClick={()=>setForget(true)}><UserX size={15}/>{t('Not you? Sign out on this device','لست أنت؟ سجّل الخروج من هذا الجهاز')}</button>}</div>
   {error&&<div role="alert" className="error">{error}</div>}
@@ -116,17 +117,24 @@ export function ReturnAccess({workshop,lang}:{workshop:string;lang:Language}){
 
 export async function restore(returnCode:string){return await action({action:'restore',returnCode}) as unknown as {code:string;room:string|null;nickname:string}}
 /** "Joined before? Enter your code": brings this browser back to an earlier identity and straight into its room. */
-export function RestoreForm({lang,open=false}:{lang:Language;open?:boolean}){
- const t=translator(lang);const [value,setValue]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState('');
- async function submit(){setBusy(true);setError('');try{const r=await restore(value);goToWorkshop(r.room||r.code)}catch(e){setError((e as Error).message);setBusy(false)}}
- return <details className="restore-form panel" open={open||undefined}>
-  <summary><KeyRound size={17}/>{t('Joined before? Enter your code','سجّلت من قبل؟ ادخل برمزك')}</summary>
-  <form className="stack" onSubmit={e=>{e.preventDefault();void submit()}}>
+export function RestoreForm({lang,open=false,workshop,pinFirst=false}:{lang:Language;open?:boolean;workshop?:string;pinFirst?:boolean}){
+ const t=translator(lang);const [value,setValue]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState(''),[mode,setMode]=useState<'code'|'pin'>(pinFirst?'pin':'code'),[username,setUsername]=useState(''),[pin,setPin]=useState('');
+ async function submit(){setBusy(true);setError('');try{const r=mode==='pin'?await action({action:'restorePin',code:workshop,username,pin}) as unknown as {code:string;room:string|null}:await restore(value);goToWorkshop(r.room||r.code)}catch(e){setError((e as Error).message);setBusy(false)}}
+ return <details className="restore-form panel" open={open||pinFirst||undefined}>
+  <summary><KeyRound size={17}/>{pinFirst?t('Joined before? Sign in','سجّلت من قبل؟ ادخل'):t('Joined before? Enter your code','سجّلت من قبل؟ ادخل برمزك')}</summary>
+  {workshop&&<div className="tabs segmented restore-modes" role="group" aria-label={t('How to come back','طريقة العودة')}>{([['code','Return code','رمز العودة'],['pin','Username + PIN','اسم المستخدم والرمز السري']] as const).map(([k,en,ar])=><button key={k} type="button" aria-pressed={mode===k} className={mode===k?'active':''} onClick={()=>{setMode(k);setError('')}}>{t(en,ar)}</button>)}</div>}
+  {mode==='pin'&&workshop?<form className="stack" onSubmit={e=>{e.preventDefault();void submit()}}>
+   <label>{t('Username','اسم المستخدم')}<input value={username} onChange={e=>setUsername(e.target.value)} required maxLength={20} autoComplete="username" autoCapitalize="none" spellCheck={false} dir="auto"/></label>
+   <label>{t('PIN','الرمز السري')}<input value={pin} onChange={e=>setPin(e.target.value)} required type="password" inputMode="numeric" maxLength={6} autoComplete="current-password" dir="ltr"/></label>
+   <small className="muted">{t('Forgot your PIN? Ask the presenter for a return code.','نسيت الرمز السري؟ اطلب رمز عودة من مقدم الورشة.')}</small>
+   <button className="btn primary full-width" disabled={busy||!username.trim()||pin.trim().length<4}>{busy?t('Checking…','جارٍ التحقق…'):t('Continue where I left off','تابع من حيث توقفت')} <ArrowRight size={17}/></button>
+   {error&&<div role="alert" className="error">{error}</div>}
+  </form>:<form className="stack" onSubmit={e=>{e.preventDefault();void submit()}}>
    <label>{t('Your return code','رمز العودة الخاص بك')}<input className="code-input" dir="ltr" value={value} onChange={e=>setValue(e.target.value.toUpperCase())} placeholder="K7-4Q2M" required maxLength={12} autoComplete="off" autoCapitalize="characters" spellCheck={false}/></label>
    <small className="muted">{t('It was shown when you joined, and is under “Come back later or on another device”. Lost it? Ask the presenter for a new one.','ظهر لك عند الانضمام، وتجده تحت «العودة لاحقاً أو من جهاز آخر». فقدته؟ اطلب رمزاً جديداً من مقدم الورشة.')}</small>
    <button className="btn primary full-width" disabled={busy||value.replace(/[^A-Za-z0-9٠-٩۰-۹]/g,'').length<6}>{busy?t('Checking…','جارٍ التحقق…'):t('Continue where I left off','تابع من حيث توقفت')} <ArrowRight size={17}/></button>
    {error&&<div role="alert" className="error">{error}</div>}
-  </form>
+  </form>}
  </details>;
 }
 
@@ -140,5 +148,30 @@ export function PresenterReissue({workshop,participant,nickname,lang}:{workshop:
   :confirm?<div className="my-room-confirm"><p>{t(`Issue a new return code for ${nickname}? Their current code stops working.`,`إصدار رمز عودة جديد لـ ${nickname}؟ سيتوقف رمزه الحالي عن العمل.`)}</p><div className="actions"><button type="button" className="btn small primary" disabled={busy} onClick={()=>void reissue()}><RefreshCw size={15}/>{t('Issue new code','أصدر رمزاً جديداً')}</button><button type="button" className="btn small secondary" onClick={()=>setConfirm(false)}>{t('Cancel','إلغاء')}</button></div></div>
   :<><p className="inline-help">{t('Lost their code or changed device? Give them a new one.','فقد رمزه أو غيّر جهازه؟ امنحه رمزاً جديداً.')}</p><button type="button" className="btn small secondary" onClick={()=>setConfirm(true)}><KeyRound size={15}/>{t('New return code','رمز عودة جديد')}</button></>}
   {error&&<div role="alert" className="error">{error}</div>}
+ </section>;
+}
+
+/** Username + PIN inputs for workshops that ask for them when joining. */
+export function LoginFields({lang,username,pin,onUsername,onPin}:{lang:Language;username:string;pin:string;onUsername:(v:string)=>void;onPin:(v:string)=>void}){
+ const t=translator(lang);
+ return <fieldset className="login-fields"><legend>{t('Your sign-in for coming back','بيانات الدخول للعودة')}</legend>
+  <label>{t('Choose a username','اختر اسم مستخدم')}<input value={username} onChange={e=>onUsername(e.target.value)} required minLength={3} maxLength={20} autoComplete="username" autoCapitalize="none" spellCheck={false} dir="auto" placeholder={t('e.g. sara.k','مثل: sara.k')}/></label>
+  <label>{t('Choose a 4–6 digit PIN','اختر رمزاً سرياً من ٤–٦ أرقام')}<input value={pin} onChange={e=>onPin(e.target.value)} required type="password" inputMode="numeric" pattern="[0-9٠-٩۰-۹]{4,6}" minLength={4} maxLength={6} autoComplete="new-password" dir="ltr"/></label>
+  <small className="muted">{t('Use them to come back on any device. Don’t reuse a bank or phone PIN.','استخدمهما للعودة من أي جهاز. لا تستخدم رمز البنك أو الهاتف.')}</small>
+ </fieldset>;
+}
+
+/** Optional "Protect my account": add (or change) a username and PIN, to come back without the return code. */
+export function ProtectAccount({workshop,lang,username}:{workshop:string;lang:Language;username:string|null}){
+ const t=translator(lang);const [open,setOpen]=useState(false),[name,setName]=useState(username||''),[pin,setPin]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState(''),[saved,setSaved]=useState(username);
+ async function save(){setBusy(true);setError('');try{const r=await action({action:'protect',code:workshop,username:name,pin}) as {username?:string};setSaved(r.username||name);setPin('');setOpen(false)}catch(e){setError((e as Error).message)}finally{setBusy(false)}}
+ return <section className="protect-account" aria-label={t('Protect my account','احمِ حسابي')}>
+  <h3><ShieldCheck size={18}/>{t('Protect my account','احمِ حسابي')} <small className="muted">{t('Optional','اختياري')}</small></h3>
+  {saved?<p>{t('Protected. Sign in with username','محمي. ادخل باسم المستخدم')} <strong dir="auto">{saved}</strong> {t('and your PIN.','ورمزك السري.')}</p>:<p className="muted">{t('Add a username and a 4–6 digit PIN to come back without your code.','أضف اسم مستخدم ورمزاً سرياً من ٤–٦ أرقام للعودة دون رمز العودة.')}</p>}
+  {open?<form className="stack" onSubmit={e=>{e.preventDefault();void save()}}>
+   <LoginFields lang={lang} username={name} pin={pin} onUsername={setName} onPin={setPin}/>
+   <div className="actions"><button className="btn small primary" disabled={busy}><ShieldCheck size={15}/>{t('Save','حفظ')}</button><button type="button" className="btn small secondary" onClick={()=>setOpen(false)}>{t('Cancel','إلغاء')}</button></div>
+   {error&&<div role="alert" className="error">{error}</div>}
+  </form>:<button type="button" className="btn small secondary" onClick={()=>setOpen(true)}><ShieldCheck size={15}/>{saved?t('Change username or PIN','غيّر اسم المستخدم أو الرمز السري'):t('Add username + PIN','أضف اسم مستخدم ورمزاً سرياً')}</button>}
  </section>;
 }

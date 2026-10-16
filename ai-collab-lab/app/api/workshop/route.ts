@@ -2,11 +2,13 @@ import { database, hash, cookie, setCookie } from '../../../db/server';
 import { defaults, skills, REACTIONS, OPPOSITE_REACTIONS, MAX_REPLY_DEPTH, ROOM_EMOJIS, ROOM_HUES, type Config, type Idea } from '../../../lib/workshop';
 import { reply, failure, clean, invalidate, snapshot, readCode, unavailable, presenterFor, teamOf, roomVisible, voiceNote, studentCookie, myWorkshops, type Session } from '../../../lib/snapshot';
 import {repairLeader,clearLeadershipVotes,leadershipBallot} from '../../../lib/leadership';
-import {normalizeReturnCode,returnHash,issueReturnCode,rateLimited,recordFailure,returnLimits,restoreCookies,forgetCookies} from '../../../lib/return-access-server';
+import {normalizeReturnCode,returnHash,issueReturnCode,rateLimited,recordFailure,returnLimits,restoreCookies,forgetCookies,credentials,usernameTaken,pinHash,pinLimits,normalizeUsername,normalizePin} from '../../../lib/return-access-server';
 export const dynamic='force-dynamic';
 async function context(req:Request,code:string){const db=database();const session=await db.prepare('SELECT * FROM sessions WHERE code = ?').bind(code).first<Session>();if(!session)return null;const isPresenter=await presenterFor(req,session);const participant=cookie(req,'student_'+code);const me=participant?await db.prepare('SELECT id,nickname,role,member FROM participants WHERE id = ? AND code = ?').bind(participant,code).first<{id:string;nickname:string;role:string;member:string|null}>():null;return {db,session,config:JSON.parse(session.config) as Config,isPresenter,me};}
 const MAX_ROOMS=40;
 const LOCKED='The presenter has locked the teams. Ask the presenter if you need to change team.';
+const TAKEN='That username is taken in this workshop. Try another.';
+const WRONG_PIN='That username and PIN did not match. Check them and try again, or ask the presenter for a return code.';
 const WRONG_CODE='That return code did not match. Check it and try again, or ask the presenter for a new one.';
 const rows=async<T>(db:D1Database,sql:string,...values:unknown[])=>(await db.batch([db.prepare(sql).bind(...values)]))[0].results as T[];
 const withCookies=(res:Response,cookies:string[])=>{for(const c of cookies)res.headers.append('Set-Cookie',c);return res;};
@@ -20,12 +22,14 @@ async function enterRoom(req:Request,db:D1Database,room:Session,roomConfig:Confi
  const cookies:string[]=[];const parentId=cookie(req,'student_'+parentCode);
  let base=parentId?await db.prepare('SELECT id,nickname FROM participants WHERE id=? AND code=?').bind(parentId,parentCode).first<{id:string;nickname:string}>():null;
  const newBase=!base;
- if(!base){let nickname=clean(b.nickname,40);if(!nickname&&!pc.anonymous)return failure('Please enter a nickname.');if(!nickname)nickname='Anonymous';base={id:crypto.randomUUID(),nickname};}
+ let login:{username:string;pin:string}|null=null;
+ if(!base){let nickname=clean(b.nickname,40);if(!nickname&&!pc.anonymous)return failure('Please enter a nickname.');if(!nickname)nickname='Anonymous';base={id:crypto.randomUUID(),nickname};
+  if(pc.returnMode==='pin'){const cr=credentials(b);if(typeof cr==='string')return failure(cr);if(await usernameTaken(db,parentCode,cr.username))return failure(TAKEN,409);login=cr;}}
  if(want==='guest'){if(pc.gallery===false)return failure('Visiting other rooms is turned off.',403);if(!roomVisible(roomConfig,room.code,await teamOf(db,parentCode,base.id),true))return failure('This team keeps its discussion private.',403);}
  const existing=await db.prepare('SELECT id,role FROM participants WHERE code=? AND member=?').bind(room.code,base.id).first<{id:string;role:string}>();
  const statements:D1PreparedStatement[]=[];const id=existing?.id||crypto.randomUUID();
  if(want==='member'&&roomConfig.joining==='invite'&&existing?.role!=='member'&&existing?.role!=='lead'&&clean(b.invite,40)!==roomConfig.inviteToken)return failure('This team joins by invitation. Ask the team for its invite link.',403);
- if(newBase){statements.push(db.prepare('INSERT INTO participants (id,code,nickname,created) VALUES (?,?,?,?)').bind(base.id,parentCode,base.nickname,Date.now()));cookies.push(studentCookie(req,parentCode,base.id));}
+ if(newBase){statements.push(db.prepare('INSERT INTO participants (id,code,nickname,created,username,pinHash) VALUES (?,?,?,?,?,?)').bind(base.id,parentCode,base.nickname,Date.now(),login?.username??null,login?await pinHash(base.id,login.pin):null));cookies.push(studentCookie(req,parentCode,base.id));}
  if(want==='member'){
   const previous=await rows<{code:string}>(db,"SELECT code FROM participants WHERE member=? AND role!='guest' AND code!=? AND code IN (SELECT code FROM sessions WHERE parent=?)",base.id,room.code,parentCode);
   // Locked teams: a student without a team may still choose one, but nobody moves between teams on their own.
@@ -41,7 +45,7 @@ async function enterRoom(req:Request,db:D1Database,room:Session,roomConfig:Confi
  } else if(!existing)statements.push(db.prepare("INSERT INTO participants (id,code,nickname,created,member,role) VALUES (?,?,?,?,?,'guest')").bind(id,room.code,base.nickname,Date.now(),base.id));
  if(statements.length)await db.batch(statements);
  cookies.push(studentCookie(req,room.code,id));
- const returnCode=newBase?await issueReturnCode(db,base.id):undefined;
+ const returnCode=newBase&&!login?await issueReturnCode(db,base.id):undefined;
  return withCookies(reply({ok:true,code:room.code,...(returnCode?{returnCode}:{})},existing?200:201),cookies);
 }
 export async function GET(req:Request){try{
@@ -58,11 +62,21 @@ export async function POST(req:Request){let code='';try{const origin=req.headers
   const found=await db.prepare('SELECT p.id,p.code,p.nickname FROM participants p JOIN sessions s ON s.code=p.code WHERE p.returnHash=? AND s.parent IS NULL').bind(await returnHash(raw)).first<{id:string;code:string;nickname:string}>();
   if(!found){await recordFailure(db,limits);return failure(WRONG_CODE,404);}
   const {room,cookies}=await restoreCookies(req,db,found);return withCookies(reply({ok:true,code:found.code,room,nickname:found.nickname}),cookies);}
+ if(action==='restorePin'){const session=await db.prepare('SELECT code,parent FROM sessions WHERE code=?').bind(code).first<{code:string;parent:string|null}>();if(!session)return failure('Workshop not found.',404);const main=session.parent||session.code;
+  const username=normalizeUsername(b.username),pin=normalizePin(b.pin);const limits=pinLimits(req,main,username);if(await rateLimited(db,limits))return failure('Too many attempts. Please wait a few minutes, or ask the presenter for a return code.',429);
+  const found=username?await db.prepare('SELECT id,code,nickname,pinHash FROM participants WHERE code=? AND username=?').bind(main,username).first<{id:string;code:string;nickname:string;pinHash:string|null}>():null;
+  if(!found||!found.pinHash||await pinHash(found.id,pin)!==found.pinHash){await recordFailure(db,limits);return failure(WRONG_PIN,404);}
+  const {room,cookies}=await restoreCookies(req,db,found);return withCookies(reply({ok:true,code:found.code,room,nickname:found.nickname}),cookies);}
  const c=await context(req,code);if(!c)return failure('Workshop not found.',404);const {config,isPresenter,me}=c;
  if(action==='unlock'){const key=clean(b.key,200);if(await hash(key)!==c.session.adminHash)return failure('The presenter key is incorrect.',403);return reply({ok:true},200,{'Set-Cookie':setCookie(req,'admin_'+code,key)});}
  if(action==='join'&&c.session.parent)return enterRoom(req,db,c.session,config,b,'member');
  if(action==='joinRoom'){if(!c.session.parent)return failure('Room not found.',404);return enterRoom(req,db,c.session,config,b,b.role==='guest'?'guest':'member');}
- if(action==='join'){if(config.ended)return failure('This workshop has ended.');if(me)return reply({ok:true});let nickname=clean(b.nickname,40);if(!nickname&&!config.anonymous)return failure('Please enter a nickname.');if(!nickname)nickname='Anonymous';const id=crypto.randomUUID();await db.prepare('INSERT INTO participants (id,code,nickname,created) VALUES (?,?,?,?)').bind(id,code,nickname,Date.now()).run();const returnCode=await issueReturnCode(db,id);return reply({ok:true,returnCode},201,{'Set-Cookie':studentCookie(req,code,id)});}
+ if(action==='join'){if(config.ended)return failure('This workshop has ended.');if(me)return reply({ok:true});let nickname=clean(b.nickname,40);if(!nickname&&!config.anonymous)return failure('Please enter a nickname.');if(!nickname)nickname='Anonymous';const id=crypto.randomUUID();
+  // "Username + PIN" workshops ask for both when joining, and do not hand out a return code (the presenter can still issue one).
+  if(config.returnMode==='pin'){const cr=credentials(b);if(typeof cr==='string')return failure(cr);if(await usernameTaken(db,code,cr.username))return failure(TAKEN,409);await db.prepare('INSERT INTO participants (id,code,nickname,created,username,pinHash) VALUES (?,?,?,?,?,?)').bind(id,code,nickname,Date.now(),cr.username,await pinHash(id,cr.pin)).run();return reply({ok:true,username:cr.username},201,{'Set-Cookie':studentCookie(req,code,id)});}
+  await db.prepare('INSERT INTO participants (id,code,nickname,created) VALUES (?,?,?,?)').bind(id,code,nickname,Date.now()).run();const returnCode=await issueReturnCode(db,id);return reply({ok:true,returnCode},201,{'Set-Cookie':studentCookie(req,code,id)});}
+ // "Protect my account": set or change this participant's username and PIN.
+ if(action==='protect'){if(c.session.parent)return failure('Use the main workshop.');if(!me)return failure('Join the workshop first.',401);const cr=credentials(b);if(typeof cr==='string')return failure(cr);if(await usernameTaken(db,code,cr.username,me.id))return failure(TAKEN,409);await db.prepare('UPDATE participants SET username=?,pinHash=? WHERE id=?').bind(cr.username,await pinHash(me.id,cr.pin),me.id).run();return reply({ok:true,username:cr.username});}
  // Return codes: a participant makes (or replaces) their own; the presenter reissues one for someone who lost theirs.
  if(action==='returnCode'){if(c.session.parent)return failure('Use the main workshop.');if(!me)return failure('Join the workshop first.',401);return reply({ok:true,returnCode:await issueReturnCode(db,me.id)});}
  if(action==='reissueCode'){if(!isPresenter)return failure('Presenter access required.',403);if(c.session.parent)return failure('Use the main workshop.');const who=await db.prepare('SELECT id,nickname FROM participants WHERE id=? AND code=?').bind(clean(b.participant,40),code).first<{id:string;nickname:string}>();if(!who)return failure('Participant not found.',404);return reply({ok:true,nickname:who.nickname,returnCode:await issueReturnCode(db,who.id)});}
@@ -194,5 +208,5 @@ if(!config.submissionsOpen)return failure('Submissions are closed.');if((b.expec
  if(action==='reflect'){const skill=clean(b.skill,100);if(config.stage!==8||!skills.includes(skill))return failure('Reflection is not available.');await db.prepare('INSERT INTO reflections(code,participant,skill) VALUES(?,?,?) ON CONFLICT(code,participant) DO UPDATE SET skill=excluded.skill').bind(code,me.id,skill).run();return reply({ok:true});}
  return failure('Unknown action.');
  }catch(e){console.error('Workshop action failed',e);return failure('Unable to save right now. Keep your text and retry.',503);}finally{if(code)invalidate(code);}}
-function settings(b:Record<string,unknown>,partial=false){const out:Partial<Config>={};for(const field of ['name','challenge','question','description'] as const){if(typeof b[field]==='string'){const value=clean(b[field],field==='question'||field==='description'?1000:100);if(value||field==='description')out[field]=value;}}if(!partial){out.name=out.name||defaults.name;out.challenge=out.challenge||defaults.challenge;out.question=out.question||defaults.question;}for(const f of ['anonymous','moderated','liveResults','multiple','teamRooms','studentRooms','gallery','lockTeams','boardEnabled','boardOpen','boardModerated'] as const)if(typeof b[f]==='boolean')out[f]=b[f] as boolean;if(['en','ar','both'].includes(String(b.language)))out.language=b.language as Config['language'];if(Number.isInteger(b.maxVotes)&&Number(b.maxVotes)>=1&&Number(b.maxVotes)<=10)out.maxVotes=Number(b.maxVotes);return out;}
+function settings(b:Record<string,unknown>,partial=false){const out:Partial<Config>={};for(const field of ['name','challenge','question','description'] as const){if(typeof b[field]==='string'){const value=clean(b[field],field==='question'||field==='description'?1000:100);if(value||field==='description')out[field]=value;}}if(!partial){out.name=out.name||defaults.name;out.challenge=out.challenge||defaults.challenge;out.question=out.question||defaults.question;}for(const f of ['anonymous','moderated','liveResults','multiple','teamRooms','studentRooms','gallery','lockTeams','boardEnabled','boardOpen','boardModerated'] as const)if(typeof b[f]==='boolean')out[f]=b[f] as boolean;if(b.returnMode==='code'||b.returnMode==='pin')out.returnMode=b.returnMode;if(['en','ar','both'].includes(String(b.language)))out.language=b.language as Config['language'];if(Number.isInteger(b.maxVotes)&&Number(b.maxVotes)>=1&&Number(b.maxVotes)<=10)out.maxVotes=Number(b.maxVotes);return out;}
 
