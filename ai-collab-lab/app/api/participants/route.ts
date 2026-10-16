@@ -18,7 +18,7 @@ export async function GET(req:Request){try{
  db.prepare(`WITH work AS (
  SELECT participant AS id,CASE WHEN type!='comment' THEN 1 ELSE 0 END AS ideas,CASE WHEN type='comment' THEN 1 ELSE 0 END AS comments,CASE WHEN status='pending' THEN 1 ELSE 0 END AS pending,0 AS votes,0 AS files,0 AS reactions,created AS stamp FROM ideas WHERE status!='deleted' AND code IN (SELECT code FROM sessions WHERE code=? OR parent=?)
  UNION ALL SELECT participant,0,0,0,1,0,0,NULL FROM votes WHERE code IN (SELECT code FROM sessions WHERE code=? OR parent=?)
- UNION ALL SELECT participant,0,0,CASE WHEN status='pending' THEN 1 ELSE 0 END,0,1,0,created FROM uploads WHERE status!='deleted' AND code IN (SELECT code FROM sessions WHERE code=? OR parent=?)
+ UNION ALL SELECT participant,0,0,CASE WHEN status='pending' THEN 1 ELSE 0 END,0,1,0,created FROM uploads WHERE status!='deleted' AND status NOT LIKE 'avatar%' AND code IN (SELECT code FROM sessions WHERE code=? OR parent=?)
  UNION ALL SELECT participant,0,0,0,0,0,1,created FROM reactions WHERE code IN (SELECT code FROM sessions WHERE code=? OR parent=?)
  ) SELECT id,SUM(ideas) AS ideas,SUM(comments) AS comments,SUM(pending) AS pending,SUM(votes) AS votes,SUM(files) AS files,SUM(reactions) AS reactions,MAX(stamp) AS lastContribution FROM work GROUP BY id`).bind(root,root,root,root,root,root,root,root)
  ]);

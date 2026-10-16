@@ -1,6 +1,6 @@
 import {database,cookie,hash} from '../../../db/server';
 import {reply,failure,readCode,presenterFor,invalidate,type Session} from '../../../lib/snapshot';
-import {validAvatar,type RoomExperience,type RoomMood} from '../../../lib/avatars';
+import {validAvatar,customPicture,type RoomExperience,type RoomMood} from '../../../lib/avatars';
 import type {Config} from '../../../lib/workshop';
 export const dynamic='force-dynamic';
 type Person={id:string;member:string|null;nickname:string;role:string;avatar:string|null;roomState:string|null;roomSignalAt:number|null;raisedAt:number|null;speakingUntil:number|null};
@@ -23,12 +23,18 @@ async function context(req:Request,code:string){
 }
 export async function GET(req:Request){try{
  const code=readCode(req),c=await context(req,code);if(!c)return failure('Workshop not found.',404);if(!c.me&&!c.admin)return failure('Join the workshop first.',401);
+ // Presenter: character pictures waiting for approval across the whole workshop.
+ if(new URL(req.url).searchParams.has('pictures')){if(!c.admin)return failure('Presenter access required.',403);
+  const pending=(await c.db.batch([c.db.prepare("SELECT u.id,u.created,p.nickname FROM uploads u JOIN participants p ON p.id=u.participant AND p.code=u.code WHERE u.code=? AND u.status='avatar-pending' ORDER BY u.created LIMIT 100").bind(c.root)]))[0].results as {id:string;created:number;nickname:string}[];
+  return reply({pending});}
  const member=!!c.session.parent&&!!c.me&&c.me.role!=='guest',manage=!!c.session.parent&&(c.admin||c.me?.role==='lead');
  if(c.session.parent&&(member||c.admin)&&!c.ended&&!c.paused)await passTurn(c.db,code,c.config);
  const now=Date.now();
  const people=c.session.parent&&(member||c.admin)?(await c.db.batch([c.db.prepare("SELECT p.*,b.avatar AS avatar FROM participants p LEFT JOIN participants b ON b.id=p.member AND b.code=? WHERE p.code=? AND p.role!='guest' ORDER BY p.created,p.id LIMIT 500").bind(c.root,code)]))[0].results as Person[]:[];
  const members=await Promise.all(people.map(async p=>({key:await seatKey(code,p.id),name:p.nickname,avatar:validAvatar(p.avatar)?p.avatar:null,lead:p.role==='lead',me:p.id===c.me?.id,recent:!!p.roomSignalAt&&now-p.roomSignalAt<45000,state:(p.roomSignalAt&&now-p.roomSignalAt<25000&&['thinking','writing'].includes(p.roomState||'')?p.roomState:'ready') as RoomMood,hand:!c.ended&&p.raisedAt&&now-p.raisedAt<HAND?p.raisedAt:null,speaking:!c.ended&&!!p.speakingUntil&&p.speakingUntil>now,until:!c.ended&&p.speakingUntil&&p.speakingUntil>now?p.speakingUntil:null})));
- const data:RoomExperience={avatar:validAvatar(c.avatar)?c.avatar:null,members,manage,member,ended:!!c.ended,generated:now,autoTurns:c.config.autoTurns!==false,turn:TURN};return reply(data);
+ const mine=c.me?(await c.db.batch([c.db.prepare("SELECT id,status FROM uploads WHERE code=? AND participant=? AND status IN ('avatar','avatar-pending','avatar-rejected') ORDER BY created DESC LIMIT 20").bind(c.root,c.me.member||c.me.id)]))[0].results as {id:string;status:string}[]:[];
+ const own=mine.find(u=>u.status!=='avatar'),approvedPicture=mine.find(u=>u.status==='avatar');
+ const data:RoomExperience={avatar:validAvatar(c.avatar)?c.avatar:null,picture:own?{id:own.id,status:own.status==='avatar-pending'?'pending':'rejected'}:null,ownPicture:approvedPicture?'custom:'+approvedPicture.id:null,members,manage,member,ended:!!c.ended,generated:now,autoTurns:c.config.autoTurns!==false,turn:TURN};return reply(data);
  }catch(e){console.error('Room experience read failed',e);return failure('Unable to load the team table. Please retry.',503)}}
 export async function POST(req:Request){try{
  if(req.headers.get('origin')&&req.headers.get('origin')!==new URL(req.url).origin)return failure('Invalid request origin.',403);
@@ -36,7 +42,18 @@ export async function POST(req:Request){try{
  const c=await context(req,code);if(!c)return failure('Workshop not found.',404);
  if(b.action==='avatar'){
   if(!c.me)return failure('Join the workshop first.',401);if(b.avatar!==null&&!validAvatar(b.avatar))return failure('Choose a character from the gallery.');
-  await c.db.prepare('UPDATE participants SET avatar=? WHERE id=? AND code=?').bind(b.avatar,c.me.member||c.me.id,c.root).run();invalidate(code);return reply({ok:true});
+  const base=c.me.member||c.me.id,picture=customPicture(b.avatar);
+  // Only your own picture, and only once the presenter has approved it.
+  if(picture&&!await c.db.prepare("SELECT 1 FROM uploads WHERE id=? AND code=? AND participant=? AND status='avatar'").bind(picture,c.root,base).first())return failure('This picture is not approved yet.',403);
+  await c.db.batch([c.db.prepare('UPDATE participants SET avatar=? WHERE id=? AND code=?').bind(b.avatar,base,c.root),c.db.prepare("UPDATE uploads SET status='deleted',data=X'' WHERE code=? AND participant=? AND status='avatar-rejected'").bind(c.root,base)]);invalidate(code);return reply({ok:true});
+ }
+ if(b.action==='picture'){
+  // Presenter decision on an uploaded character picture. Approving also puts it on the participant's seat.
+  if(!c.admin)return failure('Presenter access required.',403);const id=String(b.id||'');if(!/^[a-f0-9-]{36}$/.test(id))return failure('Picture not found.',404);
+  const row=await c.db.prepare("SELECT participant FROM uploads WHERE id=? AND code=? AND status='avatar-pending'").bind(id,c.root).first<{participant:string}>();if(!row)return failure('This picture was already reviewed or replaced.',404);
+  if(b.approve===true)await c.db.batch([c.db.prepare("UPDATE uploads SET status='avatar' WHERE id=?").bind(id),c.db.prepare('UPDATE participants SET avatar=? WHERE id=? AND code=?').bind('custom:'+id,row.participant,c.root)]);
+  else await c.db.prepare("UPDATE uploads SET status='avatar-rejected' WHERE id=?").bind(id).run();
+  invalidate(code);return reply({ok:true});
  }
  if(!c.session.parent)return failure('Use a team room.',403);
  const member=!!c.me&&c.me.role!=='guest',manage=c.admin||c.me?.role==='lead';
