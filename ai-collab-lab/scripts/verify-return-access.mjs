@@ -4,8 +4,10 @@ import assert from 'node:assert/strict';
 // Uses disposable workshops on a local test server; never run it against a live audience workshop.
 // VPS preview: WORKSHOP_TEST_ORIGIN=http://127.0.0.1:3800/workshops node scripts/verify-return-access.mjs
 const origin=process.env.WORKSHOP_TEST_ORIGIN||'http://127.0.0.1:5173';
-function client(){const cookies=new Map();const header=()=>[...cookies].map(([k,v])=>k+'='+v).join('; ');const keep=res=>{const set=res.headers.getSetCookie();for(const c of set){const pair=c.split(';')[0];const name=pair.slice(0,pair.indexOf('='));const value=pair.slice(pair.indexOf('=')+1);if(/Max-Age=0\b/.test(c)||!value)cookies.delete(name);else cookies.set(name,value);}return set;};
- return {cookies,lastSet:[],async request(body,expected=200){const res=await fetch(origin+'/api/workshop',{method:'POST',headers:{'content-type':'application/json',cookie:header()},body:JSON.stringify(body)});this.lastSet=keep(res);const json=await res.json();assert.equal(res.status,expected,body.action+': '+JSON.stringify(json));return json},
+// Each run uses its own client address so failed return-code attempts from earlier runs never trip the rate limit.
+const run=1+Math.floor(Math.random()*250);
+function client(ip='198.51.100.'+run){const cookies=new Map();const header=()=>[...cookies].map(([k,v])=>k+'='+v).join('; ');const keep=res=>{const set=res.headers.getSetCookie();for(const c of set){const pair=c.split(';')[0];const name=pair.slice(0,pair.indexOf('='));const value=pair.slice(pair.indexOf('=')+1);if(/Max-Age=0\b/.test(c)||!value)cookies.delete(name);else cookies.set(name,value);}return set;};
+ return {cookies,lastSet:[],async request(body,expected=200){const res=await fetch(origin+'/api/workshop',{method:'POST',headers:{'content-type':'application/json','x-real-ip':ip,cookie:header()},body:JSON.stringify(body)});this.lastSet=keep(res);const json=await res.json();assert.equal(res.status,expected,body.action+': '+JSON.stringify(json));return json},
   async get(code,expected=200){const res=await fetch(origin+'/api/workshop?code='+code,{headers:{cookie:header()}});this.lastSet=keep(res);assert.equal(res.status,expected);return res.json()},
   async mine(){const res=await fetch(origin+'/api/workshop?mine=1',{headers:{cookie:header()}});assert.equal(res.status,200);return (await res.json()).workshops}};}
 const presenter=client(),alice=client(),bob=client();
@@ -59,5 +61,38 @@ await alice.request({action:'joinRoom',code:r1,role:'guest'});
 await presenter.request({action:'control',code,patch:{lockTeams:false}});
 await alice.request({action:'leaveRoom',code});assert.equal((await alice.get(code)).me.room,null);
 
+
+// 7. Personal return codes: shown once at join, stored only as a hash, restore identity and team on any device.
+const carol=client();const joined=await carol.request({action:'join',code,nickname:'QA Carol'},201);
+const CODE=/^[2-9A-HJKMNP-TW-Z]{2}-[2-9A-HJKMNP-TW-Z]{4}$/;assert.match(joined.returnCode,CODE);
+await carol.request({action:'joinRoom',code:r1},201);const carolId=(await carol.get(code)).me.id,carolRoomId=(await carol.get(r1)).me.id;
+// Typed loosely on a phone: lower case, a space instead of the dash.
+const phone=client();const back=await phone.request({action:'restore',returnCode:' '+joined.returnCode.toLowerCase().replace('-',' ')});
+assert.deepEqual([back.code,back.room,back.nickname],[code,r1,'QA Carol']);
+assert.equal((await phone.get(code)).me.id,carolId,'same main identity');assert.equal((await phone.get(r1)).me.id,carolRoomId,'same room identity, straight into the room');
+assert.equal((await phone.mine())[0].room.code,r1);
+// Arabic-Indic digits are accepted.
+const arabic=joined.returnCode.replace(/[0-9]/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);assert.equal((await client().request({action:'restore',returnCode:arabic})).code,code);
+// Wrong and malformed codes.
+await client().request({action:'restore',returnCode:'ZZ-ZZZZ'},404);await client().request({action:'restore',returnCode:'abc'},400);
+// The code is never stored or returned in clear.
+for(const json of [await presenter.get(code),await presenter.get(r1),await carol.get(code)]){const text=JSON.stringify(json);assert.ok(!text.includes(joined.returnCode)&&!text.includes(joined.returnCode.replace('-',''))&&!text.includes('returnHash'),'no code or hash in snapshots');}
+const report=await fetch(origin+'/api/participants?code='+code,{headers:{cookie:[...presenter.cookies].map(([k,v])=>k+'='+v).join('; ')}}).then(r=>r.text());assert.ok(!report.includes('returnHash')&&!report.includes(joined.returnCode.replace('-','')));
+// A participant makes a new code; the old one stops working.
+const renewed=await carol.request({action:'returnCode',code});assert.match(renewed.returnCode,CODE);assert.notEqual(renewed.returnCode,joined.returnCode);
+await client().request({action:'restore',returnCode:joined.returnCode},404);await carol.request({action:'returnCode',code:r1},400);await client().request({action:'returnCode',code},401);
+// The presenter reissues; only the presenter can.
+await alice.request({action:'reissueCode',code,participant:carolId},403);await presenter.request({action:'reissueCode',code,participant:'nobody'},404);
+const reissued=await presenter.request({action:'reissueCode',code,participant:carolId});assert.equal(reissued.nickname,'QA Carol');
+await client().request({action:'restore',returnCode:renewed.returnCode},404);assert.equal((await client().request({action:'restore',returnCode:reissued.returnCode})).room,r1);
+// Someone who arrives through a room link gets a code too.
+const dana=client();const viaRoom=await dana.request({action:'joinRoom',code:r2,nickname:'QA Dana'},201);assert.match(viaRoom.returnCode,CODE);
+assert.equal((await client().request({action:'restore',returnCode:viaRoom.returnCode})).room,r2);
+// "Not you?" forgets this browser's identity for the workshop and its rooms.
+await phone.request({action:'forgetMe',code:r1});assert.equal((await phone.get(code)).me,null);assert.equal((await phone.get(r1)).me,null);assert.deepEqual(await phone.mine(),[]);
+// Rate limit: after 30 failures from one address, even a correct code waits; other addresses are unaffected.
+const guesser=client('192.0.2.'+run);for(let i=0;i<30;i++)await guesser.request({action:'restore',returnCode:'QQ-QQ'+'23456789ABCDEFGHJKMNPQRSTWXYZ'[i%29]+'2'},404);
+await guesser.request({action:'restore',returnCode:reissued.returnCode},429);assert.equal((await client().request({action:'restore',returnCode:reissued.returnCode})).code,code);
+
 await presenter.request({action:'deleteWorkshop',code,confirm:code});
-console.log('Return access verified: 180-day cookie, my workshops, room re-entry, leave/switch with kept contributions, team lock.');
+console.log('Return access verified: 180-day cookie, my workshops, room re-entry, leave/switch with kept contributions, team lock, return codes (hash-only, restore, renew, reissue, sign-out, rate limit).');

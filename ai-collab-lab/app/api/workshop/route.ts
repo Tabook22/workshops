@@ -2,10 +2,12 @@ import { database, hash, cookie, setCookie } from '../../../db/server';
 import { defaults, skills, REACTIONS, OPPOSITE_REACTIONS, MAX_REPLY_DEPTH, ROOM_EMOJIS, ROOM_HUES, type Config, type Idea } from '../../../lib/workshop';
 import { reply, failure, clean, invalidate, snapshot, readCode, unavailable, presenterFor, teamOf, roomVisible, voiceNote, studentCookie, myWorkshops, type Session } from '../../../lib/snapshot';
 import {repairLeader,clearLeadershipVotes,leadershipBallot} from '../../../lib/leadership';
+import {normalizeReturnCode,returnHash,issueReturnCode,rateLimited,recordFailure,returnLimits,restoreCookies,forgetCookies} from '../../../lib/return-access-server';
 export const dynamic='force-dynamic';
 async function context(req:Request,code:string){const db=database();const session=await db.prepare('SELECT * FROM sessions WHERE code = ?').bind(code).first<Session>();if(!session)return null;const isPresenter=await presenterFor(req,session);const participant=cookie(req,'student_'+code);const me=participant?await db.prepare('SELECT id,nickname,role,member FROM participants WHERE id = ? AND code = ?').bind(participant,code).first<{id:string;nickname:string;role:string;member:string|null}>():null;return {db,session,config:JSON.parse(session.config) as Config,isPresenter,me};}
 const MAX_ROOMS=40;
 const LOCKED='The presenter has locked the teams. Ask the presenter if you need to change team.';
+const WRONG_CODE='That return code did not match. Check it and try again, or ask the presenter for a new one.';
 const rows=async<T>(db:D1Database,sql:string,...values:unknown[])=>(await db.batch([db.prepare(sql).bind(...values)]))[0].results as T[];
 const withCookies=(res:Response,cookies:string[])=>{for(const c of cookies)res.headers.append('Set-Cookie',c);return res;};
 /** Children first, because ideas and participants reference the session. */
@@ -39,7 +41,8 @@ async function enterRoom(req:Request,db:D1Database,room:Session,roomConfig:Confi
  } else if(!existing)statements.push(db.prepare("INSERT INTO participants (id,code,nickname,created,member,role) VALUES (?,?,?,?,?,'guest')").bind(id,room.code,base.nickname,Date.now(),base.id));
  if(statements.length)await db.batch(statements);
  cookies.push(studentCookie(req,room.code,id));
- return withCookies(reply({ok:true,code:room.code},existing?200:201),cookies);
+ const returnCode=newBase?await issueReturnCode(db,base.id):undefined;
+ return withCookies(reply({ok:true,code:room.code,...(returnCode?{returnCode}:{})},existing?200:201),cookies);
 }
 export async function GET(req:Request){try{
  if(new URL(req.url).searchParams.get('mine')==='1')return reply({workshops:await myWorkshops(req)});
@@ -50,11 +53,21 @@ export async function GET(req:Request){try{
  return await snapshot(req,readCode(req));}catch(e){return unavailable(e);}}
 export async function POST(req:Request){let code='';try{const origin=req.headers.get('origin');if(origin&&origin!==new URL(req.url).origin)return failure('Invalid request origin.',403);if(Number(req.headers.get('content-length')||0)>40000)return failure('Request too large.',413);let b:Record<string,unknown>;try{b=await req.json() as Record<string,unknown>;}catch{return failure('Invalid request.');}if(!b||typeof b!=='object')return failure('Invalid request.');const action=b.action;code=clean(b.code,20).toUpperCase();const db=database();
  if(action==='create'){const config={...defaults,...settings(b),showOnJoinPage:b.showOnJoinPage===true,revision:crypto.randomUUID()};const key=crypto.randomUUID()+crypto.randomUUID();const digits=new Uint32Array(1);crypto.getRandomValues(digits);const newCode='UTAS-'+String(100000+digits[0]%900000);await db.prepare('INSERT INTO sessions (code,adminHash,config,created) VALUES (?,?,?,?)').bind(newCode,await hash(key),JSON.stringify(config),Date.now()).run();return reply({code:newCode,key},201,{'Set-Cookie':setCookie(req,'admin_'+newCode,key)});}
+ // Coming back on any device with a personal return code (the code alone identifies the workshop).
+ if(action==='restore'){const raw=normalizeReturnCode(b.returnCode);if(raw.length!==6)return failure('A return code has 6 letters and numbers, like K7-4Q2M.');const limits=returnLimits(req);if(await rateLimited(db,limits))return failure('Too many attempts. Please wait a few minutes, or ask the presenter for a new code.',429);
+  const found=await db.prepare('SELECT p.id,p.code,p.nickname FROM participants p JOIN sessions s ON s.code=p.code WHERE p.returnHash=? AND s.parent IS NULL').bind(await returnHash(raw)).first<{id:string;code:string;nickname:string}>();
+  if(!found){await recordFailure(db,limits);return failure(WRONG_CODE,404);}
+  const {room,cookies}=await restoreCookies(req,db,found);return withCookies(reply({ok:true,code:found.code,room,nickname:found.nickname}),cookies);}
  const c=await context(req,code);if(!c)return failure('Workshop not found.',404);const {config,isPresenter,me}=c;
  if(action==='unlock'){const key=clean(b.key,200);if(await hash(key)!==c.session.adminHash)return failure('The presenter key is incorrect.',403);return reply({ok:true},200,{'Set-Cookie':setCookie(req,'admin_'+code,key)});}
  if(action==='join'&&c.session.parent)return enterRoom(req,db,c.session,config,b,'member');
  if(action==='joinRoom'){if(!c.session.parent)return failure('Room not found.',404);return enterRoom(req,db,c.session,config,b,b.role==='guest'?'guest':'member');}
- if(action==='join'){if(config.ended)return failure('This workshop has ended.');if(me)return reply({ok:true});let nickname=clean(b.nickname,40);if(!nickname&&!config.anonymous)return failure('Please enter a nickname.');if(!nickname)nickname='Anonymous';const id=crypto.randomUUID();await db.prepare('INSERT INTO participants (id,code,nickname,created) VALUES (?,?,?,?)').bind(id,code,nickname,Date.now()).run();return reply({ok:true},201,{'Set-Cookie':studentCookie(req,code,id)});}
+ if(action==='join'){if(config.ended)return failure('This workshop has ended.');if(me)return reply({ok:true});let nickname=clean(b.nickname,40);if(!nickname&&!config.anonymous)return failure('Please enter a nickname.');if(!nickname)nickname='Anonymous';const id=crypto.randomUUID();await db.prepare('INSERT INTO participants (id,code,nickname,created) VALUES (?,?,?,?)').bind(id,code,nickname,Date.now()).run();const returnCode=await issueReturnCode(db,id);return reply({ok:true,returnCode},201,{'Set-Cookie':studentCookie(req,code,id)});}
+ // Return codes: a participant makes (or replaces) their own; the presenter reissues one for someone who lost theirs.
+ if(action==='returnCode'){if(c.session.parent)return failure('Use the main workshop.');if(!me)return failure('Join the workshop first.',401);return reply({ok:true,returnCode:await issueReturnCode(db,me.id)});}
+ if(action==='reissueCode'){if(!isPresenter)return failure('Presenter access required.',403);if(c.session.parent)return failure('Use the main workshop.');const who=await db.prepare('SELECT id,nickname FROM participants WHERE id=? AND code=?').bind(clean(b.participant,40),code).first<{id:string;nickname:string}>();if(!who)return failure('Participant not found.',404);return reply({ok:true,nickname:who.nickname,returnCode:await issueReturnCode(db,who.id)});}
+ // "Not me" on a shared computer: this browser forgets the identity; the return code still brings it back.
+ if(action==='forgetMe'){const main=c.session.parent||code;return withCookies(reply({ok:true}),await forgetCookies(req,db,main));}
  if(action==='deleteWorkshop'){if(!isPresenter)return failure('Presenter access required.',403);if(clean(b.confirm,20).toUpperCase()!==code)return failure('Type the workshop code to confirm.');
   // One transaction that also removes the workshop's team rooms.
   const rooms=(await rows<{code:string}>(db,'SELECT code FROM sessions WHERE parent=?',code)).map(r=>r.code);
