@@ -43,3 +43,5 @@
 .protect-account p{margin:0}
 .restore-modes{margin-bottom:14px}
 .restore-modes button{flex:1;min-height:40px}
+.exit-button{white-space:nowrap}.exit-menu{display:grid;gap:10px}.exit-option{display:flex;gap:12px;align-items:flex-start;text-align:start;width:100%;padding:14px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--text);cursor:pointer;font:inherit}.exit-option:hover{border-color:#80a784}.exit-option svg{flex:none;margin-top:2px;color:var(--muted)}.exit-option span{display:grid;gap:3px}.exit-option small{color:var(--muted);font-size:12px;line-height:1.5}
+@media(max-width:640px){.exit-button{padding-inline:10px}}

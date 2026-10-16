@@ -5,7 +5,7 @@ import {useEffect,useState} from 'react';
 import {DoorOpen,ArrowRight,LogOut,Repeat,Lock,Users,Sparkles,KeyRound,Copy,QrCode,RefreshCw,Check,UserX,ShieldCheck} from 'lucide-react';
 import {QRCodeSVG} from 'qrcode.react';
 import {localizeNumbers} from './localization';
-import {action,copyText} from './client';
+import {action,copyText,Modal} from './client';
 import {appUrl} from './urls';
 import type {Snapshot,Language} from './workshop';
 
@@ -174,4 +174,30 @@ export function ProtectAccount({workshop,lang,username}:{workshop:string;lang:La
    {error&&<div role="alert" className="error">{error}</div>}
   </form>:<button type="button" className="btn small secondary" onClick={()=>setOpen(true)}><ShieldCheck size={15}/>{saved?t('Change username or PIN','غيّر اسم المستخدم أو الرمز السري'):t('Add username + PIN','أضف اسم مستخدم ورمزاً سرياً')}</button>}
  </section>;
+}
+
+/** The participant's "Exit" button in the page header: go back to the main workshop, leave the team, or sign out on this device.
+    Leaving a team keeps every past contribution under the person's name; signing out keeps everything saved for the return code. */
+export function ExitMenu({data,lang,refresh}:{data:Snapshot;lang:Language;refresh:()=>Promise<void>}){
+ const t=translator(lang);const [open,setOpen]=useState(false),[confirm,setConfirm]=useState<''|'leave'|'signout'>(''),[busy,setBusy]=useState(false),[error,setError]=useState('');
+ const inRoom=!!data.parent,main=data.parent?.code||data.code,member=inRoom?data.me?.role!=='guest':!!data.me?.room,locked=!!data.config.lockTeams;
+ const teamName=inRoom?data.config.name:(data.rooms||[]).find(r=>r.code===data.me?.room)?.name||'';
+ if(!data.me)return null;
+ const close=()=>{if(busy)return;setOpen(false);setConfirm('');setError('')};
+ async function run(kind:'leave'|'signout'){setBusy(true);setError('');try{
+  if(kind==='leave'){await action({action:'leaveRoom',code:data.code});if(inRoom){goToWorkshop(main);return}setOpen(false);setConfirm('');await refresh()}
+  else{await action({action:'forgetMe',code:main});location.href=appUrl('/join')}
+ }catch(e){setError((e as Error).message)}finally{setBusy(false)}}
+ return <>
+  <button type="button" className="btn small secondary exit-button" onClick={()=>setOpen(true)} aria-haspopup="dialog"><LogOut size={16}/>{t('Exit','خروج')}</button>
+  {open&&<Modal title={t('Exit','خروج')} onClose={close}><div className="exit-menu">
+   {inRoom&&<button type="button" className="exit-option" onClick={()=>goToWorkshop(main)}><DoorOpen size={20}/><span><strong>{t('Back to the main workshop','العودة إلى الورشة الرئيسية')}</strong><small>{t('You stay a member of this team and can come back anytime.','تبقى عضواً في هذا الفريق ويمكنك العودة في أي وقت.')}</small></span></button>}
+   {member&&(locked?<p className="inline-help my-room-locked"><Lock size={15}/> {t(...LOCKED_HELP)}</p>
+    :confirm==='leave'?<div className="my-room-confirm"><p>{t(`Leave ${teamName||'this team'}? Your ideas and comments stay there under your name. You can join another team afterwards.`,`مغادرة ${teamName||'هذا الفريق'}؟ تبقى أفكارك وتعليقاتك هناك باسمك، ويمكنك الانضمام إلى فريق آخر بعدها.`)}</p><div className="actions"><button type="button" className="btn danger" disabled={busy} onClick={()=>void run('leave')}><LogOut size={16}/>{t('Yes, leave the team','نعم، غادر الفريق')}</button><button type="button" className="btn ghost" disabled={busy} onClick={()=>setConfirm('')}>{t('Cancel','إلغاء')}</button></div></div>
+    :<button type="button" className="exit-option" onClick={()=>setConfirm('leave')}><Users size={20}/><span><strong>{t('Leave the team','مغادرة الفريق')}</strong><small>{t('End your membership. You can join another team.','أنهِ عضويتك في الفريق. يمكنك الانضمام إلى فريق آخر.')}</small></span></button>)}
+   {confirm==='signout'?<div className="my-room-confirm"><p>{t('Sign out on this device? Your work stays saved. You will need your return code, or your username and PIN, to come back.','تسجيل الخروج من هذا الجهاز؟ يبقى عملك محفوظاً، وستحتاج إلى رمز العودة أو اسم المستخدم والرقم السري للرجوع.')}</p><ReturnCodeCard workshop={main} lang={lang}/><div className="actions"><button type="button" className="btn danger" disabled={busy} onClick={()=>void run('signout')}><UserX size={16}/>{t('Sign out','تسجيل الخروج')}</button><button type="button" className="btn ghost" disabled={busy} onClick={()=>setConfirm('')}>{t('Cancel','إلغاء')}</button></div></div>
+   :<button type="button" className="exit-option" onClick={()=>setConfirm('signout')}><UserX size={20}/><span><strong>{t('Sign out on this device','تسجيل الخروج من هذا الجهاز')}</strong><small>{t('For shared computers. Everything you shared stays saved.','للأجهزة المشتركة. كل ما شاركته يبقى محفوظاً.')}</small></span></button>}
+   {error&&<div role="alert" className="error">{error}</div>}
+  </div></Modal>}
+ </>;
 }
