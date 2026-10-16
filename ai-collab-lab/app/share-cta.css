@@ -1,0 +1,37 @@
+/* “Share your idea”: an always-visible way for joined participants to contribute.
+   Phones: a sticky bar along the bottom. Wider screens: a floating pill on the right
+   (the help button sits on the left in both directions). */
+.student.has-share-cta{padding-bottom:128px}
+.share-cta{position:fixed;z-index:75;bottom:calc(14px + env(safe-area-inset-bottom));left:16px;right:16px;display:flex;justify-content:center;pointer-events:none;animation:share-cta-in .3s var(--ease,ease) both}
+.share-cta-button{pointer-events:auto;display:flex;align-items:center;gap:12px;width:min(528px,100%);min-height:64px;padding:10px 18px 10px 10px;border-radius:20px;border:1px solid color-mix(in srgb,var(--on-accent,#151b0c) 12%,transparent);background:var(--accent-fill,var(--accent));color:var(--on-accent,#151b0c);text-align:start;font:inherit;box-shadow:0 14px 36px -10px #000a,0 0 0 4px color-mix(in srgb,var(--accent-fill,#d6ff73) 22%,transparent);transition:transform .15s,box-shadow .15s}
+[dir=rtl] .share-cta-button{padding:10px 10px 10px 18px}
+.share-cta-button:hover{transform:translateY(-2px)}
+.share-cta-button:active{transform:scale(.98)}
+.share-cta-button:focus-visible{outline:3px solid var(--text);outline-offset:3px}
+.share-cta-icon{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:color-mix(in srgb,var(--on-accent,#151b0c) 90%,transparent);color:var(--accent-fill,#d6ff73)}
+.share-cta-text{display:grid;gap:1px;min-width:0}
+.share-cta-text strong{font-family:'Manrope','Noto Sans Arabic',sans-serif;font-size:18px;font-weight:800;letter-spacing:-.01em;line-height:1.25}
+.share-cta-text small{font-size:13px;line-height:1.35;opacity:.8;overflow-wrap:anywhere}
+/* Keep the help button clear of the bar on phones. */
+body:has(.share-cta) .workshop-help-button{bottom:calc(92px + env(safe-area-inset-bottom))}
+@media(min-width:900px){
+ .share-cta{left:auto;right:24px;bottom:24px;justify-content:flex-end}
+ .share-cta-button{width:auto;max-width:340px}
+ body:has(.share-cta) .workshop-help-button{bottom:18px}
+}
+@keyframes share-cta-in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+/* The picker: one large row per way of contributing. */
+.share-options{display:grid;gap:10px}
+.share-option{--tone:var(--t-idea,#ffcf8e);display:flex;align-items:center;gap:14px;width:100%;min-height:68px;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--panel2);color:var(--text);text-align:start;font:inherit;white-space:normal;transition:border-color .15s,transform .15s}
+.share-option:not(:disabled):hover{border-color:var(--tone);transform:translateY(-1px)}
+.share-option:disabled{opacity:.6}
+.share-option-icon{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:12px;color:var(--tone);background:color-mix(in srgb,var(--tone) 16%,transparent)}
+.share-option-text{display:grid;gap:2px;flex:1;min-width:0}
+.share-option-text strong{font-size:16px}
+.share-option-text small{font-size:13px;color:var(--muted);line-height:1.4}
+.share-option-arrow{flex:none;color:var(--muted)}
+[dir=rtl] .share-option-arrow{transform:scaleX(-1)}
+.share-option:disabled .share-option-arrow{visibility:hidden}
+.tone-problem{--tone:var(--t-problem,#ff9f8a)}.tone-idea{--tone:var(--t-idea,#ffcf8e)}.tone-solution{--tone:var(--t-solution,#c8baff)}.tone-improvement{--tone:var(--t-improvement,#9ddcdd)}.tone-suggestion{--tone:var(--t-suggestion,#80caff)}.tone-comment{--tone:var(--t-comment,#a2a8b2)}
+@media print{.share-cta{display:none!important}}

@@ -13,6 +13,7 @@ import '../app/team-experience.css';
 import '../app/voice-input.css';
 import '../app/comment-thread.css';
 import '../app/discussion-map.css';
+import '../app/share-cta.css';
 
 const base = window.__WORKSHOP_BASE_PATH__ || '/workshops';
 const route = location.pathname.slice(base.length).replace(/\/$/, '') || '/';
